@@ -1,4 +1,4 @@
-﻿namespace RST.Persistence.Extensions;
+﻿namespace RST.EntityFrameworkCore.Extensions;
 
 public static class TypeExtensions
 {

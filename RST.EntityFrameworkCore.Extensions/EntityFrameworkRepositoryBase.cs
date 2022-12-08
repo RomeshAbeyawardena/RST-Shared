@@ -1,7 +1,7 @@
 ﻿using RST.Persistence.Contracts;
 using Microsoft.EntityFrameworkCore;
 
-namespace RST.Persistence;
+namespace RST.EntityFrameworkCore;
 
 public abstract class EntityFrameworkRepositoryBase<TDbContext, T> : RepositoryBase<T>, IEntityFrameworkRepository<TDbContext, T>
     where TDbContext : DbContext

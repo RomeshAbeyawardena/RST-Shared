@@ -3,7 +3,7 @@ using RST.Persistence.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace RST.Persistence.Extensions;
+namespace RST.EntityFrameworkCore.Extensions;
 public static class ServiceCollectionExtensions
 {
     /// <summary>
