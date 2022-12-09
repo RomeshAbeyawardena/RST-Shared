@@ -1,0 +1,1 @@
+﻿dotnet build -o "C:\Dev\lib\RST"
