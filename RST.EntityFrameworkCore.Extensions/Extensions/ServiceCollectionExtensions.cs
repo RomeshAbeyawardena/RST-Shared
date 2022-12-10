@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RST.EntityFrameworkCore.Extensions;
+/// <summary>
+/// 
+/// </summary>
 public static class ServiceCollectionExtensions
 {
     /// <summary>
@@ -22,6 +25,14 @@ public static class ServiceCollectionExtensions
             .AddRepositories<TDbContext>(implementationType);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TDbContext"></typeparam>
+    /// <param name="services"></param>
+    /// <param name="implementationType"></param>
+    /// <param name="configureOptions"></param>
+    /// <returns></returns>
     public static IServiceCollection AddDbContextAndRepositories<TDbContext>(this IServiceCollection services, Type implementationType, Action<IServiceProvider, DbContextOptionsBuilder> configureOptions)
         where TDbContext : DbContext
     {

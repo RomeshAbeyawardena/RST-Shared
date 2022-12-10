@@ -1,7 +1,14 @@
 ﻿namespace RST.EntityFrameworkCore.Extensions;
-
+/// <summary>
+/// 
+/// </summary>
 public static class TypeExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dbSetType"></param>
+    /// <returns></returns>
     public static IEnumerable<Type> GetDbSetModels(this Type dbSetType)
     {
         var modelTypes = new List<Type>();

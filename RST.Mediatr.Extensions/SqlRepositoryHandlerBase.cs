@@ -5,6 +5,13 @@ using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 
 namespace RST.Mediatr.Extensions;
+
+/// <summary>
+/// Represents a SQL Repository Handler
+/// </summary>
+/// <typeparam name="TRequest"></typeparam>
+/// <typeparam name="TResponse"></typeparam>
+/// <typeparam name="TModel"></typeparam>
 public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IRequestHandler<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
     where TModel : class
@@ -27,6 +34,13 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="query"></param>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     protected async Task<IEnumerable<TModel>> ProcessPagedQuery(Expression<Func<TModel, bool>> query, IPagedQuery request, CancellationToken cancellationToken)
     {
         var primaryQuery = Repository.Where(query);
@@ -36,20 +50,35 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
             primaryQuery = primaryQuery.Page(request.PageIndex.Value, request.TotalItemsPerPage.Value);
         }
 
-        if (!string.IsNullOrWhiteSpace(request.OrderByField))
+        if (request.OrderByFields != null)
         {
-            primaryQuery = primaryQuery.OrderBy($"{request.OrderByField} {GetOrderByValue(request.SortOrder)}");
+            var order = GetOrderByValue(request.SortOrder);
+            var orderList = string.Join(",", request.OrderByFields);
+            primaryQuery = primaryQuery.OrderBy($"{orderList} {order}");
         }
 
         return await primaryQuery.ToArrayAsync(cancellationToken);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public abstract Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken);
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="repository"></param>
     public SqlRepositoryHandlerBase(IRepository<TModel> repository)
     {
         Repository = repository;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public IRepository<TModel> Repository { get; }
 }

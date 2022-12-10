@@ -7,8 +7,16 @@ using RST.Default;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace RST.DependencyInjection.Extensions;
+/// <summary>
+/// 
+/// </summary>
 public static class ServiceCollectionExtensions
 {
+    /// <summary>
+    /// Adds core services to an instance of <see cref="IServiceCollection"/>
+    /// </summary>
+    /// <param name="services">Instance of <see cref="IServiceCollection"/> to add core service sto</param>
+    /// <returns>Passed instance of <see cref="IServiceCollection"/></returns>
     public static IServiceCollection AddCoreServices(this IServiceCollection services)
     {
         services
@@ -17,6 +25,12 @@ public static class ServiceCollectionExtensions
         return services.AddSingleton<IClockProvider, DefaultClockProvider>();
     }
 
+    /// <summary>
+    /// Adds services decorated with the <see cref="RegisterAttribute"/> 
+    /// </summary>
+    /// <param name="services">Instance of <see cref="IServiceCollection"/> to add core service sto</param>
+    /// <param name="assemblies">Assemblies used to for scan services</param>
+    /// <returns>Passed instance of <see cref="IServiceCollection"/></returns>
     public static IServiceCollection AddServicesWithRegisterAttribute(
       this IServiceCollection services,
       params Assembly[] assemblies)

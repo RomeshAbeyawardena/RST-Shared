@@ -3,6 +3,9 @@ using System.Data;
 
 namespace RST.Attributes;
 
+/// <summary>
+/// Represents an <see cref="Attribute"/> used to describe a DB type
+/// </summary>
 public class ColumnDescriptorAttribute : ColumnAttribute
 {
 	private IEnumerable<SqlDbType> DoubleParameterFieldTypes = new[]
@@ -37,6 +40,12 @@ public class ColumnDescriptorAttribute : ColumnAttribute
 		return type ?? throw new NullReferenceException();
     }
 
+	/// <summary>
+	/// Creates an instance of <see cref="ColumnDescriptorAttribute"/>
+	/// </summary>
+	/// <param name="dbType">Describes the DB Type</param>
+	/// <param name="length">Describes the length</param>
+	/// <param name="subLength">Describes the sub length</param>
 	public ColumnDescriptorAttribute(SqlDbType dbType, int length = int.MinValue, int subLength  = int.MinValue)
 	{
 		DbType = dbType;
@@ -45,7 +54,17 @@ public class ColumnDescriptorAttribute : ColumnAttribute
 		this.TypeName = DescribeType();
 	}
 
+	/// <summary>
+	/// Gets the Db Type
+	/// </summary>
 	public SqlDbType DbType { get; }
+
+	/// <summary>
+	/// Gets the length used by the Db type
+	/// </summary>
 	public int? Length { get; }
+	/// <summary>
+	/// Gets the sub length of the Db type
+	/// </summary>
 	public int? SubLength { get; }
 }

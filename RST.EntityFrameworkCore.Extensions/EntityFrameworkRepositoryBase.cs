@@ -3,6 +3,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace RST.EntityFrameworkCore;
 
+/// <summary>
+/// 
+/// </summary>
+/// <typeparam name="TDbContext"></typeparam>
+/// <typeparam name="T"></typeparam>
 public abstract class EntityFrameworkRepositoryBase<TDbContext, T> : RepositoryBase<T>, IEntityFrameworkRepository<TDbContext, T>
     where TDbContext : DbContext
     where T : class
@@ -14,6 +19,10 @@ public abstract class EntityFrameworkRepositoryBase<TDbContext, T> : RepositoryB
         Queryable = noTracking ? dbSet.AsNoTracking() : dbSet;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="context"></param>
     public EntityFrameworkRepositoryBase(TDbContext context)
         : base()
     {
@@ -22,22 +31,27 @@ public abstract class EntityFrameworkRepositoryBase<TDbContext, T> : RepositoryB
         Context = context;
     }
 
+    /// <inheritdoc cref="Contracts.IRepository{T}.Add(T)"/>
     public override void Add(T entity)
     {
         dbSet.Add(entity);
     }
 
+    /// <inheritdoc cref="Contracts.IRepository{T}.Update(T)"/>
     public override void Update(T entity)
     {
         dbSet.Update(entity);
     }
 
+    /// <inheritdoc cref="Contracts.IRepository{T}.CommitChangesAsync(CancellationToken)"/>
     public override Task<int> CommitChangesAsync(CancellationToken cancellationToken)
     {
         return Context.SaveChangesAsync(cancellationToken);
     }
 
+    /// <inheritdoc cref="Contracts.IRepository{T}.NoTracking"/>
     public override bool NoTracking { set => ConfigureTracking(value); }
 
+    /// <inheritdoc cref="EntityFrameworkRepositoryBase{TDbContext, T}.Context"/>
     public TDbContext Context { get; }
 }
