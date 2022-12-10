@@ -8,7 +8,7 @@ namespace RST;
 public abstract class RepositoryBase<T> : IRepository<T>
 {
     private IQueryable<T>? queryable;
-    private ExpressionStarter<T> queryBuilder;
+    private readonly ExpressionStarter<T> queryBuilder;
     protected IQueryable<T> Queryable { set => queryable = value; }
 
     public RepositoryBase(IQueryable<T>? queryable  = null)

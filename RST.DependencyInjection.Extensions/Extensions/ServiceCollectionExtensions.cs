@@ -6,7 +6,7 @@ using RST.Contracts;
 using RST.Default;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace RST.Extensions;
+namespace RST.DependencyInjection.Extensions;
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddCoreServices(this IServiceCollection services)

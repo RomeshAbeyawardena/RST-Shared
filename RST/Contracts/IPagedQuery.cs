@@ -1,4 +1,4 @@
-﻿using System.Data.SqlClient;
+﻿using RST.Enumerations;
 
 namespace RST.Contracts;
 

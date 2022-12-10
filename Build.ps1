@@ -1,1 +1,1 @@
-﻿dotnet build -o "C:\Dev\lib\RST"
+﻿& .\deploy.ps1 -outputPath "C:\Dev\lib\RST" -setMode 4
