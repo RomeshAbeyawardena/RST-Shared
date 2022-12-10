@@ -1,7 +1,6 @@
 ﻿using LinqKit;
 using RST.Contracts;
 using System.Collections;
-using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Linq.Expressions;
 
 namespace RST;
@@ -22,6 +21,7 @@ public abstract class RepositoryBase<T> : IRepository<T>
     public abstract void Add(T entity);
     public abstract void Update(T entity);
 
+    public abstract bool NoTracking { set; }
     public Type ElementType => queryable?.ElementType ?? throw new NullReferenceException();
     public Expression Expression => queryable?.Expression ?? throw new NullReferenceException();
     public IQueryProvider Provider => queryable?.Provider ?? throw new NullReferenceException();

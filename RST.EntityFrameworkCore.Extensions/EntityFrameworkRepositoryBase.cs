@@ -9,11 +9,16 @@ public abstract class EntityFrameworkRepositoryBase<TDbContext, T> : RepositoryB
 {
     private readonly DbSet<T> dbSet;
 
+    private void ConfigureTracking(bool noTracking)
+    {
+        Queryable = noTracking ? dbSet.AsNoTracking() : dbSet;
+    }
+
     public EntityFrameworkRepositoryBase(TDbContext context)
         : base()
     {
         dbSet = context.Set<T>();
-        Queryable = dbSet;
+        Queryable = dbSet.AsNoTracking();
         Context = context;
     }
 
@@ -31,6 +36,8 @@ public abstract class EntityFrameworkRepositoryBase<TDbContext, T> : RepositoryB
     {
         return Context.SaveChangesAsync(cancellationToken);
     }
+
+    public override bool NoTracking { set => ConfigureTracking(value); }
 
     public TDbContext Context { get; }
 }
