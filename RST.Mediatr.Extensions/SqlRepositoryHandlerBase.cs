@@ -41,9 +41,22 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
     /// <param name="request"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    protected async Task<IEnumerable<TModel>> ProcessPagedQuery(Expression<Func<TModel, bool>> query, IPagedQuery request, CancellationToken cancellationToken)
+    protected Task<IEnumerable<TModel>> ProcessPagedQuery(Expression<Func<TModel, bool>> query, IPagedQuery request, CancellationToken cancellationToken)
     {
-        if(request.NoTracking.HasValue)
+        return ProcessPagedQuery(query, request, null, cancellationToken);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="query"></param>
+    /// <param name="request"></param>
+    /// <param name="configureQuery"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    protected async Task<IEnumerable<TModel>> ProcessPagedQuery(Expression<Func<TModel, bool>> query, IPagedQuery request, Func<IQueryable<TModel>, IQueryable<TModel>>? configureQuery, CancellationToken cancellationToken)
+    {
+        if (request.NoTracking.HasValue)
         {
             Repository.NoTracking = request.NoTracking.Value;
         }
@@ -62,9 +75,13 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
             primaryQuery = primaryQuery.OrderBy($"{orderList} {order}");
         }
 
+        if (configureQuery != null)
+        {
+            primaryQuery = configureQuery.Invoke(primaryQuery);
+        }
+
         return await primaryQuery.ToArrayAsync(cancellationToken);
     }
-
     /// <summary>
     /// 
     /// </summary>

@@ -48,8 +48,9 @@ public static class ServiceCollectionExtensions
     /// <param name="services"></param>
     /// <param name="implementationType"></param>
     /// <param name="modelTypes"></param>
+    /// <param name="useScopedServices"></param>
     /// <returns></returns>
-    internal static IServiceCollection AddRepositories<TDbContext>(this IServiceCollection services, Type implementationType, IEnumerable<Type> modelTypes)
+    internal static IServiceCollection AddRepositories<TDbContext>(this IServiceCollection services, Type implementationType, IEnumerable<Type> modelTypes, bool useScopedServices = true)
         where TDbContext : DbContext
     {
         var serviceType = typeof(IRepository<>);
@@ -59,9 +60,18 @@ public static class ServiceCollectionExtensions
         {
             var specificImplementationType = implementationType.MakeGenericType(modelType);
 
-            services.AddTransient(serviceType.MakeGenericType(modelType), specificImplementationType);
+            if (useScopedServices)
+            {
+                services.AddScoped(serviceType.MakeGenericType(modelType), specificImplementationType);
 
-            services.AddTransient(specificServiceType.MakeGenericType(dbContextType, modelType), specificImplementationType);
+                services.AddScoped(specificServiceType.MakeGenericType(dbContextType, modelType), specificImplementationType);
+            }
+            else
+            {
+                services.AddTransient(serviceType.MakeGenericType(modelType), specificImplementationType);
+
+                services.AddTransient(specificServiceType.MakeGenericType(dbContextType, modelType), specificImplementationType);
+            }
         }
 
         return services;
