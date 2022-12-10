@@ -55,7 +55,7 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
             primaryQuery = primaryQuery.Page(request.PageIndex.Value, request.TotalItemsPerPage.Value);
         }
 
-        if (request.OrderByFields != null)
+        if (request.OrderByFields != null && request.OrderByFields.Any())
         {
             var order = GetOrderByValue(request.SortOrder);
             var orderList = string.Join(",", request.OrderByFields);
