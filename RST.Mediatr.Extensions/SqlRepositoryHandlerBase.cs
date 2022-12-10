@@ -43,6 +43,11 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
     /// <returns></returns>
     protected async Task<IEnumerable<TModel>> ProcessPagedQuery(Expression<Func<TModel, bool>> query, IPagedQuery request, CancellationToken cancellationToken)
     {
+        if(request.NoTracking.HasValue)
+        {
+            Repository.NoTracking = request.NoTracking.Value;
+        }
+
         var primaryQuery = Repository.Where(query);
 
         if (request.PageIndex.HasValue && request.TotalItemsPerPage.HasValue)
