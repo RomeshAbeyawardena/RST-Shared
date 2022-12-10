@@ -15,8 +15,12 @@ public abstract class RepositoryBase<T> : IRepository<T>
     public RepositoryBase(IQueryable<T>? queryable  = null)
     {
         this.queryBuilder = PredicateBuilder.New<T>();
+        queryBuilder.DefaultExpression = a => true;
         this.queryable = queryable;
     }
+
+    public abstract void Add(T entity);
+    public abstract void Update(T entity);
 
     public Type ElementType => queryable?.ElementType ?? throw new NullReferenceException();
     public Expression Expression => queryable?.Expression ?? throw new NullReferenceException();

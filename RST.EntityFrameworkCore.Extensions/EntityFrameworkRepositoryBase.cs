@@ -17,6 +17,16 @@ public abstract class EntityFrameworkRepositoryBase<TDbContext, T> : RepositoryB
         Context = context;
     }
 
+    public override void Add(T entity)
+    {
+        dbSet.Add(entity);
+    }
+
+    public override void Update(T entity)
+    {
+        dbSet.Update(entity);
+    }
+
     public override Task<int> CommitChangesAsync(CancellationToken cancellationToken)
     {
         return Context.SaveChangesAsync(cancellationToken);

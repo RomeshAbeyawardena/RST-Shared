@@ -2,8 +2,8 @@
 
 namespace RST.AspNetCore.Extensions;
 
-[ApiController, Route(DEFAULT_API_URL)]
+[ApiController]
 public class ApiController
 {
-    public const string DEFAULT_API_URL = "/api/{controller}";
+    public const string DEFAULT_API_URL = "api";
 }
