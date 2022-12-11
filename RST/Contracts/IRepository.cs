@@ -34,7 +34,7 @@ public interface IRepository<T> : IQueryable<T>
     Task<int> CommitChangesAsync(CancellationToken cancellationToken);
 
     /// <summary>
-    /// 
+    /// Finds an entity from the underlining data store
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <param name="keys"></param>

@@ -51,7 +51,7 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
     }
     
     /// <summary>
-    /// 
+    /// Processes a save command and applies the approriate add/update behaviour against the underlining provider
     /// </summary>
     /// <typeparam name="TDbCommand"></typeparam>
     /// <param name="command"></param>
@@ -98,7 +98,7 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
     }
 
     /// <summary>
-    /// 
+    /// Processes a paged request and applies ordering
     /// </summary>
     /// <param name="query"></param>
     /// <param name="request"></param>
@@ -110,7 +110,7 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
     }
 
     /// <summary>
-    /// 
+    /// Processes a paged request and applies ordering
     /// </summary>
     /// <param name="query"></param>
     /// <param name="request"></param>
