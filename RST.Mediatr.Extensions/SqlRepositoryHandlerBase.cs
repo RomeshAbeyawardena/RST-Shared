@@ -11,6 +11,24 @@ namespace RST.Mediatr.Extensions;
 /// </summary>
 /// <typeparam name="TRequest"></typeparam>
 /// <typeparam name="TResponse"></typeparam>
+public abstract class SqlRepositoryHandlerBase<TRequest, TResponse> : SqlRepositoryHandlerBase<TRequest, TResponse, TResponse>
+    where TRequest : IRequest<TResponse>
+    where TResponse : class
+{
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="repository"></param>
+    protected SqlRepositoryHandlerBase(IRepository<TResponse> repository) : base(repository)
+    {
+    }
+}
+
+/// <summary>
+/// Represents a SQL Repository Handler
+/// </summary>
+/// <typeparam name="TRequest"></typeparam>
+/// <typeparam name="TResponse"></typeparam>
 /// <typeparam name="TModel"></typeparam>
 public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IRequestHandler<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
@@ -32,6 +50,49 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
             default:
                 return string.Empty;
         }
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TDbCommand"></typeparam>
+    /// <param name="command"></param>
+    /// <param name="convertToModel"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    /// <exception cref="NullReferenceException"></exception>
+    protected async Task<TModel> ProcessSave<TDbCommand>(TDbCommand command, Func<TDbCommand, TModel?> convertToModel, CancellationToken cancellationToken)
+        where TDbCommand : IDbCommand
+    {
+        var entity = convertToModel(command);
+        
+        if(entity == null)
+        {
+            throw new NullReferenceException();
+        }
+
+        if(entity is IIdentity identity)
+        {
+            if(identity.Id == Guid.Empty)
+            {
+                Repository.Add(entity);
+            }
+            else
+            {
+                var foundEntity = await Repository.FindAsync(cancellationToken, identity.Id);
+                entity.HasChanges(out var changes);
+                foundEntity.CommitChanges(changes);
+            }
+        }
+        else
+            Repository.Add(entity);
+
+        if (command.CommitChanges)
+        {
+            await Repository.CommitChangesAsync(cancellationToken);
+        }
+
+        return entity;
     }
 
     /// <summary>

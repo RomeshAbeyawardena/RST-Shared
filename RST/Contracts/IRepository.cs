@@ -32,4 +32,12 @@ public interface IRepository<T> : IQueryable<T>
     /// <param name="cancellationToken">Cancellation token to cancel the operation</param>
     /// <returns>A awaiting <see cref="int"/> representing how many rows were affected</returns>
     Task<int> CommitChangesAsync(CancellationToken cancellationToken);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <param name="keys"></param>
+    /// <returns></returns>
+    Task<T> FindAsync(CancellationToken cancellationToken, params object[] keys);
 }

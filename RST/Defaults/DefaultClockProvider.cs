@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Internal;
 using RST.Contracts;
 
-namespace RST.Default;
+namespace RST.Defaults;
 
 /// <inheritdoc cref="IClockProvider"/>
 public class DefaultClockProvider : IClockProvider
