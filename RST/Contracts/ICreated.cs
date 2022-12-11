@@ -12,3 +12,11 @@ public interface ICreated<TDateTime>
     /// </summary>
     TDateTime Created { get; set; }
 }
+
+/// <summary>
+/// 
+/// </summary>
+public interface ICreated : ICreated<DateTimeOffset>
+{
+
+}

@@ -3,6 +3,14 @@
 /// <summary>
 /// Represents a modified timestamp
 /// </summary>
+public interface IModified : IModified<DateTimeOffset>
+{
+
+}
+
+/// <summary>
+/// Represents a modified timestamp
+/// </summary>
 /// <typeparam name="TDateTime">The datatype used by the modified field</typeparam>
 public interface IModified<TDateTime>
 where TDateTime : struct

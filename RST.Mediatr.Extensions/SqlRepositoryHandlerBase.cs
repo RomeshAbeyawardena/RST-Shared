@@ -19,8 +19,9 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse> : SqlReposit
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="clockProvider"></param>
     /// <param name="repository"></param>
-    protected SqlRepositoryHandlerBase(IRepository<TResponse> repository) : base(repository)
+    protected SqlRepositoryHandlerBase(IClockProvider clockProvider, IRepository<TResponse> repository) : base(clockProvider, repository)
     {
     }
 }
@@ -35,6 +36,8 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
     where TRequest : IRequest<TResponse>
     where TModel : class
 {
+    private readonly IClockProvider clockProvider;
+
     private static string GetOrderByValue(Enumerations.SortOrder? sortOrder)
     {
         if (!sortOrder.HasValue)
@@ -73,10 +76,20 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
         {
             if(identity.Id == Guid.Empty)
             {
+                if(entity is ICreated created)
+                {
+                    created.Created = clockProvider.UtcNow;
+                }
+
                 Repository.Add(entity);
             }
             else
             {
+                if(entity is IModified modified)
+                {
+                    modified.Modified = clockProvider.UtcNow;
+                }
+
                 var foundEntity = await Repository.FindAsync(cancellationToken, identity.Id);
 
                 if (foundEntity != null)
@@ -156,9 +169,11 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="clockProvider"></param>
     /// <param name="repository"></param>
-    public SqlRepositoryHandlerBase(IRepository<TModel> repository)
+    public SqlRepositoryHandlerBase(IClockProvider clockProvider, IRepository<TModel> repository)
     {
+        this.clockProvider = clockProvider;
         Repository = repository;
     }
 
