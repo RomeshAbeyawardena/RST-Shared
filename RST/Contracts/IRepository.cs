@@ -39,5 +39,5 @@ public interface IRepository<T> : IQueryable<T>
     /// <param name="cancellationToken"></param>
     /// <param name="keys"></param>
     /// <returns></returns>
-    Task<T> FindAsync(CancellationToken cancellationToken, params object[] keys);
+    ValueTask<T?> FindAsync(CancellationToken cancellationToken, params object[] keys);
 }

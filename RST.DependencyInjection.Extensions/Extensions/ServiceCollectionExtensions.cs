@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Microsoft.Extensions.Internal;
 using RST.Contracts;
-using RST.Default;
+using RST.Defaults;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace RST.DependencyInjection.Extensions;

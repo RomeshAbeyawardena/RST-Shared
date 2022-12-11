@@ -7,7 +7,7 @@ namespace RST.Defaults;
 /// <summary>
 /// Represents an object change
 /// </summary>
-public class DefaultObjectChange : IObjectChange
+public record DefaultObjectChange : IObjectChange
 {
     /// <inheritdoc cref="IObjectChange.SourceProperty"/>
     [AllowNull]

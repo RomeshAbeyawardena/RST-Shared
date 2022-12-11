@@ -67,4 +67,11 @@ public abstract class RepositoryBase<T> : IRepository<T>
     {
         return (queryable ?? throw new NullReferenceException()).GetEnumerator();
     }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <param name="keys"></param>
+    /// <returns></returns>
+    public abstract ValueTask<T?> FindAsync(CancellationToken cancellationToken, params object[] keys);
 }

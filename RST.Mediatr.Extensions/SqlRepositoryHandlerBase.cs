@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RST.Contracts;
+using RST.Extensions;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 
@@ -41,15 +42,12 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
             sortOrder = Enumerations.SortOrder.Ascending;
         }
 
-        switch (sortOrder)
+        return sortOrder switch
         {
-            case Enumerations.SortOrder.Ascending:
-                return "asc";
-            case Enumerations.SortOrder.Descending:
-                return "desc";
-            default:
-                return string.Empty;
-        }
+            Enumerations.SortOrder.Ascending => "asc",
+            Enumerations.SortOrder.Descending => "desc",
+            _ => string.Empty,
+        };
     }
     
     /// <summary>
@@ -80,8 +78,12 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
             else
             {
                 var foundEntity = await Repository.FindAsync(cancellationToken, identity.Id);
-                entity.HasChanges(out var changes);
-                foundEntity.CommitChanges(changes);
+
+                if (foundEntity != null)
+                {
+                    foundEntity.HasChanges(entity, out var changes);
+                    foundEntity.CommitChanges(changes);
+                }
             }
         }
         else

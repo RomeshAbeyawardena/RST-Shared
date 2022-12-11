@@ -49,6 +49,17 @@ public abstract class EntityFrameworkRepositoryBase<TDbContext, T> : RepositoryB
         return Context.SaveChangesAsync(cancellationToken);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <param name="keys"></param>
+    /// <returns></returns>
+    public override ValueTask<T?> FindAsync(CancellationToken cancellationToken, params object[] keys)
+    {
+        return dbSet.FindAsync(keys, cancellationToken);
+    }
+
     /// <inheritdoc cref="Contracts.IRepository{T}.NoTracking"/>
     public override bool NoTracking { set => ConfigureTracking(value); }
 

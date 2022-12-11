@@ -19,7 +19,7 @@ public interface IObjectChange
     /// Gets the new value
     /// </summary>
     object NewValue { get; }
-#
+
     /// <summary>
     /// Gets the old value
     /// </summary>
