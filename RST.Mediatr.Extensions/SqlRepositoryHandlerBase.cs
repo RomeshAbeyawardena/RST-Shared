@@ -40,11 +40,11 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
     private readonly IClockProvider clockProvider;
 
     /// <summary>
-    /// 
+    /// Define the date range query to filter <typeparamref name="TModel"/> by a date range 
     /// </summary>
     /// <param name="query"></param>
     /// <returns></returns>
-    protected virtual Expression<Func<TModel, bool>> GenerateDateRangeQuery(IDateRangeQuery query)
+    protected virtual Expression<Func<TModel, bool>> DefineDateRangeQuery(IDateRangeQuery query)
     {
         return a => true;
     }
@@ -152,7 +152,7 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
         {
             if (dateRangeQuery.StartDate.HasValue || dateRangeQuery.EndDate.HasValue)
             {
-                query = query.And(GenerateDateRangeQuery(dateRangeQuery));
+                query = query.And(DefineDateRangeQuery(dateRangeQuery));
             }
         }
 
