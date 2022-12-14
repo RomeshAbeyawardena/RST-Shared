@@ -3,7 +3,7 @@
 /// <summary>
 /// Represent a query comparing against a date range
 /// </summary>
-public interface IDateRangeQuery<T>
+public interface IDateRangeQuery<T> : IDbQuery
     where T: struct
 {
     /// <summary>
