@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using LinqKit;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RST.Contracts;
 using RST.Extensions;
@@ -37,6 +38,16 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
     where TModel : class
 {
     private readonly IClockProvider clockProvider;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="query"></param>
+    /// <returns></returns>
+    protected virtual Expression<Func<TModel, bool>> GenerateDateRangeQuery(IDateRangeQuery query)
+    {
+        return a => true;
+    }
 
     private static string GetOrderByValue(Enumerations.SortOrder? sortOrder)
     {
@@ -135,6 +146,14 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
         if (request.NoTracking.HasValue)
         {
             Repository.NoTracking = request.NoTracking.Value;
+        }
+
+        if (request is IDateRangeQuery dateRangeQuery)
+        {
+            if (dateRangeQuery.StartDate.HasValue || dateRangeQuery.EndDate.HasValue)
+            {
+                query = query.And(GenerateDateRangeQuery(dateRangeQuery));
+            }
         }
 
         var primaryQuery = Repository.Where(query);
