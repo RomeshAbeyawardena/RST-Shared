@@ -5,6 +5,7 @@ using RST.Contracts;
 using RST.Extensions;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 
 namespace RST.Mediatr.Extensions;
 
@@ -38,6 +39,36 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
     where TModel : class
 {
     private readonly IClockProvider clockProvider;
+
+    /// <summary>
+    /// Configures no tracking against the repository based upon the <paramref name="request"/> parameter
+    /// </summary>
+    /// <param name="request">Request used to configure the repository</param>
+    protected void ConfigureNoTracking(IDbQuery request)
+    {
+        if (request.NoTracking.HasValue)
+        {
+            Repository.NoTracking = request.NoTracking.Value;
+        }
+    }
+
+    /// <summary>
+    /// Executes an order by against the <paramref name="query"/>
+    /// </summary>
+    /// <param name="query">Query to extend</param>
+    /// <param name="request">Request used to extend query</param>
+    /// <returns></returns>
+    protected IQueryable<TModel> OrderByQuery(IQueryable<TModel> query, IOrderByQuery request)
+    {
+        if (request.OrderByFields != null && request.OrderByFields.Any())
+        {
+            var order = GetOrderByValue(request.SortOrder);
+            var orderList = string.Join(",", request.OrderByFields);
+            return query.OrderBy($"{orderList} {order}");
+        }
+
+        return query;
+    }
 
     /// <summary>
     /// Define the date range query to filter <typeparamref name="TModel"/> by a date range 
@@ -143,10 +174,7 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
     /// <returns></returns>
     protected async Task<IEnumerable<TModel>> ProcessPagedQuery(Expression<Func<TModel, bool>> query, IPagedQuery request, Func<IQueryable<TModel>, IQueryable<TModel>>? configureQuery, CancellationToken cancellationToken)
     {
-        if (request.NoTracking.HasValue)
-        {
-            Repository.NoTracking = request.NoTracking.Value;
-        }
+        ConfigureNoTracking(request);
 
         if (request is IDateRangeQuery dateRangeQuery)
         {
@@ -163,13 +191,8 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
             primaryQuery = primaryQuery.Page(request.PageIndex.Value, request.TotalItemsPerPage.Value);
         }
 
-        if (request.OrderByFields != null && request.OrderByFields.Any())
-        {
-            var order = GetOrderByValue(request.SortOrder);
-            var orderList = string.Join(",", request.OrderByFields);
-            primaryQuery = primaryQuery.OrderBy($"{orderList} {order}");
-        }
-
+        primaryQuery = OrderByQuery(primaryQuery, request);
+        
         if (configureQuery != null)
         {
             primaryQuery = configureQuery.Invoke(primaryQuery);

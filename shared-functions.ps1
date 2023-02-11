@@ -64,9 +64,9 @@ function set-version(
         { 
             return [System.Version]::new(
                 $currentVersion.Major + 1, 
-                $currentVersion.Minor, 
-                $currentVersion.Build, 
-                $currentVersion.Revision 
+                0, 
+                0, 
+                0 
              )
         }
         $SET_MODE_MINOR 
@@ -74,8 +74,8 @@ function set-version(
             return [System.Version]::new(
                 $currentVersion.Major, 
                 $currentVersion.Minor + 1, 
-                $currentVersion.Build, 
-                $currentVersion.Revision
+                0, 
+                0
             ) 
         }
         $SET_MODE_BUILD 
@@ -84,7 +84,7 @@ function set-version(
                 $currentVersion.Major, 
                 $currentVersion.Minor, 
                 $currentVersion.Build + 1, 
-                $currentVersion.Revision
+                0
             ) 
         }
         $SET_MODE_REVISION 
