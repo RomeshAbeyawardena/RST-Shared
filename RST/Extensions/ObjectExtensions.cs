@@ -47,8 +47,6 @@ public static class ObjectExtensions
             var sourceValue = property.GetValue(source);
             var targetValue = property.GetValue(target);
 
-
-
             if(sourceValue == null || !sourceValue.Equals(targetValue))
             {
                 changeList.Add(new DefaultObjectChange { 
