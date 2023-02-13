@@ -1,12 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace RST.Contracts;
 
-namespace RST.Contracts
+/// <summary>
+/// Represents a paged result
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <typeparam name="TResult"></typeparam>
+public interface IPagedResult<T, TResult> : IResult<IEnumerable<TResult>>
+    where T : struct
 {
-    internal interface IPagedResult
-    {
-    }
+    /// <summary>
+    /// 
+    /// </summary>
+    T PageNumber { get; }
+    /// <summary>
+    /// 
+    /// </summary>
+    T NumberOfPages { get; }
+    /// <summary>
+    /// 
+    /// </summary>
+    T TotalItems { get; }
+    /// <summary>
+    /// Gets a list of results
+    /// </summary>
+    IEnumerable<TResult> Results { get; }
+
 }

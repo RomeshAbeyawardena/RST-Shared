@@ -8,7 +8,7 @@ namespace RST.Defaults
     public static class Result
     {
         /// <summary>
-        /// Gets a result object
+        /// Produces a result object
         /// </summary>
         /// <param name="value">The result value</param>
         /// <param name="statusCode">Status code of result</param>
@@ -29,7 +29,7 @@ namespace RST.Defaults
         }
 
         /// <summary>
-        /// Gets a typed result of <typeparamref name="T"/>
+        /// Produces a typed result of <typeparamref name="T"/>
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="value">The result value</param>
@@ -47,6 +47,39 @@ namespace RST.Defaults
                 StatusCode = statusCode,
                 Message = statusMessage,
                 Value = value
+            };
+        }
+
+        /// <summary>
+        /// Produces a paged result 
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="result"></param>
+        /// <param name="pageNumber"></param>
+        /// <param name="totalNumberOfPages"></param>
+        /// <param name="totalItems"></param>
+        /// <param name="statusCode"></param>
+        /// <param name="statusMessage"></param>
+        /// <param name="isSuccessful"></param>
+        /// <returns></returns>
+        public static IPagedResult<long, TResult> GetPaged<TResult>(
+            IEnumerable<TResult> result, 
+            long pageNumber,
+            long totalNumberOfPages,
+            long totalItems,
+            int? statusCode = 200,
+            string? statusMessage = null,
+            bool isSuccessful = true)
+        {
+            return new DefaultPagedResult<long, TResult>()
+            {
+                IsSuccessful = isSuccessful,
+                StatusCode = statusCode,
+                Message = statusMessage,
+                PageNumber = pageNumber,
+                TotalItems= totalItems,
+                NumberOfPages= totalNumberOfPages,
+                Results = result
             };
         }
     }

@@ -4,9 +4,9 @@
     <Company>DNI</Company>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <FileVersion>0.0.0.14</FileVersion>
+    <FileVersion>0.0.0.15</FileVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>0.0.0.14</Version>
+    <Version>0.0.0.15</Version>
     <VersionSuffix>DEV</VersionSuffix>
   </PropertyGroup>
 </Project>
