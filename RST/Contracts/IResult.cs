@@ -7,6 +7,10 @@ namespace RST.Contracts;
 public interface IResult
 {
     /// <summary>
+    /// Gets error or status message
+    /// </summary>
+    string? Message { get; }
+    /// <summary>
     /// Gets the status code
     /// </summary>
     int? StatusCode { get; }
