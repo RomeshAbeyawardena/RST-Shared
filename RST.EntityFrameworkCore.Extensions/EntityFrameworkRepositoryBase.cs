@@ -80,12 +80,15 @@ public abstract class EntityFrameworkRepositoryBase<TDbContext, T> : RepositoryB
         return dbSet.FindAsync(keys, cancellationToken);
     }
 
-    /// <inheritdoc cref="IEntityFrameworkRepository{TDbContext, T}.GetPagedResult(Expression{Func{T, bool}}, IPagedQuery{int},CancellationToken)" />
-    public async Task<IPagedResult<int, T>> GetPagedResult(Expression<Func<T, bool>> expression, IPagedQuery<int> query, CancellationToken cancellationToken)
+    /// <inheritdoc cref="IRepository{T}.GetPagedResult(Expression{Func{T, bool}}, IPagedQuery{int}, CancellationToken)" />
+    public override async Task<IPagedResult<int, T>> GetPagedResult(Expression<Func<T, bool>> expression, IPagedQuery<int> query, CancellationToken cancellationToken)
     {
         var q = this.Where(expression);
         var total = await q.CountAsync(cancellationToken);
-        var maximumPages = 0;
+        
+        var maximumPages = query.TotalItemsPerPage.HasValue 
+            ? Convert.ToInt32(Math.Ceiling((decimal)query.TotalItemsPerPage/total)) 
+            : 1;
 
         if (query.OrderByFields != null && query.OrderByFields.Any())
         {
@@ -99,8 +102,8 @@ public abstract class EntityFrameworkRepositoryBase<TDbContext, T> : RepositoryB
                 query.PageIndex.GetValueOrDefault(), maximumPages, total);
     }
 
-    /// <inheritdoc cref="IEntityFrameworkRepository{TDbContext, T}.GetPagedResult(Action{ExpressionStarter{T}}, IPagedQuery{int},CancellationToken)"/>
-    public Task<IPagedResult<int, T>> GetPagedResult(Action<ExpressionStarter<T>> queryBuilder, IPagedQuery<int> query, CancellationToken cancellationToken)
+    /// <inheritdoc cref="IRepository{T}.GetPagedResult(Action{ExpressionStarter{T}}, IPagedQuery{int}, CancellationToken)"/>
+    public override Task<IPagedResult<int, T>> GetPagedResult(Action<ExpressionStarter<T>> queryBuilder, IPagedQuery<int> query, CancellationToken cancellationToken)
     {
         queryBuilder(QueryBuilder);
         return GetPagedResult(queryBuilder, query, cancellationToken);

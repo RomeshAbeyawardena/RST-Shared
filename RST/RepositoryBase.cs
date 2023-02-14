@@ -74,4 +74,22 @@ public abstract class RepositoryBase<T> : IRepository<T>
     /// <param name="keys"></param>
     /// <returns></returns>
     public abstract ValueTask<T?> FindAsync(CancellationToken cancellationToken, params object[] keys);
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="expression"></param>
+    /// <param name="query"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public abstract Task<IPagedResult<int, T>> GetPagedResult(Expression<Func<T, bool>> expression, IPagedQuery<int> query, CancellationToken cancellationToken);
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="queryBuilder"></param>
+    /// <param name="query"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public abstract Task<IPagedResult<int, T>> GetPagedResult(Action<ExpressionStarter<T>> queryBuilder, IPagedQuery<int> query, CancellationToken cancellationToken);
 }

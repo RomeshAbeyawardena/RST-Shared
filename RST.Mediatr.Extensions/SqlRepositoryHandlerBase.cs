@@ -152,6 +152,7 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
         return entity;
     }
 
+    
     /// <summary>
     /// Processes a paged request and applies ordering
     /// </summary>
@@ -159,20 +160,7 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
     /// <param name="request"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    protected Task<IEnumerable<TModel>> ProcessPagedQuery(Expression<Func<TModel, bool>> query, IPagedQuery request, CancellationToken cancellationToken)
-    {
-        return ProcessPagedQuery(query, request, null, cancellationToken);
-    }
-
-    /// <summary>
-    /// Processes a paged request and applies ordering
-    /// </summary>
-    /// <param name="query"></param>
-    /// <param name="request"></param>
-    /// <param name="configureQuery"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    protected async Task<IEnumerable<TModel>> ProcessPagedQuery(Expression<Func<TModel, bool>> query, IPagedQuery request, Func<IQueryable<TModel>, IQueryable<TModel>>? configureQuery, CancellationToken cancellationToken)
+    protected Task<IPagedResult<int, TModel>> ProcessPagedQuery(Expression<Func<TModel, bool>> query, IPagedQuery request, CancellationToken cancellationToken)
     {
         ConfigureNoTracking(request);
 
@@ -184,21 +172,7 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
             }
         }
 
-        var primaryQuery = Repository.Where(query);
-
-        if (request.PageIndex.HasValue && request.TotalItemsPerPage.HasValue)
-        {
-            primaryQuery = primaryQuery.Page(request.PageIndex.Value, request.TotalItemsPerPage.Value);
-        }
-
-        primaryQuery = OrderByQuery(primaryQuery, request);
-        
-        if (configureQuery != null)
-        {
-            primaryQuery = configureQuery.Invoke(primaryQuery);
-        }
-
-        return await primaryQuery.ToArrayAsync(cancellationToken);
+        return Repository.GetPagedResult(query, request, cancellationToken);
     }
     /// <summary>
     /// 

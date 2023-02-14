@@ -19,21 +19,5 @@ public interface IEntityFrameworkRepository<TDbContext, T> : IRepository<T>
     /// </summary>
     TDbContext Context { get; }
 
-    /// <summary>
-    /// Get paged result
-    /// </summary>
-    /// <param name="expression">Expression to query</param>
-    /// <param name="query">Instance of paged query used for filtering</param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    Task<IPagedResult<int, T>> GetPagedResult(Expression<Func<T, bool>> expression, IPagedQuery<int> query, CancellationToken cancellationToken);
-
-    /// <summary>
-    /// Get paged result
-    /// </summary>
-    /// <param name="queryBuilder">Query builder to create an expression from</param>
-    /// <param name="query">Instance of paged query used for filtering</param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    Task<IPagedResult<int, T>> GetPagedResult(Action<ExpressionStarter<T>> queryBuilder, IPagedQuery<int> query, CancellationToken cancellationToken);
+    
 } 
