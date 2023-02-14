@@ -53,14 +53,14 @@ namespace RST.Defaults
         /// <summary>
         /// Produces a paged result 
         /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="result"></param>
-        /// <param name="pageNumber"></param>
-        /// <param name="totalNumberOfPages"></param>
-        /// <param name="totalItems"></param>
-        /// <param name="statusCode"></param>
-        /// <param name="statusMessage"></param>
-        /// <param name="isSuccessful"></param>
+        /// <typeparam name="TResult">Type of result</typeparam>
+        /// <param name="result">A list of <typeparamref name="TResult"/></param>
+        /// <param name="pageNumber">The current page number</param>
+        /// <param name="totalNumberOfPages">Total pages available</param>
+        /// <param name="totalItems">Total items of unpaged list</param>
+        /// <param name="statusCode">Status code of result</param>
+        /// <param name="statusMessage">Status or error message</param>
+        /// <param name="isSuccessful">Determines whether the result was successful</param>
         /// <returns></returns>
         public static IPagedResult<long, TResult> GetPaged<TResult>(
             IEnumerable<TResult> result, 
