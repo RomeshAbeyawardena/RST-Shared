@@ -19,6 +19,21 @@ public abstract class EntityFrameworkRepositoryBase<TDbContext, T> : RepositoryB
 {
     private readonly DbSet<T> dbSet;
 
+    private static string GetOrderByValue(Enumerations.SortOrder? sortOrder)
+    {
+        if (!sortOrder.HasValue)
+        {
+            sortOrder = Enumerations.SortOrder.Ascending;
+        }
+
+        return sortOrder switch
+        {
+            Enumerations.SortOrder.Ascending => "asc",
+            Enumerations.SortOrder.Descending => "desc",
+            _ => string.Empty,
+        };
+    }
+
     private void ConfigureTracking(bool noTracking)
     {
         Queryable = noTracking ? dbSet.AsNoTracking() : dbSet;
@@ -71,22 +86,24 @@ public abstract class EntityFrameworkRepositoryBase<TDbContext, T> : RepositoryB
         var q = this.Where(expression);
         var total = await q.CountAsync(cancellationToken);
         var maximumPages = 0;
+
+        if (query.OrderByFields != null && query.OrderByFields.Any())
+        {
+            var order = GetOrderByValue(query.SortOrder);
+            var orderList = string.Join(",", query.OrderByFields);
+            q = q.OrderBy($"{orderList} {order}");
+        }
+
         return Result.GetPaged(await q.Page(query.PageIndex.GetValueOrDefault(),
             query.TotalItemsPerPage.GetValueOrDefault()).ToArrayAsync(cancellationToken),
                 query.PageIndex.GetValueOrDefault(), maximumPages, total);
     }
 
     /// <inheritdoc cref="IEntityFrameworkRepository{TDbContext, T}.GetPagedResult(Action{ExpressionStarter{T}}, IPagedQuery{int},CancellationToken)"/>
-    public async Task<IPagedResult<int, T>> GetPagedResult(Action<ExpressionStarter<T>> queryBuilder, IPagedQuery<int> query, CancellationToken cancellationToken)
+    public Task<IPagedResult<int, T>> GetPagedResult(Action<ExpressionStarter<T>> queryBuilder, IPagedQuery<int> query, CancellationToken cancellationToken)
     {
         queryBuilder(QueryBuilder);
-        
-        var q = this.Where(QueryBuilder);
-        var total = await q.CountAsync(cancellationToken);
-        var maximumPages = 0;
-        return Result.GetPaged(await q.Page(query.PageIndex.GetValueOrDefault(),
-            query.TotalItemsPerPage.GetValueOrDefault()).ToArrayAsync(cancellationToken), 
-                query.PageIndex.GetValueOrDefault(), maximumPages, total);
+        return GetPagedResult(queryBuilder, query, cancellationToken);
     }
 
     /// <inheritdoc cref="Contracts.IRepository{T}.NoTracking"/>
