@@ -83,6 +83,11 @@ public abstract class EntityFrameworkRepositoryBase<TDbContext, T> : RepositoryB
     /// <inheritdoc cref="IRepository{T}.GetPagedResult(Expression{Func{T, bool}}, IPagedQuery{int}, CancellationToken)" />
     public override async Task<IPagedResult<int, T>> GetPagedResult(Expression<Func<T, bool>> expression, IPagedQuery<int> query, CancellationToken cancellationToken)
     {
+        if(!query.TotalItemsPerPage.HasValue && !query.PageIndex.HasValue)
+        {
+            throw new ArgumentNullException(nameof(query), "Unable to set paging");
+        }
+
         var q = this.Where(expression);
         var total = await q.CountAsync(cancellationToken);
         
@@ -97,9 +102,9 @@ public abstract class EntityFrameworkRepositoryBase<TDbContext, T> : RepositoryB
             q = q.OrderBy($"{orderList} {order}");
         }
 
-        return Result.GetPaged(await q.Page(query.PageIndex.GetValueOrDefault(),
-            query.TotalItemsPerPage.GetValueOrDefault()).ToArrayAsync(cancellationToken),
-                query.PageIndex.GetValueOrDefault(), maximumPages, total);
+        return Result.GetPaged(await q.Page(query.PageIndex!.Value,
+            query.TotalItemsPerPage!.Value).ToArrayAsync(cancellationToken),
+                query.PageIndex.Value, maximumPages, total);
     }
 
     /// <inheritdoc cref="IRepository{T}.GetPagedResult(Action{ExpressionStarter{T}}, IPagedQuery{int}, CancellationToken)"/>
