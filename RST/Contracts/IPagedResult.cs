@@ -26,3 +26,12 @@ public interface IPagedResult<T, TResult> : IResult<IEnumerable<TResult>>
     IEnumerable<TResult> Results { get; }
 
 }
+
+/// <summary>
+/// Represents a paged result
+/// </summary>
+/// <typeparam name="TResult"></typeparam>
+public interface IPagedResult<TResult> : IPagedResult<int, TResult>
+{
+
+}

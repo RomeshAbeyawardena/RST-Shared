@@ -156,8 +156,8 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
     /// <summary>
     /// Processes a paged request and applies ordering
     /// </summary>
-    /// <param name="query"></param>
-    /// <param name="request"></param>
+    /// <param name="query">The query to filter by</param>
+    /// <param name="request">The request object</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     protected Task<IPagedResult<int, TModel>> ProcessPagedQuery(Expression<Func<TModel, bool>> query, IPagedQuery request, CancellationToken cancellationToken)
