@@ -2,6 +2,11 @@
 
 namespace RST.Defaults;
 
+internal class DefaultPagedResult<TResult> : DefaultPagedResult<int, TResult>, IPagedResult<TResult>
+{
+
+}
+
 internal class DefaultPagedResult<T, TResult> : DefaultResult<IEnumerable<T>>, IPagedResult<T, TResult>
     where T : struct
 {

@@ -62,7 +62,7 @@ namespace RST.Defaults
         /// <param name="statusMessage">Status or error message</param>
         /// <param name="isSuccessful">Determines whether the result was successful</param>
         /// <returns></returns>
-        public static IPagedResult<int, TResult> GetPaged<TResult>(
+        public static IPagedResult<TResult> GetPaged<TResult>(
             IEnumerable<TResult> result, 
             int pageNumber,
             int totalNumberOfPages,
@@ -71,7 +71,7 @@ namespace RST.Defaults
             string? statusMessage = null,
             bool isSuccessful = true)
         {
-            return new DefaultPagedResult<int, TResult>()
+            return new DefaultPagedResult<TResult>()
             {
                 IsSuccessful = isSuccessful,
                 StatusCode = statusCode,

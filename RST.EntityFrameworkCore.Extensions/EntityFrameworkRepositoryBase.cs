@@ -81,7 +81,7 @@ public abstract class EntityFrameworkRepositoryBase<TDbContext, T> : RepositoryB
     }
 
     /// <inheritdoc cref="IRepository{T}.GetPagedResult(Expression{Func{T, bool}}, IPagedQuery{int}, CancellationToken)" />
-    public override async Task<IPagedResult<int, T>> GetPagedResult(Expression<Func<T, bool>> expression, IPagedQuery<int> query, CancellationToken cancellationToken)
+    public override async Task<IPagedResult<T>> GetPagedResult(Expression<Func<T, bool>> expression, IPagedQuery<int> query, CancellationToken cancellationToken)
     {
         if(!query.TotalItemsPerPage.HasValue && !query.PageIndex.HasValue)
         {
@@ -108,7 +108,7 @@ public abstract class EntityFrameworkRepositoryBase<TDbContext, T> : RepositoryB
     }
 
     /// <inheritdoc cref="IRepository{T}.GetPagedResult(Action{ExpressionStarter{T}}, IPagedQuery{int}, CancellationToken)"/>
-    public override Task<IPagedResult<int, T>> GetPagedResult(Action<ExpressionStarter<T>> queryBuilder, IPagedQuery<int> query, CancellationToken cancellationToken)
+    public override Task<IPagedResult<T>> GetPagedResult(Action<ExpressionStarter<T>> queryBuilder, IPagedQuery<int> query, CancellationToken cancellationToken)
     {
         queryBuilder(QueryBuilder);
         return GetPagedResult(queryBuilder, query, cancellationToken);

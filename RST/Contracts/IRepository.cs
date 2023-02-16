@@ -49,7 +49,7 @@ public interface IRepository<T> : IQueryable<T>
     /// <param name="query">Instance of paged query used for filtering</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<IPagedResult<int, T>> GetPagedResult(Expression<Func<T, bool>> expression, IPagedQuery<int> query, CancellationToken cancellationToken);
+    Task<IPagedResult<T>> GetPagedResult(Expression<Func<T, bool>> expression, IPagedQuery<int> query, CancellationToken cancellationToken);
 
     /// <summary>
     /// Get paged result
@@ -58,5 +58,5 @@ public interface IRepository<T> : IQueryable<T>
     /// <param name="query">Instance of paged query used for filtering</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<IPagedResult<int, T>> GetPagedResult(Action<ExpressionStarter<T>> queryBuilder, IPagedQuery<int> query, CancellationToken cancellationToken);
+    Task<IPagedResult<T>> GetPagedResult(Action<ExpressionStarter<T>> queryBuilder, IPagedQuery<int> query, CancellationToken cancellationToken);
 }

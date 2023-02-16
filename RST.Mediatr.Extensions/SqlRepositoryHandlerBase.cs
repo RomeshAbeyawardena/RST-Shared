@@ -160,7 +160,7 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
     /// <param name="request">The request object</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    protected Task<IPagedResult<int, TModel>> ProcessPagedQuery(Expression<Func<TModel, bool>> query, IPagedQuery request, CancellationToken cancellationToken)
+    protected Task<IPagedResult<TModel>> ProcessPagedQuery(Expression<Func<TModel, bool>> query, IPagedQuery request, CancellationToken cancellationToken)
     {
         ConfigureNoTracking(request);
 
