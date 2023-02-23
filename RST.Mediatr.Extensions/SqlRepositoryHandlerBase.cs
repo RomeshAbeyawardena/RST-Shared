@@ -71,6 +71,21 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
     }
 
     /// <summary>
+    /// Filters a date range object
+    /// </summary>
+    /// <param name="query">Query to extend</param>
+    /// <param name="request">Request used to extend</param>
+    /// <returns></returns>
+    protected Expression<Func<TModel, bool>> FilterByDateRange(Expression<Func<TModel, bool>> query, IDateRangeQuery request)
+    {
+        if (request.StartDate.HasValue || request.EndDate.HasValue)
+        {
+            query = query.And(DefineDateRangeQuery(request));
+        }
+        return query;
+    }
+
+    /// <summary>
     /// Define the date range query to filter <typeparamref name="TModel"/> by a date range 
     /// </summary>
     /// <param name="query"></param>
@@ -152,7 +167,25 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
         return entity;
     }
 
-    
+    /// <summary>
+    /// Process orderable queryable
+    /// </summary>
+    /// <param name="query">Query to filter and order</param>
+    /// <param name="orderByQuery">Request object to apply ordering and filtering</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    protected async Task<IEnumerable<TModel>> ProcessOrderableQuery(Expression<Func<TModel, bool>> query, IOrderByQuery orderByQuery, CancellationToken cancellationToken)
+    {
+        ConfigureNoTracking(orderByQuery);
+
+        if (orderByQuery is IDateRangeQuery dateRangeQuery)
+        {
+            query = FilterByDateRange(query, dateRangeQuery);
+        }
+
+        return await OrderByQuery(this.Repository.Where(query), orderByQuery).ToArrayAsync(cancellationToken);
+    }
+
     /// <summary>
     /// Processes a paged request and applies ordering
     /// </summary>
@@ -166,10 +199,7 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
 
         if (request is IDateRangeQuery dateRangeQuery)
         {
-            if (dateRangeQuery.StartDate.HasValue || dateRangeQuery.EndDate.HasValue)
-            {
-                query = query.And(DefineDateRangeQuery(dateRangeQuery));
-            }
+            query = FilterByDateRange(query, dateRangeQuery);
         }
 
         return Repository.GetPagedResult(query, request, cancellationToken);

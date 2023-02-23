@@ -25,7 +25,7 @@ public class ColumnDescriptorAttribute : ColumnAttribute
 
     private string DescribeType()
 	{
-		var type = Enum.GetName(DbType);
+		var type = Enum.GetName(DbType)?.ToUpper();
 
 		if (DoubleParameterFieldTypes.Contains(DbType))
 		{
