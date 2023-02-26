@@ -94,7 +94,7 @@ public abstract class EntityFrameworkRepositoryBase<TDbContext, T> : RepositoryB
         var total = await q.CountAsync(cancellationToken);
 
 
-        if (!query.TotalItemsPerPage.HasValue || !query.PageIndex.HasValue)
+        if (total < 1 || !query.TotalItemsPerPage.HasValue || !query.PageIndex.HasValue)
         {
             return Result.GetPaged(await q.ToArrayAsync(cancellationToken), 1, 1, total);
         }
