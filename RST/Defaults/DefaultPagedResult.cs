@@ -17,7 +17,7 @@ public class DefaultPagedResult<TResult> : DefaultPagedResult<int, TResult>, IPa
 /// </summary>
 /// <typeparam name="T"></typeparam>
 /// <typeparam name="TResult"></typeparam>
-public class DefaultPagedResult<T, TResult> : DefaultResult<IEnumerable<T>>, IPagedResult<T, TResult>
+public class DefaultPagedResult<T, TResult> : DefaultResult<IEnumerable<TResult>>, IPagedResult<T, TResult>
     where T : struct
 {
     /// <summary>
