@@ -84,20 +84,45 @@ namespace RST.Defaults
         }
     }
 
-    internal class DefaultResult<T> : IResult<T>
+    /// <summary>
+    /// Represents a default implementation for <see cref="IResult{T}"/>
+    /// </summary>
+    /// <typeparam name="T"><see cref="Type"/> of result</typeparam>
+    public class DefaultResult<T> : IResult<T>
     {
+        ///<inheritdoc/>
         public string? Message { get; set; }
+
+        ///<inheritdoc/>
         public int? StatusCode { get; set; }
+        
         object? IResult.Value => Value;
+
+        /// <summary>
+        /// Gets or sets the strong typed value
+        /// </summary>
         public T? Value { get; set; }
+
+        ///<inheritdoc/>
         public bool IsSuccessful { get; set; }
     }
 
-    internal class DefaultResult : IResult
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <inheritdoc cref="IRepository{T}"/>
+    public class DefaultResult : IResult
     {
+        ///<inheritdoc/>
         public string? Message { get; set; }
+
+        ///<inheritdoc/>
         public int? StatusCode { get; set; }
+
+        ///<inheritdoc/>
         public virtual object? Value { get; set; }
+
+        ///<inheritdoc/>
         public bool IsSuccessful { get; set; }
     }
 }

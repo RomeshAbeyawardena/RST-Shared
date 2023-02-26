@@ -83,17 +83,7 @@ public abstract class EntityFrameworkRepositoryBase<TDbContext, T> : RepositoryB
     /// <inheritdoc cref="IRepository{T}.GetPagedResult(Expression{Func{T, bool}}, IPagedQuery{int}, CancellationToken)" />
     public override async Task<IPagedResult<T>> GetPagedResult(Expression<Func<T, bool>> expression, IPagedQuery<int> query, CancellationToken cancellationToken)
     {
-        if(!query.TotalItemsPerPage.HasValue && !query.PageIndex.HasValue)
-        {
-            throw new ArgumentNullException(nameof(query), "Unable to set paging");
-        }
-
         var q = this.Where(expression);
-        var total = await q.CountAsync(cancellationToken);
-        
-        var maximumPages = query.TotalItemsPerPage.HasValue 
-            ? Convert.ToInt32(Math.Ceiling((decimal)query.TotalItemsPerPage/total)) 
-            : 1;
 
         if (query.OrderByFields != null && query.OrderByFields.Any())
         {
@@ -101,10 +91,24 @@ public abstract class EntityFrameworkRepositoryBase<TDbContext, T> : RepositoryB
             var orderList = string.Join(",", query.OrderByFields);
             q = q.OrderBy($"{orderList} {order}");
         }
+        var total = await q.CountAsync(cancellationToken);
 
-        return Result.GetPaged(await q.Page(query.PageIndex!.Value,
-            query.TotalItemsPerPage!.Value).ToArrayAsync(cancellationToken),
-                query.PageIndex.Value, maximumPages, total);
+
+        if (!query.TotalItemsPerPage.HasValue || !query.PageIndex.HasValue)
+        {
+            return Result.GetPaged(await q.ToArrayAsync(cancellationToken), 1, 1, total);
+        }
+        else
+        {
+            
+            var maximumPages = query.TotalItemsPerPage.HasValue
+                ? Convert.ToInt32(Math.Ceiling((decimal)query.TotalItemsPerPage / total))
+                : 1;
+
+            return Result.GetPaged(await q.Page(query.PageIndex!.Value,
+                query.TotalItemsPerPage!.Value).ToArrayAsync(cancellationToken),
+                    query.PageIndex.Value, maximumPages, total);
+        }
     }
 
     /// <inheritdoc cref="IRepository{T}.GetPagedResult(Action{ExpressionStarter{T}}, IPagedQuery{int}, CancellationToken)"/>
