@@ -40,7 +40,7 @@ public abstract class ApiController
         Mapper = null!;
 
         var apiControllerType = GetType();
-        var properties = apiControllerType.GetInheritedProperties().Where(p => p.CanWrite && p.HasAttribute(typeof(InjectAttribute), out var attribute));
+        var properties = apiControllerType.GetAllProperties().Where(p => p.CanWrite && p.HasAttribute(typeof(InjectAttribute), out var attribute));
         
         foreach (var property in properties)
         {

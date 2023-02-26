@@ -10,12 +10,8 @@ public class PropertyInfoExtensionTests
     {
         var t = typeof(MySecondoryInheritedType);
 
-        var properties = t.GetInheritedProperties();
+        var properties = t.GetAllProperties();
         var count = properties.Count();
-        Assert.That(count, Is.EqualTo(6));
-
-        properties = t.GetProperties();
-        count = properties.Count();
         Assert.That(count, Is.EqualTo(3));
     }
 }

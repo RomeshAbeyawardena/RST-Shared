@@ -37,7 +37,7 @@ public class ApiControllerTests
         serviceProviderMock.Setup(s => s.GetService(typeof(IMediator)))
             .Returns(mediatorMock.Object).Verifiable();
 
-        serviceProviderMock.Verify(s => s.GetService(typeof(IMapper)));
-        serviceProviderMock.Verify(s => s.GetService(typeof(IMediator)));
+        serviceProviderMock.Verify(s => s.GetService(typeof(IMapper)), Times.Once);
+        serviceProviderMock.Verify(s => s.GetService(typeof(IMediator)), Times.Once);
     }
 }

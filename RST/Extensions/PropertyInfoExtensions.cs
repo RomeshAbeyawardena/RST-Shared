@@ -44,7 +44,7 @@ public static class PropertyInfoExtensions
     /// <param name="type"></param>
     /// <param name="filterExpression"></param>
     /// <returns></returns>
-    public static IEnumerable<PropertyInfo> GetInheritedProperties(this Type type, Func<PropertyInfo, bool>? filterExpression = null)
+    public static IEnumerable<PropertyInfo> GetAllProperties(this Type type, Func<PropertyInfo, bool>? filterExpression = null)
     {
         var properties = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
