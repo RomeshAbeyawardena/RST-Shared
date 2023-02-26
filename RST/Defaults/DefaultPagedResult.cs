@@ -41,15 +41,4 @@ public class DefaultPagedResult<T, TResult> : DefaultResult<IEnumerable<T>>, IPa
     public IEnumerable<TResult> Results { get; set; }
     
     IEnumerable<TResult>? IResult<IEnumerable<TResult>>.Value => Results;
-
-    ///<inheritdoc />
-    public IEnumerator<TResult> GetEnumerator()
-    {
-        return Results.GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
 }

@@ -5,7 +5,7 @@
 /// </summary>
 /// <typeparam name="T"></typeparam>
 /// <typeparam name="TResult"></typeparam>
-public interface IPagedResult<T, TResult> : IResult<IEnumerable<TResult>>, IEnumerable<TResult>
+public interface IPagedResult<T, TResult> : IResult<IEnumerable<TResult>>
     where T : struct
 {
     /// <summary>
