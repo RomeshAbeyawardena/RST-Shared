@@ -9,7 +9,7 @@ namespace RST.Mediatr.Extensions;
 /// <typeparam name="TRequest"></typeparam>
 /// <typeparam name="TModel"></typeparam>
 public abstract class PagedRepositoryHandlerBase<TRequest, TModel>
-    : SqlRepositoryHandlerBase<TRequest, IPagedResult<TModel>, TModel>
+    : RepositoryHandlerBase<TRequest, IPagedResult<TModel>, TModel>
     where TRequest: IRequest<IPagedResult<TModel>>
     where TModel: class
 {

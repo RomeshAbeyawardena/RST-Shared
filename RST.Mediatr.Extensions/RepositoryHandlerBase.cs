@@ -14,7 +14,7 @@ namespace RST.Mediatr.Extensions;
 /// </summary>
 /// <typeparam name="TRequest"></typeparam>
 /// <typeparam name="TResponse"></typeparam>
-public abstract class RepositoryHandlerBase<TRequest, TResponse> : SqlRepositoryHandlerBase<TRequest, TResponse, TResponse>
+public abstract class RepositoryHandlerBase<TRequest, TResponse> : RepositoryHandlerBase<TRequest, TResponse, TResponse>
     where TRequest : IRequest<TResponse>
     where TResponse : class
 {
@@ -34,7 +34,7 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse> : SqlRepository
 /// <typeparam name="TRequest"></typeparam>
 /// <typeparam name="TResponse"></typeparam>
 /// <typeparam name="TModel"></typeparam>
-public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IRequestHandler<TRequest, TResponse>
+public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : IRequestHandler<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
     where TModel : class
 {
@@ -217,7 +217,7 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse, TModel> : IR
     /// </summary>
     /// <param name="clockProvider"></param>
     /// <param name="repository"></param>
-    public SqlRepositoryHandlerBase(IClockProvider clockProvider, IRepository<TModel> repository)
+    public RepositoryHandlerBase(IClockProvider clockProvider, IRepository<TModel> repository)
     {
         this.clockProvider = clockProvider;
         Repository = repository;
