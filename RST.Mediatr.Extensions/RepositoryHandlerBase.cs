@@ -14,7 +14,7 @@ namespace RST.Mediatr.Extensions;
 /// </summary>
 /// <typeparam name="TRequest"></typeparam>
 /// <typeparam name="TResponse"></typeparam>
-public abstract class SqlRepositoryHandlerBase<TRequest, TResponse> : SqlRepositoryHandlerBase<TRequest, TResponse, TResponse>
+public abstract class RepositoryHandlerBase<TRequest, TResponse> : SqlRepositoryHandlerBase<TRequest, TResponse, TResponse>
     where TRequest : IRequest<TResponse>
     where TResponse : class
 {
@@ -23,7 +23,7 @@ public abstract class SqlRepositoryHandlerBase<TRequest, TResponse> : SqlReposit
     /// </summary>
     /// <param name="clockProvider"></param>
     /// <param name="repository"></param>
-    protected SqlRepositoryHandlerBase(IClockProvider clockProvider, IRepository<TResponse> repository) : base(clockProvider, repository)
+    protected RepositoryHandlerBase(IClockProvider clockProvider, IRepository<TResponse> repository) : base(clockProvider, repository)
     {
     }
 }
