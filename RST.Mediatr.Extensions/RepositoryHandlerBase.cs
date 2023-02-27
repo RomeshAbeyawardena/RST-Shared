@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 namespace RST.Mediatr.Extensions;
 
 /// <summary>
-/// Represents a SQL Repository Handler
+/// Represents a repository handler
 /// </summary>
 /// <typeparam name="TRequest"></typeparam>
 /// <typeparam name="TResponse"></typeparam>

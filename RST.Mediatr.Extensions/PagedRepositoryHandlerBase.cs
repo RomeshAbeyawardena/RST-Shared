@@ -4,7 +4,7 @@ using RST.Contracts;
 namespace RST.Mediatr.Extensions;
 
 /// <summary>
-/// Represents an abstract Paged SQL repository request handler
+/// Represents an abstract paged repository request handler
 /// </summary>
 /// <typeparam name="TRequest"></typeparam>
 /// <typeparam name="TModel"></typeparam>
