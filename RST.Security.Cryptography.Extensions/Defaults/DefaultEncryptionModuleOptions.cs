@@ -5,7 +5,6 @@ namespace RST.Security.Cryptography.Extensions.Defaults;
 
 internal class DefaultEncryptionModuleOptions : IEncryptionModuleOptions
 {
-
     public DefaultEncryptionModuleOptions(EncryptionCaseConvention encryptionCaseConvention)
     {
         EncryptionOptionsFactory = new Dictionary<string, Func<IServiceProvider, IEncryptionOptions>>();

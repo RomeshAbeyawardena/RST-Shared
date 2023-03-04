@@ -20,5 +20,8 @@ public interface IEncryptionOptions
     /// </summary>
     string InitialVector { get; set; }
 
+    /// <summary>
+    /// Gets or sets the encoding
+    /// </summary>
     Encoding? Encoding { get; set; }
 }
