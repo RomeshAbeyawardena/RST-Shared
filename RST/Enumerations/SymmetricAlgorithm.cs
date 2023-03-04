@@ -1,7 +1,16 @@
 ﻿namespace RST.Enumerations;
 
+/// <summary>
+/// Represents symmetric algorithm
+/// </summary>
 public enum SymmetricAlgorithm
 {
+    /// <summary>
+    /// Uses AES
+    /// </summary>
     Aes,
-    RSA
+    /// <summary>
+    /// Uses Triple DES
+    /// </summary>
+    TripleDES
 }
