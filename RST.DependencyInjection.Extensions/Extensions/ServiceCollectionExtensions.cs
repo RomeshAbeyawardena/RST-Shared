@@ -39,7 +39,11 @@ public static class ServiceCollectionExtensions
     {
         var serviceDefinitionOptions = new ServiceDefinitionOptions();
         configureOptions?.Invoke(serviceDefinitionOptions);
-        assemblies = assemblies.Union(serviceDefinitionOptions.GetAssemblies()).ToArray();
+        
+        if (serviceDefinitionOptions.HasAssemblies)
+        {
+            assemblies = assemblies.Union(serviceDefinitionOptions.Assemblies).ToArray();
+        }
 
         return services.Scan(s => s
             .FromAssemblies(assemblies)
