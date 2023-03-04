@@ -14,11 +14,11 @@ public interface IEncryptionOptions
     /// <summary>
     /// Gets or sets the encryption key
     /// </summary>
-    string Key { get; set; }
+    string? Key { get; set; }
     /// <summary>
     /// Gets or sets the public key
     /// </summary>
-    string InitialVector { get; set; }
+    string? InitialVector { get; set; }
 
     /// <summary>
     /// Gets or sets the encoding
