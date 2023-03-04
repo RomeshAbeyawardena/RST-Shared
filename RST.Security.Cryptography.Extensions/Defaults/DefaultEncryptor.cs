@@ -11,6 +11,12 @@ public class DefaultEncryptor : CryptographicProviderBase, IEncryptor
 {
     private readonly IEncryptionModuleOptions encryptionModuleOptions;
 
+    /// <summary>
+    /// Initialises instance of <see cref="IEncryptor"/> implementation
+    /// </summary>
+    /// <param name="encryptionOptions"></param>
+    /// <param name="symmetricAlgorithmFactory"></param>
+    /// <param name="encryptionModuleOptions"></param>
     public DefaultEncryptor(IEncryptionOptions encryptionOptions, 
         ISymmetricAlgorithmFactory symmetricAlgorithmFactory,
         IEncryptionModuleOptions encryptionModuleOptions) : base(encryptionOptions, symmetricAlgorithmFactory)
