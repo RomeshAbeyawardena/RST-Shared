@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <NoWarn>1591</NoWarn>
@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RST.AspNetCore.Extensions\RST.AspNetCore.Extensions.csproj" />
+    <ProjectReference Include="..\RST.Security.Cryptography.Extensions\RST.Security.Cryptography.Extensions.csproj" />
     <ProjectReference Include="..\RST\RST.csproj" />
   </ItemGroup>
 

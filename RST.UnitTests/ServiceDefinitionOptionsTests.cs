@@ -1,12 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace RST.UnitTests;
 
-namespace RST.UnitTests
+[TestFixture]
+public class ServiceDefinitionOptionsTests
 {
-    internal class ServiceDefinitionOptionsTests
+    ServiceDefinitionOptions serviceDefinitionOptions;
+    [SetUp]
+    public void SetUp()
     {
+        serviceDefinitionOptions = new ServiceDefinitionOptions();
+    }
+
+    [Test]
+    public void Ensure_cached_list_is_populated()
+    {
+        serviceDefinitionOptions.ConfigureCoreServices = true;
+        serviceDefinitionOptions.ConfigureCryptographyExtensions = true;
+
+        Assert.That(serviceDefinitionOptions.HasAssemblies, Is.True);
+        Assert.That(serviceDefinitionOptions.Assemblies, Is.Empty);
     }
 }
