@@ -4,6 +4,7 @@
 /// Represents a dictionary builder
 /// </summary>
 public interface IDictionaryBuilder<TKey, TValue> : IReadOnlyDictionary<TKey, TValue>
+    where TKey : notnull
 {
     /// <inheritdoc cref="Dictionary{TKey, TValue}.Add(TKey, TValue)"/>
     /// <returns>This instance of <see cref="IDictionaryBuilder{TKey, TValue}" /></returns>

@@ -1,11 +1,13 @@
 ﻿using RST.Contracts;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 
 namespace RST.Defaults;
 
 /// <inheritdoc cref="IDictionaryBuilder{TKey, TValue}"/>
 public class DefaultDictionaryBuilder<TKey, TValue> : IDictionaryBuilder<TKey, TValue>
+    where TKey: notnull
 {
     private readonly IDictionary<TKey, TValue> dictionary;
 
@@ -13,9 +15,9 @@ public class DefaultDictionaryBuilder<TKey, TValue> : IDictionaryBuilder<TKey, T
     /// Initialises an instance of <see cref="IDictionaryBuilder{TKey, TValue}"/>
     /// </summary>
     /// <param name="dictionary"></param>
-    public DefaultDictionaryBuilder(IDictionary<TKey, TValue> dictionary)
+    public DefaultDictionaryBuilder(IDictionary<TKey, TValue>? dictionary = null)
     {
-        this.dictionary = dictionary;
+        this.dictionary = dictionary ?? new ConcurrentDictionary<TKey, TValue>();
     }
 
     /// <inheritdoc cref="IDictionary{TKey, TValue}"/>
