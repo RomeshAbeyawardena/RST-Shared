@@ -67,10 +67,10 @@ public abstract class CryptographicProviderBase
             var iv = Convert.FromBase64String(encryptionOptions.InitialVector);
 
             if (key.Length > 32)
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("Key is an invalid size");
 
             if (iv.Length > 16 || iv.Length < 16)
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("Initial vector an invalid size");
 
             switch (encryptionMode)
             {

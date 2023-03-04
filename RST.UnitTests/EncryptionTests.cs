@@ -1,6 +1,8 @@
 ﻿using Moq;
 using RST.Contracts;
+using RST.Enumerations;
 using RST.Security.Cryptography.Extensions.Defaults;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace RST.UnitTests
@@ -19,11 +21,16 @@ namespace RST.UnitTests
         {
             encryptionOptions = new DefaultEncryptionOptions()
             {
-                Key = Convert.ToBase64String(Encoding.UTF8.GetBytes("NmZiMjhlMjNkZDdiNGU0NmJjODgwNTVjOTYxZDY1ZTM=")),
-                InitialVector = Convert.ToBase64String(Encoding.UTF8.GetBytes("YjY2OTBlMmRjYjhhMDZmOQ=="))
+                Key = "NmZiMjhlMjNkZDdiNGU0NmJjODgwNTVjOTYxZDY1ZTM=",
+                InitialVector = "YjY2OTBlMmRjYjhhMDZmOQ=="
             };
             encryptionModuleOptions = new DefaultEncryptionModuleOptions(Enumerations.EncryptionCaseConvention.Uppercase);
             algorithmFactory = new Mock<ISymmetricAlgorithmFactory>();
+
+            algorithmFactory
+                .Setup(s => s.GetSymmetricAlgorithm(It.IsAny<Enumerations.SymmetricAlgorithm>()))
+                .Returns(Aes.Create());
+
             encryptor = new DefaultEncryptor(encryptionOptions,algorithmFactory.Object,encryptionModuleOptions);
             decryptor = new DefaultDecryptor(encryptionOptions, algorithmFactory.Object);
         }
@@ -31,9 +38,11 @@ namespace RST.UnitTests
         [Test]
         public void Encrypt()
         {
+           var o = "Hello world";
+           var s = encryptor.Encrypt(o, encryptionOptions);
            
-           var s = encryptor.Encrypt("Hello world", encryptionOptions);
-            Assert.That(s, Is.EqualTo("s"));
+           var e = decryptor.Decrypt(s, encryptionOptions);
+           Assert.That(e, Is.EqualTo(o));
         }
     }
 }
