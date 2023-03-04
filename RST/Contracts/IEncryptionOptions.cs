@@ -1,4 +1,6 @@
-﻿namespace RST.Contracts;
+﻿using System.Text;
+
+namespace RST.Contracts;
 
 /// <summary>
 /// Represents encryption options
@@ -17,4 +19,6 @@ public interface IEncryptionOptions
     /// Gets or sets the public key
     /// </summary>
     string InitialVector { get; set; }
+
+    Encoding? Encoding { get; set; }
 }
