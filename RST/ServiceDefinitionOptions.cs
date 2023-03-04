@@ -8,19 +8,40 @@ namespace RST;
 /// </summary>
 public class ServiceDefinitionOptions
 {
+    private bool configureCoreServices;
+    private bool configureCryptographyExtensions;
+
+    internal bool hasChanged = false;
+
     private IEnumerable<Assembly>? assemblies;
     /// <summary>
     /// Configures core services
     /// </summary>
-    public bool ConfigureCoreServices { get; set; }
+    public bool ConfigureCoreServices { 
+        get => configureCoreServices; 
+        set { 
+            hasChanged = configureCoreServices != value; 
+            configureCoreServices = value; 
+        } 
+    }
+
     /// <summary>
     /// Configures cryptography extensions
     /// </summary>
-    public bool ConfigureCryptographyExtensions { get; set; }
+    public bool ConfigureCryptographyExtensions { 
+        get => configureCryptographyExtensions; 
+        set
+        {
+            hasChanged = configureCryptographyExtensions != value;
+            configureCryptographyExtensions = value;
+        }
+    }
 
     internal bool HasAssemblies => Assemblies.Any();
 
-    internal IEnumerable<Assembly> Assemblies => assemblies ?? GetAssemblies();
+    internal IEnumerable<Assembly> Assemblies => assemblies == null || hasChanged 
+        ? GetAssemblies()
+        : assemblies;
 
     internal IEnumerable<Assembly> GetAssemblies()
     {
@@ -35,7 +56,7 @@ public class ServiceDefinitionOptions
         {
             assemblyList.Add(ServiceDefinitions.RST_SECURITY_CRYPTOGRAPHY_EXTENSIONS);
         }
-
+        hasChanged = false;
         return assemblies = assemblyList.LoadAssemblies();
     }
 }

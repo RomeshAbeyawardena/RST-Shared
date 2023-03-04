@@ -16,7 +16,9 @@ public class ServiceDefinitionOptionsTests
         serviceDefinitionOptions.ConfigureCoreServices = true;
         serviceDefinitionOptions.ConfigureCryptographyExtensions = true;
 
+        Assert.That(serviceDefinitionOptions.hasChanged, Is.True);
         Assert.That(serviceDefinitionOptions.HasAssemblies, Is.True);
-        Assert.That(serviceDefinitionOptions.Assemblies, Is.Empty);
+        Assert.That(serviceDefinitionOptions.Assemblies.Count(), Is.EqualTo(2));
+        Assert.That(serviceDefinitionOptions.hasChanged, Is.False);
     }
 }
