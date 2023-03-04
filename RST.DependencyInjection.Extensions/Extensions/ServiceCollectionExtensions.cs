@@ -29,12 +29,18 @@ public static class ServiceCollectionExtensions
     /// Adds services decorated with the <see cref="RegisterAttribute"/> 
     /// </summary>
     /// <param name="services">Instance of <see cref="IServiceCollection"/> to add core service sto</param>
+    /// <param name="configureOptions">Configure options</param>
     /// <param name="assemblies">Assemblies used to for scan services</param>
     /// <returns>Passed instance of <see cref="IServiceCollection"/></returns>
     public static IServiceCollection AddServicesWithRegisterAttribute(
       this IServiceCollection services,
+      Action<ServiceDefinitionOptions>? configureOptions = null,
       params Assembly[] assemblies)
     {
+        var serviceDefinitionOptions = new ServiceDefinitionOptions();
+        configureOptions?.Invoke(serviceDefinitionOptions);
+        assemblies = assemblies.Union(serviceDefinitionOptions.GetAssemblies()).ToArray();
+
         return services.Scan(s => s
             .FromAssemblies(assemblies)
             .AddClasses(c => c.WithAttribute<RegisterAttribute>(c => c.ServiceLifetime == ServiceLifetime.Singleton))
