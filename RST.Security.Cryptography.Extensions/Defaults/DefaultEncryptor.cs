@@ -10,6 +10,7 @@ namespace RST.Security.Cryptography.Extensions.Defaults;
 public class DefaultEncryptor : CryptographicProviderBase, IEncryptor
 {
     private readonly IEncryptionModuleOptions encryptionModuleOptions;
+    private readonly IServiceProvider serviceProvider;
 
     /// <summary>
     /// Initialises instance of <see cref="IEncryptor"/> implementation
@@ -17,11 +18,22 @@ public class DefaultEncryptor : CryptographicProviderBase, IEncryptor
     /// <param name="encryptionOptions"></param>
     /// <param name="symmetricAlgorithmFactory"></param>
     /// <param name="encryptionModuleOptions"></param>
+    /// <param name="serviceProvider"></param>
     public DefaultEncryptor(IEncryptionOptions encryptionOptions, 
         ISymmetricAlgorithmFactory symmetricAlgorithmFactory,
-        IEncryptionModuleOptions encryptionModuleOptions) : base(encryptionOptions, symmetricAlgorithmFactory)
+        IEncryptionModuleOptions encryptionModuleOptions,
+        IServiceProvider serviceProvider) : base(encryptionOptions, symmetricAlgorithmFactory)
     {
         this.encryptionModuleOptions = encryptionModuleOptions;
+        this.serviceProvider = serviceProvider;
+    }
+
+    /// <inheritdoc cref="IEncryptor.Encrypt(string, string)"/>
+    public string Encrypt(string encryptionKey, string value)
+    {
+        var encryptionOptions = GetEncryptionOptions(encryptionModuleOptions, serviceProvider, encryptionKey);
+
+        return Encrypt(value, encryptionOptions);
     }
 
     ///<inheritdoc cref="IEncryptor.Encrypt(string, IEncryptionOptions)"/>

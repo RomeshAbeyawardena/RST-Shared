@@ -1,5 +1,6 @@
 ﻿using RST.Contracts;
 using RST.Enumerations;
+using System;
 using System.Security.Cryptography;
 
 namespace RST.Security.Cryptography.Extensions;
@@ -10,6 +11,31 @@ namespace RST.Security.Cryptography.Extensions;
 public abstract class CryptographicProviderBase
 {
     private readonly ISymmetricAlgorithmFactory SymmetricAlgorithmFactory;
+
+    /// <summary>
+    /// Gets an instance of <see cref="IEncryptionOptions"/> for supplied <paramref name="encryptionKey"/>
+    /// </summary>
+    /// <param name="encryptionModuleOptions">Instance of <see cref="IEncryptionModuleOptions"/></param>
+    /// <param name="serviceProvider">Instance of service provider</param>
+    /// <param name="encryptionKey">Encryption key to retrieve</param>
+    /// <returns></returns>
+    /// <exception cref="NullReferenceException"></exception>
+    protected static IEncryptionOptions GetEncryptionOptions(
+        IEncryptionModuleOptions encryptionModuleOptions,
+        IServiceProvider serviceProvider,
+        string encryptionKey)
+    {
+        if (encryptionModuleOptions.EncryptionOptions.TryGetValue(encryptionKey, out var encryptionOptions))
+        {
+            return encryptionOptions;
+        }
+        else if (encryptionModuleOptions.EncryptionOptionsFactory.TryGetValue(encryptionKey, out var encryptionOptionsFactory))
+        {
+            return encryptionOptionsFactory(serviceProvider);
+        }
+        else
+            throw new NullReferenceException($"Encryption key '{encryptionKey}' not found");
+    }
 
     /// <summary>
     /// Gets a symmetric algorithm 
@@ -63,6 +89,16 @@ public abstract class CryptographicProviderBase
     {
         ICryptoTransform GetCryptoTransform(System.Security.Cryptography.SymmetricAlgorithm symmetricAlgorithm)
         {
+            if (string.IsNullOrWhiteSpace(encryptionOptions.Key))
+            {
+                throw new NullReferenceException("Key must not be null or an empty value");
+            }
+
+            if (string.IsNullOrWhiteSpace(encryptionOptions.InitialVector))
+            {
+                throw new NullReferenceException("Initial vector must not be null or an empty value");
+            }
+
             var key = Convert.FromBase64String(encryptionOptions.Key);
             var iv = Convert.FromBase64String(encryptionOptions.InitialVector);
 

@@ -1,5 +1,6 @@
 ﻿using RST.Attributes;
 using RST.Contracts;
+using System;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -9,13 +10,20 @@ namespace RST.Security.Cryptography.Extensions.Defaults;
 [Register]
 public class DefaultDecryptor : CryptographicProviderBase, IDecryptor
 {
+    private readonly IEncryptionModuleOptions encryptionModuleOptions;
+    private readonly IServiceProvider serviceProvider;
+
     /// <summary>
     /// Initialises an instance of <see cref="DefaultDecryptor"/>
     /// </summary>
     /// <param name="encryptionOptions"></param>
     /// <param name="symmetricAlgorithmFactory"></param>
-    public DefaultDecryptor(IEncryptionOptions encryptionOptions, ISymmetricAlgorithmFactory symmetricAlgorithmFactory) : base(encryptionOptions, symmetricAlgorithmFactory)
+    /// <param name="encryptionModuleOptions"></param>
+    /// <param name="serviceProvider"></param>
+    public DefaultDecryptor(IEncryptionOptions encryptionOptions, ISymmetricAlgorithmFactory symmetricAlgorithmFactory, IEncryptionModuleOptions encryptionModuleOptions, IServiceProvider serviceProvider) : base(encryptionOptions, symmetricAlgorithmFactory)
     {
+        this.encryptionModuleOptions = encryptionModuleOptions;
+        this.serviceProvider = serviceProvider;
     }
 
     /// <inheritdoc cref="IDecryptor.Decrypt(string, IEncryptionOptions)"/>
@@ -34,5 +42,13 @@ public class DefaultDecryptor : CryptographicProviderBase, IDecryptor
 
         return ExecuteSymmetricOperation(Enumerations.EncryptionMode.Decrypt,
             encryptionOptions, CryptoStreamMode.Read, DecryptOperation, encryptedBytes);
+    }
+
+    /// <inheritdoc cref="IDecryptor.Decrypt(string, string)"/>
+    public string Decrypt(string encryptionKey, string value)
+    {
+        var encryptionOptions = GetEncryptionOptions(encryptionModuleOptions, serviceProvider, encryptionKey);
+
+        return Decrypt(value, encryptionOptions);
     }
 }

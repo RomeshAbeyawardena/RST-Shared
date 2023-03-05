@@ -14,7 +14,8 @@ namespace RST.UnitTests
         private DefaultDecryptor decryptor;
         private DefaultEncryptionOptions encryptionOptions;
         private DefaultEncryptionModuleOptions encryptionModuleOptions;
-        private Mock<ISymmetricAlgorithmFactory> algorithmFactory;
+        private Mock<ISymmetricAlgorithmFactory> algorithmFactoryMock;
+        private Mock<IServiceProvider> serviceProviderMock;
 
         [SetUp]
         public void SetUp()
@@ -25,14 +26,19 @@ namespace RST.UnitTests
                 InitialVector = "YjY2OTBlMmRjYjhhMDZmOQ=="
             };
             encryptionModuleOptions = new DefaultEncryptionModuleOptions(Enumerations.EncryptionCaseConvention.Uppercase);
-            algorithmFactory = new Mock<ISymmetricAlgorithmFactory>();
+            algorithmFactoryMock = new Mock<ISymmetricAlgorithmFactory>();
 
-            algorithmFactory
+            algorithmFactoryMock
                 .Setup(s => s.GetSymmetricAlgorithm(It.IsAny<Enumerations.SymmetricAlgorithm>()))
                 .Returns(Aes.Create());
 
-            encryptor = new DefaultEncryptor(encryptionOptions,algorithmFactory.Object,encryptionModuleOptions);
-            decryptor = new DefaultDecryptor(encryptionOptions, algorithmFactory.Object);
+            serviceProviderMock = new Mock<IServiceProvider>();
+
+            encryptor = new DefaultEncryptor(encryptionOptions,algorithmFactoryMock.Object,encryptionModuleOptions,
+                serviceProviderMock.Object);
+            decryptor = new DefaultDecryptor(encryptionOptions, algorithmFactoryMock.Object,
+                encryptionModuleOptions,
+                serviceProviderMock.Object);
         }
 
         [Test]
@@ -42,7 +48,7 @@ namespace RST.UnitTests
            var s = encryptor.Encrypt(o, encryptionOptions);
            
            var e = decryptor.Decrypt(s, encryptionOptions);
-           Assert.That(e, Is.EqualTo(o));
+           Assert.That(e, Is.EqualTo(o.ToUpperInvariant()));
         }
     }
 }
