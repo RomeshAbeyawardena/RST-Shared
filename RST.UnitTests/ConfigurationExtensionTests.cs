@@ -68,7 +68,8 @@ public class ConfigurationExtensionTests
             c.OnLoadException = (a) => throw new FileNotFoundException(a.Exception.Message);
             c.ReloadOnChange = false;
         }).Build();
-
+        sw.Dispose();
+        ms.Dispose();
     }
     
     [Test]
@@ -79,9 +80,9 @@ public class ConfigurationExtensionTests
 
         fileProviderMock.Verify(a => a.GetFileInfo("appsetting.json"), Times.Once);
 
-        Assert.That(config, Contains.Item(KeyValuePair.Create("encryption:config:testkey:privateKey", "YzJiMGQzOGY3YjhjNDJhMzk4NjE2ODg2NzZjMDMxNTQK")));
+        Assert.That(config, Contains.Item(KeyValuePair.Create("encryption:config:testkey:Key", "YzJiMGQzOGY3YjhjNDJhMzk4NjE2ODg2NzZjMDMxNTQK")));
 
-        Assert.That(config, Contains.Item(KeyValuePair.Create("encryption:config:testkey:publicKey", "YjRiZGRiYTZlZThmNGE1N2I4OGJlNzIyMmFjNWMwMTI=")));
+        Assert.That(config, Contains.Item(KeyValuePair.Create("encryption:config:testkey:InitialVector", "YjRiZGRiYTZlZThmNGE1N2I4OGJlNzIyMmFjNWMwMTI=")));
 
         Assert.That(config, Contains.Item(KeyValuePair.Create("encryption:config:testkey:enabled", "True")));
     }
