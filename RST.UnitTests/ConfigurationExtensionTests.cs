@@ -30,16 +30,19 @@ public class ConfigurationExtensionTests
   ""encryption"": {
     ""config"": {
       ""testkey"": {
+        ""Algorithm"":""Aes"",
         ""Key"": ""YzJiMGQzOGY3YjhjNDJhMzk4NjE2ODg2NzZjMDMxNTQK"",
         ""InitialVector"": ""YjRiZGRiYTZlZThmNGE1N2I4OGJlNzIyMmFjNWMwMTI="",
         ""enabled"": true
       },
       ""testkey2"": {
+        ""Algorithm"":""Aes"",
         ""Key"": ""ZTY4NDFjODg4NTRlNDNhOWEyYjZhYWQzZWZmYTYwOTI="",
         ""InitialVector"": ""YzJiMGQzOGY3YjhjNDJhMzk4NjE2ODg2NzZjMDMxNTQK"",
         ""enabled"": true
       },
       ""testkey3"": {
+        ""Algorithm"":""Aes"",
         ""Key"": ""ZGQ4YTNiODFjOTUxNGZhMmE0ZjQ4N2IyZmUxMzc1ODA="",
         ""InitialVector"": ""MDcyMjQwMTQxZTYzNGNlZjlhMThmZWVmNjRiMjA3ODQ="",
         ""enabled"": true
