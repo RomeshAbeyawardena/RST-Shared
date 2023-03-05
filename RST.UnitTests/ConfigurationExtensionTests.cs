@@ -93,5 +93,6 @@ public class ConfigurationExtensionTests
         var encryptionConfigurations = configuration.GetValues<DefaultEncryptionOptions>(
             "encryption/config", "testkey", "testkey2", "testkey3");
 
+        Assert.That(encryptionConfigurations.Count(), Is.EqualTo(3));
     }
 }
