@@ -28,7 +28,7 @@ public static class ConfigurationExtensions
         for (int i = 1; i < splitPath.Length; i++)
         {
             var currentPath = splitPath[i];
-            section = configuration.GetSection(currentPath);
+            section = section.GetSection(currentPath);
             if (!section.Exists())
             {
                 throw new EntryPointNotFoundException($"Unable to find {currentPath}");
