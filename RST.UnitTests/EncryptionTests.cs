@@ -59,6 +59,13 @@ namespace RST.UnitTests
 
             var e = decryptor.Decrypt("test", s);
             Assert.That(e, Is.EqualTo(o.ToUpperInvariant()));
+
+            encryptionModuleOptions.EncryptionOptionsFactory.Add("test1", s => encryptionOptions);
+
+            s = encryptor.Encrypt("test1", o);
+
+            e = decryptor.Decrypt("test1", s);
+            Assert.That(e, Is.EqualTo(o.ToUpperInvariant()));
         }
 
         [Test]
