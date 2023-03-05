@@ -9,12 +9,13 @@ namespace RST.Extensions.Configuration;
 public static class ConfigurationExtensions
 {
     /// <summary>
-    /// 
+    /// Traverses through the sections within <paramref name="configuration"/> in order find an instance of <see cref="IConfigurationSection"/> by a given path separated by either a '/' or '\\'
     /// </summary>
-    /// <param name="configuration"></param>
-    /// <param name="path"></param>
-    /// <returns></returns>
-    public static IConfigurationSection? GetFromPath(this IConfiguration configuration, string path)
+    /// <param name="configuration"><see cref="IConfiguration"/> instance to obtain <see cref="IConfigurationSection"/></param>
+    /// <param name="path">The path to traverse</param>
+    /// <exception cref="EntryPointNotFoundException"></exception>
+    /// <returns>An instance of <see cref="IConfigurationSection"/></returns>
+    public static IConfigurationSection GetFromPath(this IConfiguration configuration, string path)
     {
         var splitPath = path.Split('/', '\\');
 
