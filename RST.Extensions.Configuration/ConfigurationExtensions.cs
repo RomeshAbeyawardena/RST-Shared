@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.Configuration;
+using System.Data.Entity.Validation;
 
 namespace RST.Extensions.Configuration;
 
@@ -8,6 +9,21 @@ namespace RST.Extensions.Configuration;
 /// </summary>
 public static class ConfigurationExtensions
 {
+    /// <summary>
+    /// <inheritdoc cref="ConfigurationBinder.Get{T}(IConfiguration)"/>
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="configuration"></param>
+    /// <param name="rootPath"></param>
+    /// <param name="sectionNames"></param>
+    /// <returns></returns>
+    public static IEnumerable<T?> GetValues<T>(this IConfiguration configuration, string rootPath,
+        params string[] sectionNames)
+    {
+        var configurationSection = GetFromPath(configuration, rootPath);
+        return sectionNames.Select(s => configurationSection.Get<T>());
+    }
+
     /// <summary>
     /// Gets a list of <see cref="IConfigurationSection"/> instances from the supplied <paramref name="paths"/> from supplied <paramref name="configuration"/> 
     /// </summary>
