@@ -20,8 +20,8 @@ public static class ConfigurationExtensions
     public static IEnumerable<T?> GetValues<T>(this IConfiguration configuration, string rootPath,
         params string[] sectionNames)
     {
-        var configurationSection = GetFromPath(configuration, rootPath);
-        return sectionNames.Select(s => configurationSection.Get<T>());
+        var configurationSection = GetFromPath(configuration, $"{rootPath}");
+        return GetSectionsFromPaths(configuration, sectionNames.Select(p => $"{rootPath}/{p}").ToArray()).Select(s => s.Get<T>());
     }
 
     /// <summary>
@@ -30,7 +30,7 @@ public static class ConfigurationExtensions
     /// <param name="configuration">Configuration instance</param>
     /// <param name="paths">Paths to extract from <see cref="IConfiguration"/></param>
     /// <returns></returns>
-    public static IEnumerable<IConfigurationSection> GetSectionsFromPath(this IConfiguration configuration, params string[] paths)
+    public static IEnumerable<IConfigurationSection> GetSectionsFromPaths(this IConfiguration configuration, params string[] paths)
     {
         return paths.Select(p => GetFromPath(configuration, p));
     }

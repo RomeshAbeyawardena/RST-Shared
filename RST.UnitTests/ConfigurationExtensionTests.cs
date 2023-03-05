@@ -3,7 +3,9 @@ using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Moq;
+using RST.Contracts;
 using RST.Extensions.Configuration;
+using RST.Security.Cryptography.Extensions.Defaults;
 using System.Text;
 
 namespace RST.UnitTests;
@@ -28,18 +30,18 @@ public class ConfigurationExtensionTests
   ""encryption"": {
     ""config"": {
       ""testkey"": {
-        ""privateKey"": ""YzJiMGQzOGY3YjhjNDJhMzk4NjE2ODg2NzZjMDMxNTQK"",
-        ""publicKey"": ""YjRiZGRiYTZlZThmNGE1N2I4OGJlNzIyMmFjNWMwMTI="",
+        ""Key"": ""YzJiMGQzOGY3YjhjNDJhMzk4NjE2ODg2NzZjMDMxNTQK"",
+        ""InitialVector"": ""YjRiZGRiYTZlZThmNGE1N2I4OGJlNzIyMmFjNWMwMTI="",
         ""enabled"": true
       },
       ""testkey2"": {
-        ""privateKey"": ""ZTY4NDFjODg4NTRlNDNhOWEyYjZhYWQzZWZmYTYwOTI="",
-        ""publicKey"": ""YzJiMGQzOGY3YjhjNDJhMzk4NjE2ODg2NzZjMDMxNTQK"",
+        ""Key"": ""ZTY4NDFjODg4NTRlNDNhOWEyYjZhYWQzZWZmYTYwOTI="",
+        ""InitialVector"": ""YzJiMGQzOGY3YjhjNDJhMzk4NjE2ODg2NzZjMDMxNTQK"",
         ""enabled"": true
       },
       ""testkey3"": {
-        ""privateKey"": ""ZGQ4YTNiODFjOTUxNGZhMmE0ZjQ4N2IyZmUxMzc1ODA="",
-        ""publicKey"": ""MDcyMjQwMTQxZTYzNGNlZjlhMThmZWVmNjRiMjA3ODQ="",
+        ""Key"": ""ZGQ4YTNiODFjOTUxNGZhMmE0ZjQ4N2IyZmUxMzc1ODA="",
+        ""InitialVector"": ""MDcyMjQwMTQxZTYzNGNlZjlhMThmZWVmNjRiMjA3ODQ="",
         ""enabled"": true
       }
     }
@@ -79,5 +81,13 @@ public class ConfigurationExtensionTests
         Assert.That(config, Contains.Item(KeyValuePair.Create("encryption:config:testkey:publicKey", "YjRiZGRiYTZlZThmNGE1N2I4OGJlNzIyMmFjNWMwMTI=")));
 
         Assert.That(config, Contains.Item(KeyValuePair.Create("encryption:config:testkey:enabled", "True")));
+    }
+
+    [Test]
+    public void GetValues()
+    {
+        var encryptionConfigurations = configuration.GetValues<DefaultEncryptionOptions>(
+            "encryption/config", "testkey", "testkey2", "testkey3");
+
     }
 }
