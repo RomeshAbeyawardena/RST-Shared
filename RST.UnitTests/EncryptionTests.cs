@@ -1,5 +1,6 @@
 ﻿using Moq;
 using NUnit.Framework;
+using RST.Defaults;
 using RST.Contracts;
 using RST.Security.Cryptography.Extensions.Defaults;
 using System.Security.Cryptography;

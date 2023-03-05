@@ -2,7 +2,7 @@
 using RST.Enumerations;
 using System.Text;
 
-namespace RST.Security.Cryptography.Extensions.Defaults;
+namespace RST.Defaults;
 
 /// <inheritdoc cref="IEncryptionOptions"/>
 public record DefaultEncryptionOptions : IEncryptionOptions

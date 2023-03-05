@@ -4,6 +4,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Moq;
 using RST.Contracts;
+using RST.Defaults;
 using RST.Extensions.Configuration;
 using RST.Security.Cryptography.Extensions.Defaults;
 using System.Text;
