@@ -1,9 +1,8 @@
 ﻿using Moq;
+using NUnit.Framework;
 using RST.Contracts;
-using RST.Enumerations;
 using RST.Security.Cryptography.Extensions.Defaults;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace RST.UnitTests
 {
@@ -49,6 +48,26 @@ namespace RST.UnitTests
            
            var e = decryptor.Decrypt(s, encryptionOptions);
            Assert.That(e, Is.EqualTo(o.ToUpperInvariant()));
+        }
+
+        [Test]
+        public void Encrypt_using_moduleOptions()
+        {
+            encryptionModuleOptions.EncryptionOptions.Add("test", encryptionOptions);
+            var o = "Hello world";
+            var s = encryptor.Encrypt("test", o);
+
+            var e = decryptor.Decrypt("test", s);
+            Assert.That(e, Is.EqualTo(o.ToUpperInvariant()));
+        }
+
+        [Test]
+        public void Encrypt_using_moduleOptions_fail()
+        {
+            encryptionModuleOptions.EncryptionOptions.Add("test", encryptionOptions);
+            var o = "Hello world";
+            
+            Assert.Throws<NullReferenceException>(() => encryptor.Encrypt("test2", o));
         }
     }
 }
