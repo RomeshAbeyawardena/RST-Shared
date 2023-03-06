@@ -17,7 +17,7 @@ public static class DictionaryBuilderExtensions
     /// <param name="rootPath"></param>
     /// <param name="sectionNames"></param>
     /// <returns></returns>
-    public static IDictionary<string, Func<string, IEncryptionOptions>>
+    public static IDictionary<string, IEncryptionOptions>
         AddConfiguration(this IDictionary<string, IEncryptionOptions> dictionary, IServiceProvider serviceProvider,
             string rootPath, params string[] sectionNames)
     {
@@ -32,7 +32,7 @@ public static class DictionaryBuilderExtensions
 
             if (option != null)
             {
-                dictionary.Add(sectionName, s => option);
+                dictionary.Add(sectionName, option);
             }
         }
 
