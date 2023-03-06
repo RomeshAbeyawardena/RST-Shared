@@ -96,4 +96,11 @@ public class ConfigurationExtensionTests
 
         Assert.That(encryptionConfigurations.Count(), Is.EqualTo(3));
     }
+
+    [Test]
+    public void GetSections()
+    {
+        var encryptionConfigurations = configuration.GetSections("encryption/config");
+        Assert.That(encryptionConfigurations.Count(), Is.EqualTo(3));
+    }
 }

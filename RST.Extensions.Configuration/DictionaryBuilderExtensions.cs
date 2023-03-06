@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RST.Contracts;
-using RST.Defaults;
 
 namespace RST.Extensions.Configuration;
 /// <summary>
@@ -22,13 +21,29 @@ public static class DictionaryBuilderExtensions
             string rootPath, params string[] sectionNames)
     {
         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+        
+        if(!sectionNames.Any())
+        {
+            var sections = configuration.GetSections(rootPath);
+            
+            foreach(var section in sections)
+            {
+                var opts = section.Get<IEncryptionOptions>();
+                if (opts != null)
+                {
+                    dictionary.Add(section.Key, opts);
+                }
+            }
+
+            return dictionary;
+        }
 
         var options = configuration.GetValues<IEncryptionOptions>(rootPath, sectionNames);
 
         for (int i = 0; i < sectionNames.Length; i++)
         {
             var sectionName = sectionNames[i];
-            var option = options.ElementAt(i);
+            var option = options.ElementAtOrDefault(i);
 
             if (option != null)
             {
