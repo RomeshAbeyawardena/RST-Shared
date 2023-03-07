@@ -34,7 +34,7 @@ public static class ServiceCollectionExtensions
     /// <returns>Passed instance of <see cref="IServiceCollection"/></returns>
     public static IServiceCollection AddServicesWithRegisterAttribute(
       this IServiceCollection services,
-      Action<ServiceDefinitionOptions>? configureOptions = null,
+      Action<IServiceDefinitionOptions>? configureOptions = null,
       params Assembly[] assemblies)
     {
         var serviceDefinitionOptions = new ServiceDefinitionOptions();

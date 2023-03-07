@@ -1,12 +1,12 @@
-﻿using RST.Extensions;
+﻿using RST.Contracts;
+using RST.Extensions;
 using System.Reflection;
 
 namespace RST;
 
-/// <summary>
-/// Represents service definition options
-/// </summary>
-public class ServiceDefinitionOptions
+
+/// <inheritdoc cref="IServiceDefinitionOptions"/>
+public record ServiceDefinitionOptions : IServiceDefinitionOptions
 {
     private bool configureCoreServices;
     private bool configureCryptographyExtensions;
@@ -14,9 +14,8 @@ public class ServiceDefinitionOptions
     internal bool hasChanged = false;
 
     private IEnumerable<Assembly>? assemblies;
-    /// <summary>
-    /// Configures core services
-    /// </summary>
+
+    /// <inheritdoc cref="IServiceDefinitionOptions.ConfigureCoreServices"/>
     public bool ConfigureCoreServices { 
         get => configureCoreServices; 
         set { 
@@ -25,9 +24,7 @@ public class ServiceDefinitionOptions
         } 
     }
 
-    /// <summary>
-    /// Configures cryptography extensions
-    /// </summary>
+    /// <inheritdoc cref="IServiceDefinitionOptions.ConfigureCryptographyExtensions"/>
     public bool ConfigureCryptographyExtensions { 
         get => configureCryptographyExtensions; 
         set
