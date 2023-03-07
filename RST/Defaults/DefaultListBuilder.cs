@@ -1,6 +1,4 @@
-﻿
-using RST.Attributes;
-using RST.Contracts;
+﻿using RST.Contracts;
 using System.Collections;
 
 namespace RST.Defaults;
@@ -8,7 +6,6 @@ namespace RST.Defaults;
 /// <summary>
 /// <inheritdoc cref="IListBuilder{T}"/>
 /// </summary>
-[Register(Microsoft.Extensions.DependencyInjection.ServiceLifetime.Transient)]
 public class DefaultListBuilder<T> : IListBuilder<T>
 {
     private readonly List<T> list;
@@ -16,7 +13,7 @@ public class DefaultListBuilder<T> : IListBuilder<T>
     /// Initialises a list builder
     /// </summary>
     /// <param name="list"></param>
-    public DefaultListBuilder(List<T> list) 
+    public DefaultListBuilder(List<T>? list = null) 
     {
         this.list = list ?? new List<T>();
     }

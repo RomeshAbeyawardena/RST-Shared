@@ -22,7 +22,10 @@ public static class ServiceCollectionExtensions
         services
             .TryAddSingleton<ISystemClock, SystemClock>();
 
-        return services.AddSingleton<IClockProvider, DefaultClockProvider>();
+        return services
+            .AddSingleton<IClockProvider, DefaultClockProvider>()
+            .AddTransient(typeof(IDictionaryBuilder<,>), typeof(DefaultInjectedDictionaryBuilder<,>))
+            .AddTransient(typeof(IListBuilder<>), typeof(DefaultInjectedListBuilder<>));
     }
 
     /// <summary>
