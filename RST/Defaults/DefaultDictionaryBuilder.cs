@@ -1,4 +1,5 @@
-﻿using RST.Contracts;
+﻿using RST.Attributes;
+using RST.Contracts;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
@@ -6,6 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace RST.Defaults;
 
 /// <inheritdoc cref="IDictionaryBuilder{TKey, TValue}"/>
+[Register(Microsoft.Extensions.DependencyInjection.ServiceLifetime.Transient)]
 public class DefaultDictionaryBuilder<TKey, TValue> : IDictionaryBuilder<TKey, TValue>
     where TKey: notnull
 {
