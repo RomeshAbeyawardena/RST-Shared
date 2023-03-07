@@ -4,7 +4,7 @@ using RST.Contracts;
 namespace RST.Defaults;
 
 /// <inheritdoc cref="IClockProvider"/>
-public class DefaultClockProvider : IClockProvider
+public record DefaultClockProvider : IClockProvider
 {
     /// <summary>
     /// Creates an instance of <see cref="DefaultClockProvider"/>

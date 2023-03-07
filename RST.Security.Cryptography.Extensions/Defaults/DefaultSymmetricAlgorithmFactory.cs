@@ -23,11 +23,11 @@ public class DefaultSymmetricAlgorithmFactory : ISymmetricAlgorithmFactory
 
     /// <inheritdoc cref="ISymmetricAlgorithmFactory.GetSymmetricAlgorithm(Enumerations.SymmetricAlgorithm)"/>
     /// <exception cref="NullReferenceException">When algorithm is not found</exception>
-    public System.Security.Cryptography.SymmetricAlgorithm GetSymmetricAlgorithm(Enumerations.SymmetricAlgorithm symmetricAlgorithm)
+    public SymmetricAlgorithm GetSymmetricAlgorithm(Enumerations.SymmetricAlgorithm symmetricAlgorithm)
     {
-        if(symmetricAlgorithms.TryGetValue(symmetricAlgorithm, out var algorithm))
+        if(symmetricAlgorithms.TryGetValue(symmetricAlgorithm, out var getAlgorithm))
         {
-            return algorithm();
+            return getAlgorithm();
         }
 
         throw new NullReferenceException("Algorithm not found!");

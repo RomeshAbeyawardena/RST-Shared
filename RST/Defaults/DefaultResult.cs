@@ -88,7 +88,7 @@ namespace RST.Defaults
     /// Represents a default implementation for <see cref="IResult{T}"/>
     /// </summary>
     /// <typeparam name="T"><see cref="Type"/> of result</typeparam>
-    public class DefaultResult<T> : IResult<T>
+    public record DefaultResult<T> : IResult<T>
     {
         ///<inheritdoc/>
         public string? Message { get; set; }
@@ -111,7 +111,7 @@ namespace RST.Defaults
     /// 
     /// </summary>
     /// <inheritdoc cref="IRepository{T}"/>
-    public class DefaultResult : IResult
+    public record DefaultResult : IResult
     {
         ///<inheritdoc/>
         public string? Message { get; set; }

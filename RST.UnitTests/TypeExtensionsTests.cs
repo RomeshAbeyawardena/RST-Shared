@@ -3,7 +3,7 @@
 namespace RST.UnitTests;
 
 [TestFixture]
-public class TypeExtensions
+public class TypeExtensionsTests
 {
 
     [Test]

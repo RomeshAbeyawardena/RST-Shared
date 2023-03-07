@@ -7,7 +7,7 @@ namespace RST.Defaults;
 /// Represents a default paged result
 /// </summary>
 /// <typeparam name="TResult"></typeparam>
-public class DefaultPagedResult<TResult> : DefaultPagedResult<int, TResult>, IPagedResult<TResult>
+public record DefaultPagedResult<TResult> : DefaultPagedResult<int, TResult>, IPagedResult<TResult>
 {
 
 }
@@ -17,7 +17,7 @@ public class DefaultPagedResult<TResult> : DefaultPagedResult<int, TResult>, IPa
 /// </summary>
 /// <typeparam name="T"></typeparam>
 /// <typeparam name="TResult"></typeparam>
-public class DefaultPagedResult<T, TResult> : DefaultResult<IEnumerable<TResult>>, IPagedResult<T, TResult>
+public record DefaultPagedResult<T, TResult> : DefaultResult<IEnumerable<TResult>>, IPagedResult<T, TResult>
     where T : struct
 {
     /// <summary>
