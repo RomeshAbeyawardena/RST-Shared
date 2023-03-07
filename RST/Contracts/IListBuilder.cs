@@ -36,4 +36,14 @@ public interface IListBuilder<T> : IEnumerable<T>
     /// <param name="index"><inheritdoc cref="IList{T}.RemoveAt(int)"/></param>
     /// <returns>This instance of <see cref="IListBuilder{T}"/></returns>
     IListBuilder<T> RemoveAtIndex(int index);
+
+    /// <summary>
+    /// Gets or sets a value to determine whether the entries in the previous list reference should be copied over to the new reference.
+    /// </summary>
+    bool CopyEntriesFromPreviousList { get; set; }
+
+    /// <summary>
+    /// Sets the underlining referenced list
+    /// </summary>
+    List<T> List { set; }
 }

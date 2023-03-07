@@ -9,7 +9,20 @@ namespace RST.Defaults;
 public class DefaultDictionaryBuilder<TKey, TValue> : IDictionaryBuilder<TKey, TValue>
     where TKey: notnull
 {
-    private readonly IDictionary<TKey, TValue> dictionary;
+    private IDictionary<TKey, TValue> dictionary;
+
+    private IDictionary<TKey, TValue> CopyEntries(IDictionary<TKey, TValue> dictionary)
+    {
+        if (CopyEntriesFromPreviousDictionary && this.dictionary.Any())
+        {
+            foreach (var entry in this.dictionary)
+            {
+                dictionary.Add(entry);
+            }
+        }
+
+        return dictionary;
+    }
 
     /// <summary>
     /// Initialises an instance of <see cref="IDictionaryBuilder{TKey, TValue}"/>
@@ -31,6 +44,12 @@ public class DefaultDictionaryBuilder<TKey, TValue> : IDictionaryBuilder<TKey, T
 
     /// <inheritdoc cref="Dictionary{TKey, TValue}.Count"/>
     public int Count => dictionary.Count;
+
+    /// <inheritdoc cref="IDictionaryBuilder{TKey, TValue}.Dictionary"/>
+    public IDictionary<TKey, TValue> Dictionary { set => dictionary = CopyEntries(value); }
+
+    /// <inheritdoc cref="IDictionaryBuilder{TKey, TValue}.CopyEntriesFromPreviousDictionary"/>
+    public bool CopyEntriesFromPreviousDictionary { get; set; }
 
     /// <inheritdoc cref="IDictionaryBuilder{TKey, TValue}.Add(KeyValuePair{TKey, TValue})"/>
     public IDictionaryBuilder<TKey, TValue> Add(TKey key, TValue value)

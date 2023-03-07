@@ -8,7 +8,21 @@ namespace RST.Defaults;
 /// </summary>
 public class DefaultListBuilder<T> : IListBuilder<T>
 {
-    private readonly List<T> list;
+    private List<T> list;
+
+    private List<T> CopyEntries(List<T> list)
+    {
+        if (CopyEntriesFromPreviousList && list.Any())
+        {
+            foreach (var item in this.list)
+            {
+                list.Add(item);
+            }
+        }
+
+        return list;
+    }
+
     /// <summary>
     /// Initialises a list builder
     /// </summary>
@@ -17,6 +31,17 @@ public class DefaultListBuilder<T> : IListBuilder<T>
     {
         this.list = list ?? new List<T>();
     }
+
+    /// <summary>
+    /// <inheritdoc cref="IListBuilder{T}.CopyEntriesFromPreviousList"/>
+    /// </summary>
+    public bool CopyEntriesFromPreviousList { get; set; }
+
+    /// <summary>
+    /// <inheritdoc cref="IListBuilder{T}.List"/>
+    /// </summary>
+    public List<T> List { set => list = CopyEntries(value); }
+
     /// <summary>
     /// <inheritdoc cref="IListBuilder{T}.Add(T)"/>
     /// </summary>
