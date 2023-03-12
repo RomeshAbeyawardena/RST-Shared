@@ -11,6 +11,7 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RST.DependencyInjection.Extensions\RST.DependencyInjection.Extensions.csproj" />
     <ProjectReference Include="..\RST\RST.csproj" />
   </ItemGroup>
 </Project>
