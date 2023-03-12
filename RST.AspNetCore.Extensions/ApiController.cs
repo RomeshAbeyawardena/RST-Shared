@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
+using RST.DependencyInjection.Extensions;
 using RST.Extensions;
 
 namespace RST.AspNetCore.Extensions;
@@ -10,7 +11,7 @@ namespace RST.AspNetCore.Extensions;
 /// Represents an API Controller
 /// </summary>
 [ApiController]
-public abstract class ApiController
+public abstract class ApiController : EnableInjectionBase<InjectAttribute>
 {
     /// <summary>
     /// A base API url
@@ -34,21 +35,10 @@ public abstract class ApiController
     /// </summary>
     /// <param name="serviceProvider"></param>
     protected ApiController(IServiceProvider serviceProvider)
+        : base(serviceProvider)
     {
         Mediator = null!;
         Mapper = null!;
-
-        var apiControllerType = GetType();
-        var properties = apiControllerType.GetAllProperties().Where(p => p.CanWrite && p.HasAttribute(typeof(InjectAttribute), out var attribute));
-        
-        foreach (var property in properties)
-        {
-            var service = serviceProvider.GetService(property.PropertyType);
-
-            if (service != null)
-            {
-                property.SetValue(this, service);
-            }
-        }
+        ConfigureInjection();
     }
 }

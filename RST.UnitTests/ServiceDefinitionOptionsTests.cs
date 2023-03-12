@@ -1,12 +1,16 @@
-﻿namespace RST.UnitTests;
+﻿using Microsoft.Extensions.DependencyInjection;
+using RST.DependencyInjection.Extensions;
+namespace RST.UnitTests;
 
 [TestFixture]
 public class ServiceDefinitionOptionsTests
 {
+    IServiceCollection services;
     ServiceDefinitionOptions serviceDefinitionOptions;
     [SetUp]
     public void SetUp()
     {
+        services = new ServiceCollection();
         serviceDefinitionOptions = new ServiceDefinitionOptions();
     }
 
@@ -23,5 +27,7 @@ public class ServiceDefinitionOptionsTests
 
         serviceDefinitionOptions.ConfigureCryptographyExtensions = false;
         Assert.That(serviceDefinitionOptions.hasChanged, Is.True);
+
+        services.AddServicesWithRegisterAttribute(opt => { opt.ConfigureCoreServices = true; });
     }
 }
