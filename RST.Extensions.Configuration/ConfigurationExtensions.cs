@@ -18,7 +18,7 @@ public static class ConfigurationExtensions
         var rootSection = configuration.GetFromPath(rootPath);
         return rootSection.GetChildren();
     }
-    ///public static IEnumerable<IConfigurationSection>
+    
     /// <summary>
     /// <inheritdoc cref="ConfigurationBinder.Get{T}(IConfiguration)"/>
     /// </summary>
