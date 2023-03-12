@@ -1,6 +1,9 @@
 ﻿namespace RST.DependencyInjection.Extensions.Attributes;
 
-[AttributeUsage(AttributeTargets.Class, Inherited = true)]
+/// <summary>
+/// Marks a field or property as injectable
+/// </summary>
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, Inherited = true)]
 public sealed class InjectAttribute : Attribute
 {
     
