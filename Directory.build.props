@@ -6,6 +6,7 @@
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <FileVersion>0.0.2.17</FileVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <Version>0.0.2.17</Version>
     <VersionSuffix>DEV</VersionSuffix>
   </PropertyGroup>

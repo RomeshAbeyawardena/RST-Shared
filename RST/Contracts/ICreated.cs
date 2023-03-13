@@ -8,13 +8,13 @@ public interface ICreated<TDateTime>
     where TDateTime : struct
 {
     /// <summary>
-    /// Gets the creation timestamp
+    /// Gets or sets the creation timestamp
     /// </summary>
     TDateTime Created { get; set; }
 }
 
 /// <summary>
-/// 
+/// Represents a creation timestamp
 /// </summary>
 public interface ICreated : ICreated<DateTimeOffset>
 {

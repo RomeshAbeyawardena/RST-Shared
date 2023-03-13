@@ -7,11 +7,11 @@ public interface IDateRangeQuery<T> : IDbQuery
     where T: struct
 {
     /// <summary>
-    /// 
+    /// Gets or sets the start date to filter
     /// </summary>
     T? StartDate { get; set; }
     /// <summary>
-    /// 
+    /// Gets or sets the end date to filter
     /// </summary>
     T? EndDate { get; set; }
 }

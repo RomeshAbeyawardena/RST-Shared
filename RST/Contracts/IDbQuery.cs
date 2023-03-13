@@ -1,7 +1,7 @@
 ﻿namespace RST.Contracts;
 
 /// <summary>
-/// Represents a DbQuerry
+/// Represents a DB query
 /// </summary>
 public interface IDbQuery
 {

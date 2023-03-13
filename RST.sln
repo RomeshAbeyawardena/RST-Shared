@@ -23,11 +23,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RST.Mediatr.Extensions", "RST.Mediatr.Extensions\RST.Mediatr.Extensions.csproj", "{6DE63D24-7E40-46E6-AB5C-721A6D53DB10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RST.UnitTests", "RST.UnitTests\RST.UnitTests.csproj", "{BFBFAB37-B160-4FCE-BC02-1949CABF5668}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RST.UnitTests", "RST.UnitTests\RST.UnitTests.csproj", "{BFBFAB37-B160-4FCE-BC02-1949CABF5668}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RST.Security.Cryptography.Extensions", "RST.Security.Cryptography.Extensions\RST.Security.Cryptography.Extensions.csproj", "{476888B3-04F6-4151-BA0A-7EFA0B877530}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RST.Security.Cryptography.Extensions", "RST.Security.Cryptography.Extensions\RST.Security.Cryptography.Extensions.csproj", "{476888B3-04F6-4151-BA0A-7EFA0B877530}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RST.Extensions.Configuration", "RST.Extensions.Configuration\RST.Extensions.Configuration.csproj", "{C6FA7962-8C3A-46B9-9166-6D63D2003D19}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RST.Extensions.Configuration", "RST.Extensions.Configuration\RST.Extensions.Configuration.csproj", "{C6FA7962-8C3A-46B9-9166-6D63D2003D19}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{93F388AB-B47B-4999-8008-1922BAE7E61F}"
+	ProjectSection(SolutionItems) = preProject
+		Readme.md = Readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
