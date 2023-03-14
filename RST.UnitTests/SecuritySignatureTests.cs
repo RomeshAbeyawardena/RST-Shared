@@ -29,6 +29,7 @@ public class SecuritySignatureTests
         configurationMock.SetupProperty(s => s.HashAlgorithmName, HashAlgorithmName.SHA512);
 
         var signature = securitySignature!.SignData(data, configurationMock.Object);
+        securitySignature.FlushProvider();
         Assert.That(securitySignature.VerifyData(data, signature, configurationMock.Object), Is.True);
     }
 }

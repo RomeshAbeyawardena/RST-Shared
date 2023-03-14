@@ -5,6 +5,7 @@ using Microsoft.Extensions.Internal;
 using RST.Contracts;
 using RST.Defaults;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using System.Security.Cryptography;
 
 namespace RST.DependencyInjection.Extensions;
 /// <summary>
@@ -23,6 +24,7 @@ public static class ServiceCollectionExtensions
             .TryAddSingleton<ISystemClock, SystemClock>();
 
         return services
+            .AddSingleton(c => RSA.Create())
             .AddSingleton<IClockProvider, DefaultClockProvider>()
             .AddTransient(typeof(IDictionaryBuilder<,>), typeof(DefaultInjectedDictionaryBuilder<,>))
             .AddTransient(typeof(IListBuilder<>), typeof(DefaultInjectedListBuilder<>));

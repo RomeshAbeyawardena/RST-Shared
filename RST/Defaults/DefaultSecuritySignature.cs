@@ -12,7 +12,13 @@ namespace RST.Defaults;
 [Register(Microsoft.Extensions.DependencyInjection.ServiceLifetime.Transient)]
 public class DefaultSecuritySignature : ISecuritySignature
 {
-    private readonly RSA rSA;
+    private RSA rSA;
+
+    internal void FlushProvider()
+    {
+        rSA.Dispose();
+        rSA = RSA.Create();
+    }
 
     /// <summary>
     /// 
