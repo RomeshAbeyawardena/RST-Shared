@@ -10,35 +10,62 @@ namespace RST.Security.Cryptography.Defaults;
 public record DefaultSignatureConfiguration : ISignatureConfiguration
 {
     /// <summary>
-    /// 
+    /// Builds a default configuration from a public key, optional private key and password
+    /// </summary>
+    /// <param name="publicKey"></param>
+    /// <param name="privateKey"></param>
+    /// <param name="privateKeyPassword"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"></exception>
+    public static ISignatureConfiguration DefaultConfiguration(string? publicKey, string? privateKey = null, string? privateKeyPassword = null)
+    {
+        return new DefaultSignatureConfiguration
+        {
+            PublicKey = publicKey ?? throw new ArgumentNullException(nameof(publicKey)),
+            PrivateKey = privateKey,
+            PrivateKeyPassword = privateKeyPassword,
+            HashAlgorithmName = HashAlgorithmName.SHA256,
+            Encoding = Encoding.UTF8,
+            EncryptionAlgorithm = PbeEncryptionAlgorithm.Aes256Cbc,
+            EncryptionPadding = RSAEncryptionPadding.OaepSHA256,
+            IterationCount = 30,
+            Padding = RSASignaturePadding.Pkcs1,
+        };
+    }
+    /// <summary>
+    /// Gets or sets the private key
     /// </summary>
     public string? PrivateKey { get; set; }
     /// <summary>
-    /// 
+    /// Gets or sets the public key
     /// </summary>
     public string? PublicKey { get; set; }
     /// <summary>
-    /// 
+    /// Gets or sets the private key password
     /// </summary>
     public string? PrivateKeyPassword { get; set; }
     /// <summary>
-    /// 
+    /// Gets or sets the hash algorithm name
     /// </summary>
     public HashAlgorithmName HashAlgorithmName { get; set; }
     /// <summary>
-    /// 
+    /// Gets or sets the encryption algorithm
     /// </summary>
     public PbeEncryptionAlgorithm EncryptionAlgorithm { get; set; }
     /// <summary>
-    /// 
+    /// Gets or sets the padding
     /// </summary>
-    public RSASignaturePadding Padding { get; set; }
+    public RSASignaturePadding? Padding { get; set; }
     /// <summary>
-    /// 
+    /// Gets or sets the iteration count
     /// </summary>
     public int IterationCount { get; set; }
     /// <summary>
-    /// 
+    /// Gets or sets the encoding
     /// </summary>
     public Encoding? Encoding { get; set; }
+    /// <summary>
+    /// Gets or sets the encryption padding
+    /// </summary>
+    public RSAEncryptionPadding? EncryptionPadding { get; set; }
 }

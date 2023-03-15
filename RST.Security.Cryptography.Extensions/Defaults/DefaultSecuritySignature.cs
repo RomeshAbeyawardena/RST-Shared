@@ -62,7 +62,7 @@ public class DefaultSecuritySignature : ISecuritySignature
         rSA!.ImportRSAPublicKey(publicKeyBytes, out var bytes);
         
         return rSA.VerifyData((signatureConfiguration.Encoding ?? Encoding.Default).GetBytes(data), 
-            Convert.FromBase64String(signature), signatureConfiguration.HashAlgorithmName, signatureConfiguration.Padding);
+            Convert.FromBase64String(signature), signatureConfiguration.HashAlgorithmName, signatureConfiguration.Padding ?? RSASignaturePadding.Pkcs1);
     }
 
     /// <summary>
@@ -75,7 +75,7 @@ public class DefaultSecuritySignature : ISecuritySignature
     {
         ImportKeys(signatureConfiguration);
 
-        var signature = rSA!.SignData(Encoding.UTF8.GetBytes(data), signatureConfiguration.HashAlgorithmName, signatureConfiguration.Padding);
+        var signature = rSA!.SignData(Encoding.UTF8.GetBytes(data), signatureConfiguration.HashAlgorithmName, signatureConfiguration.Padding ?? RSASignaturePadding.Pkcs1);
 
         //Debug.WriteLine(Convert.ToBase64String(signature), "Signature");
         return Convert.ToBase64String(signature);
@@ -124,7 +124,7 @@ public class DefaultSecuritySignature : ISecuritySignature
             return GetEncodingOrDefault(signatureConfiguration).GetString(rSA!.DecryptValue(encodedData));
         }
 
-        return GetEncodingOrDefault(signatureConfiguration).GetString(rSA!.Decrypt(encodedData, signatureConfiguration.EncryptionPadding));
+        return GetEncodingOrDefault(signatureConfiguration).GetString(rSA!.Decrypt(encodedData, signatureConfiguration.EncryptionPadding ?? RSAEncryptionPadding.Pkcs1));
     }
 
     /// <summary>
@@ -144,6 +144,6 @@ public class DefaultSecuritySignature : ISecuritySignature
             return Convert.ToBase64String(rSA!.EncryptValue(encodedData));
         }
 
-        return Convert.ToBase64String(rSA!.Encrypt(encodedData, signatureConfiguration.EncryptionPadding));
+        return Convert.ToBase64String(rSA!.Encrypt(encodedData, signatureConfiguration.EncryptionPadding ?? RSAEncryptionPadding.Pkcs1));
     }
 }
