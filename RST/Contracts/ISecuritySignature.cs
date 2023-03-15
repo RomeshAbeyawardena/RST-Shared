@@ -6,6 +6,20 @@
 public interface ISecuritySignature : IDisposable
 {
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="encryptedValue"></param>
+    /// <param name="signatureConfiguration"></param>
+    /// <returns></returns>
+    string Decrypt(string encryptedValue, ISignatureConfiguration signatureConfiguration);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="plaintext"></param>
+    /// <param name="signatureConfiguration"></param>
+    /// <returns></returns>
+    string Encrypt(string plaintext, ISignatureConfiguration signatureConfiguration);
+    /// <summary>
     /// Generates a signature for <paramref name="data"/>
     /// </summary>
     /// <param name="data"></param>

@@ -110,4 +110,14 @@ public class DefaultSecuritySignature : ISecuritySignature
 
         return configuration;
     }
+
+    public string Decrypt(string encryptedValue, ISignatureConfiguration signatureConfiguration)
+    {
+        throw new NotImplementedException();
+    }
+
+    public string Encrypt(string plaintext, ISignatureConfiguration signatureConfiguration)
+    {
+        return rSA.de
+    }
 }
