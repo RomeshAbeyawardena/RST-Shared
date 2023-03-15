@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RST.Attributes;
 using RST.Contracts;
-using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -10,13 +9,13 @@ namespace RST.Security.Cryptography.Defaults;
 /// <summary>
 /// 
 /// </summary>
-[Register(Microsoft.Extensions.DependencyInjection.ServiceLifetime.Transient)]
+[Register(ServiceLifetime.Transient)]
 public class DefaultSecuritySignature : ISecuritySignature
 {
-    private RSA? rSA;
     private readonly IServiceProvider serviceProvider;
-
-    private Encoding GetEncodingOrDefault(ISignatureConfiguration configuration)
+    private Lazy<RSA> lazyRsa;
+    private RSA Rsa => lazyRsa.Value;
+    private static Encoding GetEncodingOrDefault(ISignatureConfiguration configuration)
     {
         return configuration.Encoding ?? Encoding.Default;
     }
@@ -26,20 +25,20 @@ public class DefaultSecuritySignature : ISecuritySignature
         if (!string.IsNullOrEmpty(configuration.PublicKey))
         {
             var publicKeyBytes = Convert.FromBase64String(configuration.PublicKey);
-            rSA?.ImportRSAPublicKey(publicKeyBytes, out var ct);
+            Rsa?.ImportRSAPublicKey(publicKeyBytes, out var ct);
         }
 
         if (!string.IsNullOrEmpty(configuration.PrivateKey))
         {
             var privateKeyBytes = Convert.FromBase64String(configuration.PrivateKey);
-            rSA!.ImportEncryptedPkcs8PrivateKey(configuration.PrivateKeyPassword, privateKeyBytes, out var ct1);
+            Rsa!.ImportEncryptedPkcs8PrivateKey(configuration.PrivateKeyPassword, privateKeyBytes, out var ct1);
         }
     }
 
     internal void FlushProvider()
     {
-        rSA?.Dispose();
-        rSA = serviceProvider.GetRequiredService<RSA>();
+        Rsa?.Dispose();
+        lazyRsa = new Lazy<RSA>(serviceProvider.GetRequiredService<RSA>);
     }
 
     /// <summary>
@@ -48,8 +47,8 @@ public class DefaultSecuritySignature : ISecuritySignature
     /// <param name="serviceProvider"></param>
     public DefaultSecuritySignature(IServiceProvider serviceProvider)
     {
+        lazyRsa = new Lazy<RSA>(serviceProvider.GetRequiredService<RSA>);
         this.serviceProvider = serviceProvider;
-        FlushProvider();
     }
 
     /// <summary>
@@ -62,9 +61,9 @@ public class DefaultSecuritySignature : ISecuritySignature
     public bool VerifyData(string data, string signature, ISignatureConfiguration signatureConfiguration)
     {
         var publicKeyBytes = Convert.FromBase64String(signatureConfiguration.PublicKey ?? throw new ArgumentException());
-        rSA!.ImportRSAPublicKey(publicKeyBytes, out var bytes);
+        Rsa!.ImportRSAPublicKey(publicKeyBytes, out var bytes);
         
-        return rSA.VerifyData((signatureConfiguration.Encoding ?? Encoding.Default).GetBytes(data), 
+        return Rsa.VerifyData((signatureConfiguration.Encoding ?? Encoding.Default).GetBytes(data), 
             Convert.FromBase64String(signature), signatureConfiguration.HashAlgorithmName, signatureConfiguration.Padding ?? RSASignaturePadding.Pkcs1);
     }
 
@@ -78,7 +77,7 @@ public class DefaultSecuritySignature : ISecuritySignature
     {
         ImportKeys(signatureConfiguration);
 
-        var signature = rSA!.SignData(Encoding.UTF8.GetBytes(data), signatureConfiguration.HashAlgorithmName, signatureConfiguration.Padding ?? RSASignaturePadding.Pkcs1);
+        var signature = Rsa!.SignData(Encoding.UTF8.GetBytes(data), signatureConfiguration.HashAlgorithmName, signatureConfiguration.Padding ?? RSASignaturePadding.Pkcs1);
 
         //Debug.WriteLine(Convert.ToBase64String(signature), "Signature");
         return Convert.ToBase64String(signature);
@@ -89,7 +88,7 @@ public class DefaultSecuritySignature : ISecuritySignature
     /// </summary>
     public void Dispose()
     {
-        rSA?.Dispose();
+        Rsa?.Dispose();
     }
 
     /// <summary>
@@ -102,9 +101,9 @@ public class DefaultSecuritySignature : ISecuritySignature
     {
         using var rsa = RSA.Create();
         
-        var publicKeyBytes = rSA!.ExportRSAPublicKey();
+        var publicKeyBytes = Rsa!.ExportRSAPublicKey();
         
-        var privateKeyBytes = rSA.ExportEncryptedPkcs8PrivateKey(signatureConfiguration.PrivateKeyPassword, new PbeParameters(signatureConfiguration.EncryptionAlgorithm, signatureConfiguration.HashAlgorithmName, signatureConfiguration.IterationCount));
+        var privateKeyBytes = Rsa.ExportEncryptedPkcs8PrivateKey(signatureConfiguration.PrivateKeyPassword, new PbeParameters(signatureConfiguration.EncryptionAlgorithm, signatureConfiguration.HashAlgorithmName, signatureConfiguration.IterationCount));
         
         var configuration = DefaultSignatureConfiguration.DefaultConfiguration(Convert.ToBase64String(publicKeyBytes), Convert.ToBase64String(privateKeyBytes));
         
@@ -125,10 +124,10 @@ public class DefaultSecuritySignature : ISecuritySignature
 
         if(usePublicKey)
         {
-            return GetEncodingOrDefault(signatureConfiguration).GetString(rSA!.DecryptValue(encodedData));
+            return GetEncodingOrDefault(signatureConfiguration).GetString(Rsa!.DecryptValue(encodedData));
         }
 
-        return GetEncodingOrDefault(signatureConfiguration).GetString(rSA!.Decrypt(encodedData, signatureConfiguration.EncryptionPadding ?? RSAEncryptionPadding.Pkcs1));
+        return GetEncodingOrDefault(signatureConfiguration).GetString(Rsa!.Decrypt(encodedData, signatureConfiguration.EncryptionPadding ?? RSAEncryptionPadding.Pkcs1));
     }
 
     /// <summary>
@@ -145,9 +144,9 @@ public class DefaultSecuritySignature : ISecuritySignature
         
         if (usePublicKey)
         {
-            return Convert.ToBase64String(rSA!.EncryptValue(encodedData));
+            return Convert.ToBase64String(Rsa!.EncryptValue(encodedData));
         }
 
-        return Convert.ToBase64String(rSA!.Encrypt(encodedData, signatureConfiguration.EncryptionPadding ?? RSAEncryptionPadding.Pkcs1));
+        return Convert.ToBase64String(Rsa!.Encrypt(encodedData, signatureConfiguration.EncryptionPadding ?? RSAEncryptionPadding.Pkcs1));
     }
 }
