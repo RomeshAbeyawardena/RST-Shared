@@ -1,7 +1,7 @@
-﻿using Moq;
-using NUnit.Framework.Constraints;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using RST.Contracts;
-using RST.Defaults;
+using RST.Security.Cryptography.Defaults;
 using System.Security.Cryptography;
 
 namespace RST.UnitTests;
@@ -10,10 +10,13 @@ public class SecuritySignatureTests
 {
     private DefaultSecuritySignature? securitySignature;
     private Mock<ISignatureConfiguration> configurationMock;
+    private Mock<ISupportRequiredService> serviceProviderMock;
     [SetUp]
     public void SetUp()
     {
-        securitySignature = new DefaultSecuritySignature(RSA.Create());
+        serviceProviderMock = new Mock<ISupportRequiredService>();
+        serviceProviderMock.Setup(s => s.GetRequiredService(typeof(RSA))).Returns(RSA.Create());
+        securitySignature = new DefaultSecuritySignature((IServiceProvider)serviceProviderMock.Object);
         configurationMock= new Mock<ISignatureConfiguration>();
     }
 

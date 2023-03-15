@@ -15,21 +15,23 @@ public record DefaultSignatureConfiguration : ISignatureConfiguration
     /// <param name="publicKey"></param>
     /// <param name="privateKey"></param>
     /// <param name="privateKeyPassword"></param>
+    /// <param name="configuration"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"></exception>
-    public static ISignatureConfiguration DefaultConfiguration(string? publicKey, string? privateKey = null, string? privateKeyPassword = null)
+    public static ISignatureConfiguration DefaultConfiguration(string? publicKey, string? privateKey = null, string? privateKeyPassword = null, 
+        ISignatureConfiguration? configuration = null)
     {
         return new DefaultSignatureConfiguration
         {
             PublicKey = publicKey ?? throw new ArgumentNullException(nameof(publicKey)),
             PrivateKey = privateKey,
             PrivateKeyPassword = privateKeyPassword,
-            HashAlgorithmName = HashAlgorithmName.SHA256,
-            Encoding = Encoding.UTF8,
-            EncryptionAlgorithm = PbeEncryptionAlgorithm.Aes256Cbc,
-            EncryptionPadding = RSAEncryptionPadding.OaepSHA256,
-            IterationCount = 30,
-            Padding = RSASignaturePadding.Pkcs1,
+            HashAlgorithmName = configuration?.HashAlgorithmName ?? HashAlgorithmName.SHA256,
+            Encoding = configuration?.Encoding ?? Encoding.UTF8,
+            EncryptionAlgorithm = configuration?.EncryptionAlgorithm ?? PbeEncryptionAlgorithm.Aes256Cbc,
+            EncryptionPadding = configuration?.EncryptionPadding ?? RSAEncryptionPadding.OaepSHA256,
+            IterationCount = configuration?.IterationCount ?? 30,
+            Padding = configuration?.Padding ?? RSASignaturePadding.Pkcs1,
         };
     }
     /// <summary>

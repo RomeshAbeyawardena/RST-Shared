@@ -50,7 +50,7 @@ public class DefaultSecuritySignature : ISecuritySignature
     }
 
     /// <summary>
-    /// 
+    /// Verifies data using a public key
     /// </summary>
     /// <param name="data"></param>
     /// <param name="signature"></param>
@@ -66,7 +66,7 @@ public class DefaultSecuritySignature : ISecuritySignature
     }
 
     /// <summary>
-    /// 
+    /// Signs data using supplied <paramref name="signatureConfiguration"/>
     /// </summary>
     /// <param name="data"></param>
     /// <param name="signatureConfiguration"></param>
@@ -82,7 +82,7 @@ public class DefaultSecuritySignature : ISecuritySignature
     }
 
     /// <summary>
-    /// 
+    /// <inheritdoc cref="IDisposable.Dispose"/>
     /// </summary>
     public void Dispose()
     {
@@ -90,7 +90,7 @@ public class DefaultSecuritySignature : ISecuritySignature
     }
 
     /// <summary>
-    /// 
+    /// Creates an instance of <see cref="ISignatureConfiguration"/> for the an instance of RSA using the parameters in <paramref name="signatureConfiguration"/>
     /// </summary>
     /// <param name="signatureConfiguration"></param>
     /// <returns></returns>
@@ -98,12 +98,13 @@ public class DefaultSecuritySignature : ISecuritySignature
     public ISignatureConfiguration CreateConfiguration(ISignatureConfiguration signatureConfiguration)
     {
         using var rsa = RSA.Create();
-        var configuration = new DefaultSignatureConfiguration();
+        
         var publicKeyBytes = rSA!.ExportRSAPublicKey();
-        configuration.PublicKey = Convert.ToBase64String(publicKeyBytes);
+        
         var privateKeyBytes = rSA.ExportEncryptedPkcs8PrivateKey(signatureConfiguration.PrivateKeyPassword, new PbeParameters(signatureConfiguration.EncryptionAlgorithm, signatureConfiguration.HashAlgorithmName, signatureConfiguration.IterationCount));
-        configuration.PrivateKey = Convert.ToBase64String(privateKeyBytes);
-
+        
+        var configuration = DefaultSignatureConfiguration.DefaultConfiguration(Convert.ToBase64String(publicKeyBytes), Convert.ToBase64String(privateKeyBytes));
+        
         return configuration;
     }
 

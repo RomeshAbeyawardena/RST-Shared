@@ -14,6 +14,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RST.DependencyInjection.Extensions\RST.DependencyInjection.Extensions.csproj" />
+    <ProjectReference Include="..\RST.Security.Cryptography.Extensions\RST.Security.Cryptography.Extensions.csproj" />
     <ProjectReference Include="..\RST\RST.csproj" />
   </ItemGroup>
 </Project>
