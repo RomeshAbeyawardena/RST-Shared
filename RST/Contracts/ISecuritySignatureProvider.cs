@@ -3,7 +3,7 @@
 /// <summary>
 /// 
 /// </summary>
-public interface ISecuritySignature : IDisposable
+public interface ISecuritySignatureProvider : IDisposable
 {
     /// <summary>
     /// 

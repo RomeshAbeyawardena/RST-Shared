@@ -9,13 +9,13 @@ namespace RST.AspNetCore.Extensions
         where TKey : struct
         where TTimestamp : struct
     {
-        private readonly ISecuritySignature securitySignature;
+        private readonly ISecuritySignatureProvider securitySignature;
         protected virtual Task<bool> OnValidateIdentitySignature(TIdentity identity, string signature, ISignatureConfiguration configuration)
         {
             return Task.FromResult(true);
         }
 
-        public BaseApplicationAuthenticationRepository(ISecuritySignature securitySignature)
+        public BaseApplicationAuthenticationRepository(ISecuritySignatureProvider securitySignature)
         {
             this.securitySignature = securitySignature;
         }

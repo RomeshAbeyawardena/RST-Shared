@@ -8,7 +8,7 @@ namespace RST.UnitTests;
 [TestFixture]
 public class SecuritySignatureTests
 {
-    private DefaultSecuritySignature? securitySignature;
+    private DefaultSecuritySignatureProvider? securitySignature;
     private Mock<ISignatureConfiguration> configurationMock;
     private ServiceProvider serviceProvider;
     [SetUp]
@@ -17,7 +17,7 @@ public class SecuritySignatureTests
         serviceProvider = new ServiceCollection()
             .AddTransient((s) => RSA.Create()).BuildServiceProvider();
         
-        securitySignature = new DefaultSecuritySignature(serviceProvider);
+        securitySignature = new DefaultSecuritySignatureProvider(serviceProvider);
         configurationMock= new Mock<ISignatureConfiguration>();
     }
 

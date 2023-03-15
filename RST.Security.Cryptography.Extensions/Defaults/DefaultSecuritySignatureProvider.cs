@@ -10,7 +10,7 @@ namespace RST.Security.Cryptography.Defaults;
 /// 
 /// </summary>
 [Register(ServiceLifetime.Transient)]
-public class DefaultSecuritySignature : ISecuritySignature
+public class DefaultSecuritySignatureProvider : ISecuritySignatureProvider
 {
     private readonly IServiceProvider serviceProvider;
     private Lazy<RSA> lazyRsa;
@@ -45,7 +45,7 @@ public class DefaultSecuritySignature : ISecuritySignature
     /// 
     /// </summary>
     /// <param name="serviceProvider"></param>
-    public DefaultSecuritySignature(IServiceProvider serviceProvider)
+    public DefaultSecuritySignatureProvider(IServiceProvider serviceProvider)
     {
         lazyRsa = new Lazy<RSA>(serviceProvider.GetRequiredService<RSA>);
         this.serviceProvider = serviceProvider;
@@ -63,8 +63,11 @@ public class DefaultSecuritySignature : ISecuritySignature
         var publicKeyBytes = Convert.FromBase64String(signatureConfiguration.PublicKey ?? throw new ArgumentException());
         Rsa!.ImportRSAPublicKey(publicKeyBytes, out var bytes);
         
-        return Rsa.VerifyData((signatureConfiguration.Encoding ?? Encoding.Default).GetBytes(data), 
+        var result = Rsa.VerifyData((signatureConfiguration.Encoding ?? Encoding.Default).GetBytes(data), 
             Convert.FromBase64String(signature), signatureConfiguration.HashAlgorithmName, signatureConfiguration.Padding ?? RSASignaturePadding.Pkcs1);
+        FlushProvider();
+
+        return result;
     }
 
     /// <summary>
@@ -78,8 +81,8 @@ public class DefaultSecuritySignature : ISecuritySignature
         ImportKeys(signatureConfiguration);
 
         var signature = Rsa!.SignData(Encoding.UTF8.GetBytes(data), signatureConfiguration.HashAlgorithmName, signatureConfiguration.Padding ?? RSASignaturePadding.Pkcs1);
-
-        //Debug.WriteLine(Convert.ToBase64String(signature), "Signature");
+        FlushProvider();
+        
         return Convert.ToBase64String(signature);
     }
 
@@ -89,6 +92,7 @@ public class DefaultSecuritySignature : ISecuritySignature
     public void Dispose()
     {
         Rsa?.Dispose();
+        GC.SuppressFinalize(this);
     }
 
     /// <summary>
@@ -99,7 +103,6 @@ public class DefaultSecuritySignature : ISecuritySignature
     /// <exception cref="NotImplementedException"></exception>
     public ISignatureConfiguration CreateConfiguration(ISignatureConfiguration signatureConfiguration)
     {
-        using var rsa = RSA.Create();
         
         var publicKeyBytes = Rsa!.ExportRSAPublicKey();
         
@@ -122,12 +125,17 @@ public class DefaultSecuritySignature : ISecuritySignature
         ImportKeys(signatureConfiguration);
         var encodedData = Convert.FromBase64String(encryptedValue);
 
+        string result;
         if(usePublicKey)
         {
-            return GetEncodingOrDefault(signatureConfiguration).GetString(Rsa!.DecryptValue(encodedData));
+            result = GetEncodingOrDefault(signatureConfiguration).GetString(Rsa!.DecryptValue(encodedData));
         }
+        else
+            result = GetEncodingOrDefault(signatureConfiguration).GetString(Rsa!.Decrypt(encodedData, signatureConfiguration.EncryptionPadding ?? RSAEncryptionPadding.Pkcs1));
 
-        return GetEncodingOrDefault(signatureConfiguration).GetString(Rsa!.Decrypt(encodedData, signatureConfiguration.EncryptionPadding ?? RSAEncryptionPadding.Pkcs1));
+        FlushProvider();
+
+        return result;
     }
 
     /// <summary>
@@ -141,12 +149,17 @@ public class DefaultSecuritySignature : ISecuritySignature
     {
         ImportKeys(signatureConfiguration);
         var encodedData = GetEncodingOrDefault(signatureConfiguration).GetBytes(plaintext);
-        
+
+        string result;
         if (usePublicKey)
         {
-            return Convert.ToBase64String(Rsa!.EncryptValue(encodedData));
+            result = Convert.ToBase64String(Rsa!.EncryptValue(encodedData));
         }
+        else
+            result = Convert.ToBase64String(Rsa!.Encrypt(encodedData, signatureConfiguration.EncryptionPadding ?? RSAEncryptionPadding.Pkcs1));
 
-        return Convert.ToBase64String(Rsa!.Encrypt(encodedData, signatureConfiguration.EncryptionPadding ?? RSAEncryptionPadding.Pkcs1));
+        FlushProvider();
+
+        return result;
     }
 }
