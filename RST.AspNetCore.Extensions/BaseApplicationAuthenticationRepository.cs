@@ -88,5 +88,25 @@ namespace RST.AspNetCore.Extensions
 
             return securitySignatureProvider.VerifyData(applicationIdentity.AccessToken, signature, configuration);
         }
+
+        async Task<IApplicationIdentity> IApplicationAuthenticationRepository.GetIdentity(string publicKey)
+        {
+            return Convert(await GetIdentity(publicKey));
+        }
+
+        Task<bool> IApplicationAuthenticationRepository.ValidateIdentitySignature(object identity, string signature, ISignatureConfiguration? configuration)
+        {
+            return ValidateIdentitySignature((TIdentity)identity, signature, configuration);
+        }
+
+        Task<IDictionary<string, string>> IApplicationAuthenticationRepository.GetRoles(IApplicationIdentity identity)
+        {
+            return GetRoles((TIdentity)identity);
+        }
+
+        async Task<IApplicationIdentity> IApplicationAuthenticationRepository.GetIdentity(object key)
+        {
+            return Convert(await GetIdentity((TKey)key));
+        }
     }
 }

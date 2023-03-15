@@ -3,18 +3,10 @@
 namespace RST.AspNetCore.Extensions.Contracts;
 
 /// <summary>
-/// Represents an application identity
+/// 
 /// </summary>
-/// <typeparam name="TKey"></typeparam>
-/// <typeparam name="TTimeStamp"></typeparam>
-public interface IApplicationIdentity<TKey, TTimeStamp> : IIdentity<TKey>, ICreated<TTimeStamp>, IModified<TTimeStamp>
-    where TKey : struct
-    where TTimeStamp : struct
+public interface IApplicationIdentity : System.Security.Principal.IIdentity
 {
-    /// <summary>
-    /// Gets or sets the application name
-    /// </summary>
-    string Name { get; set; }
     /// <summary>
     /// Gets or sets the public key
     /// </summary>
@@ -27,4 +19,16 @@ public interface IApplicationIdentity<TKey, TTimeStamp> : IIdentity<TKey>, ICrea
     /// Gets or sets the Is enabled flag
     /// </summary>
     bool IsEnabled { get; set; }
+}
+
+/// <summary>
+/// Represents an application identity
+/// </summary>
+/// <typeparam name="TKey"></typeparam>
+/// <typeparam name="TTimeStamp"></typeparam>
+public interface IApplicationIdentity<TKey, TTimeStamp> : IIdentity<TKey>, ICreated<TTimeStamp>, IModified<TTimeStamp>, IApplicationIdentity
+    where TKey : struct
+    where TTimeStamp : struct
+{
+    
 }
