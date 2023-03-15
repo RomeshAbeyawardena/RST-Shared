@@ -46,13 +46,15 @@ namespace RST.AspNetCore.Extensions
 
                 var publicKey = authorisationToken.Substring(authorisationToken.Length - 16, 16);
 
+                var encryptedGlob = authorisationToken[..^16];
+
                 var identity = await applicationAuthenticationRepository.GetIdentity(publicKey);
 
                 if (identity == null)
                 {
                     throw new NullReferenceException();
                 }
-
+                
                 var roles = await applicationAuthenticationRepository.GetRoles(identity);
 
                 if (roles == null)
