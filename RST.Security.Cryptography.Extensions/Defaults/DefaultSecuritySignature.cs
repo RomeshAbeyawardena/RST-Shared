@@ -29,8 +29,11 @@ public class DefaultSecuritySignature : ISecuritySignature
             rSA?.ImportRSAPublicKey(publicKeyBytes, out var ct);
         }
 
-        var privateKeyBytes = rSA!.ExportEncryptedPkcs8PrivateKey(configuration.PrivateKeyPassword, new PbeParameters(configuration.EncryptionAlgorithm, configuration.HashAlgorithmName, configuration.IterationCount));
-        rSA!.ImportEncryptedPkcs8PrivateKey(configuration.PrivateKeyPassword, privateKeyBytes, out var ct1);
+        if (!string.IsNullOrEmpty(configuration.PrivateKey))
+        {
+            var privateKeyBytes = Convert.FromBase64String(configuration.PrivateKey);
+            rSA!.ImportEncryptedPkcs8PrivateKey(configuration.PrivateKeyPassword, privateKeyBytes, out var ct1);
+        }
     }
 
     internal void FlushProvider()
