@@ -32,6 +32,12 @@ public interface ISignatureConfiguration
     /// 
     /// </summary>
     RSASignaturePadding Padding { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    RSAEncryptionPadding EncryptionPadding { get; set; }
+
     /// <summary>
     /// 
     /// </summary>

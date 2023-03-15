@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace RST.Defaults;
+namespace RST.Security.Cryptography.Defaults;
 
 /// <summary>
 /// 
