@@ -20,7 +20,7 @@ public record DefaultEncryptionOptions : IEncryptionOptions
     public Encoding? Encoding { get; set; }
 
     /// <summary>
-    /// 
+    /// Creates a new instance of <see cref="DefaultEncryptionOptions"/> with shared property values
     /// </summary>
     /// <param name="initialVector"></param>
     /// <param name="key"></param>

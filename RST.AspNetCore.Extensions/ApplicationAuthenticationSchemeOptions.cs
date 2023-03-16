@@ -8,17 +8,23 @@ namespace RST.AspNetCore.Extensions;
 /// </summary>
 public class ApplicationAuthenticationSchemeOptions : AuthenticationSchemeOptions
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public ApplicationAuthenticationSchemeOptions()
-        : this(string.Empty)
+        : this(string.Empty, default)
     {
 
     }
     /// <summary>
     /// 
     /// </summary>
-    public ApplicationAuthenticationSchemeOptions(string scheme)
+    /// <param name="scheme"></param>
+    /// <param name="encryptionOptions"></param>
+    public ApplicationAuthenticationSchemeOptions(string scheme, IEncryptionOptions? encryptionOptions)
     {
         Scheme = scheme;
+        EncryptionOptions = encryptionOptions;
     }
 
     /// <summary>
@@ -36,6 +42,16 @@ public class ApplicationAuthenticationSchemeOptions : AuthenticationSchemeOption
     /// </summary>
     public override void Validate()
     {
+        if(string.IsNullOrWhiteSpace(Scheme))
+        {
+            throw new ArgumentNullException(nameof(Scheme));
+        }
+
+        if (EncryptionOptions == null)
+        {
+            throw new ArgumentNullException(nameof(EncryptionOptions));
+        }
+
         base.Validate();
     }
 
@@ -45,6 +61,8 @@ public class ApplicationAuthenticationSchemeOptions : AuthenticationSchemeOption
     /// <param name="scheme"></param>
     public override void Validate(string scheme)
     {
+        Scheme = scheme;
+        Validate();
         base.Validate(scheme);
     }
 }
