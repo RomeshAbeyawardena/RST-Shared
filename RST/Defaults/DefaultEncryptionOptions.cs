@@ -18,4 +18,20 @@ public record DefaultEncryptionOptions : IEncryptionOptions
 
     /// <inheritdoc cref="IEncryptionOptions.Encoding"/>
     public Encoding? Encoding { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="initialVector"></param>
+    /// <param name="key"></param>
+    /// <returns></returns>
+    public IEncryptionOptions CreateInstance(string initialVector, string? key = null)
+    {
+        return new DefaultEncryptionOptions() {
+            Algorithm = Algorithm,
+            Key = string.IsNullOrEmpty(key) ? Key : key,
+            InitialVector = initialVector,
+            Encoding = Encoding,
+        };
+    }
 }
