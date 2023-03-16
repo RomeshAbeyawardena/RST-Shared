@@ -31,7 +31,7 @@ public record DefaultEncryptionModuleOptions : IEncryptionModuleOptions
     public IEncryptionOptions? this[string key] { get =>
             EncryptionOptions.TryGetValue(key, out var options)
             ? options : EncryptionOptionsFactory.TryGetValue(key, out var factory)
-                ? factory(serviceProvider) : null;
+                ? factory?.Invoke(serviceProvider) : null;
     }
 
     /// <inheritdoc cref="IEncryptionModuleOptions.EncryptionOptionsFactory"/>
