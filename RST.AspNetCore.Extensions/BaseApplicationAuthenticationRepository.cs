@@ -63,6 +63,14 @@ namespace RST.AspNetCore.Extensions
         public abstract Task<IDictionary<string, string>> GetRoles(TIdentity identity);
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="applicationIdentity"></param>
+        /// <param name="accessToken"></param>
+        /// <returns></returns>
+        public abstract Task<bool> ValidateAccessToken(IApplicationIdentity<TKey, TTimestamp> applicationIdentity, string accessToken);
+
+        /// <summary>
         /// <inheritdoc cref="IApplicationAuthenticationRepository{TKey, TIdentity, TTimestamp}.ValidateIdentitySignature(TIdentity, string, ISignatureConfiguration?)"/>
         /// or logic in <see cref="BaseApplicationAuthenticationRepository{TKey, TIdentity, TTimestamp}.OnValidateIdentitySignature(TIdentity, string, ISignatureConfiguration)"/>
         /// </summary>
@@ -107,6 +115,11 @@ namespace RST.AspNetCore.Extensions
         async Task<IApplicationIdentity> IApplicationAuthenticationRepository.GetIdentity(object key)
         {
             return Convert(await GetIdentity((TKey)key));
+        }
+
+        Task<bool> IApplicationAuthenticationRepository.ValidateAccessToken(IApplicationIdentity applicationIdentity, string accessToken)
+        {
+            return ValidateAccessToken((IApplicationIdentity<TKey, TTimestamp>)applicationIdentity, accessToken);
         }
     }
 }

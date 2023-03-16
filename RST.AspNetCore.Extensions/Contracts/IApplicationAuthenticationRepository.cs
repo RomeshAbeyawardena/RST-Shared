@@ -36,7 +36,16 @@ namespace RST.AspNetCore.Extensions.Contracts
         /// <param name="identity"></param>
         /// <returns></returns>
         Task<IDictionary<string, string>> GetRoles(IApplicationIdentity identity);
+        
+        /// <summary>
+        /// Validates access token
+        /// </summary>
+        /// <param name="applicationIdentity"></param>
+        /// <param name="accessToken"></param>
+        /// <returns></returns>
+        Task<bool> ValidateAccessToken(IApplicationIdentity applicationIdentity, string accessToken);
     }
+
     /// <summary>
     /// Represents an application authentication repository
     /// </summary>
@@ -76,5 +85,13 @@ namespace RST.AspNetCore.Extensions.Contracts
         /// <param name="identity"></param>
         /// <returns></returns>
         Task<IDictionary<string, string>> GetRoles(TIdentity identity);
+
+        /// <summary>
+        /// Validates access token
+        /// </summary>
+        /// <param name="applicationIdentity"></param>
+        /// <param name="accessToken"></param>
+        /// <returns></returns>
+        Task<bool> ValidateAccessToken(IApplicationIdentity<TKey, TTimestamp> applicationIdentity, string accessToken);
     }
 }

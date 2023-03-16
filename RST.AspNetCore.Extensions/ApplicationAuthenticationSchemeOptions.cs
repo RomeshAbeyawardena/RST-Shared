@@ -20,8 +20,11 @@ public class ApplicationAuthenticationSchemeOptions : AuthenticationSchemeOption
     /// 
     /// </summary>
     /// <param name="scheme"></param>
+    /// <param name="encryptionKey"></param>
     /// <param name="encryptionOptions"></param>
-    public ApplicationAuthenticationSchemeOptions(string scheme, IEncryptionOptions? encryptionOptions)
+    public ApplicationAuthenticationSchemeOptions(string scheme,
+        string? encryptionKey = null,
+        IEncryptionOptions? encryptionOptions = null)
     {
         Scheme = scheme;
         EncryptionOptions = encryptionOptions;
@@ -31,7 +34,10 @@ public class ApplicationAuthenticationSchemeOptions : AuthenticationSchemeOption
     /// 
     /// </summary>
     public string Scheme { get; set; }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    public string? EncryptionKey { get; set; }
     /// <summary>
     /// 
     /// </summary>
