@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RST.AspNetCore.Extensions.Contracts;
 using RST.Contracts;
+using RST.Security.Cryptography.Defaults;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 
@@ -16,6 +17,8 @@ namespace RST.AspNetCore.Extensions
         private readonly IApplicationAuthenticationRepository applicationAuthenticationRepository;
         private readonly IEncryptionModuleOptions encryptionModuleOptions;
         private readonly IDecryptor decryptor;
+        private readonly ISecuritySignatureProvider securitySignatureProvider;
+
         /// <summary>
         /// 
         /// </summary>
@@ -25,13 +28,15 @@ namespace RST.AspNetCore.Extensions
         /// <param name="clock"></param>
         /// <param name="encryptionModuleOptions"></param>
         /// <param name="decryptor"></param>
+        /// <param name="securitySignatureProvider"></param>
         /// <param name="applicationAuthenticationRepository"></param>
         public ApplicationAuthentication(IOptionsMonitor<ApplicationAuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock, IEncryptionModuleOptions encryptionModuleOptions,
-            IDecryptor decryptor, 
+            IDecryptor decryptor, ISecuritySignatureProvider securitySignatureProvider,
             IApplicationAuthenticationRepository applicationAuthenticationRepository) : base(options, logger, encoder, clock)
         {
             this.encryptionModuleOptions = encryptionModuleOptions;
             this.decryptor = decryptor;
+            this.securitySignatureProvider = securitySignatureProvider;
             this.applicationAuthenticationRepository = applicationAuthenticationRepository;
         }
 
@@ -70,7 +75,21 @@ namespace RST.AspNetCore.Extensions
                     throw new NullReferenceException("Identity not found");
                 }
 
-                var encryptedAccessToken = Request.Headers.ETag.FirstOrDefault();
+                var encryptedSignature = Request.Headers.ETag.FirstOrDefault();
+
+                if (string.IsNullOrWhiteSpace(encryptedSignature))
+                {
+                    throw new NullReferenceException("Signature invalid");
+                }
+
+                var signature = decryptor.Decrypt(encryptedSignature, encryptionOptions);
+
+                if(!securitySignatureProvider.VerifyData(authorisationToken, signature, DefaultSignatureConfiguration.DefaultConfiguration(identity.PublicKey)))
+                {
+                    throw new InvalidOperationException("ETag signature invalid");
+                }
+
+                var encryptedAccessToken = Request.Headers.WWWAuthenticate.FirstOrDefault();
 
                 if (string.IsNullOrWhiteSpace(encryptedAccessToken))
                 {
@@ -79,9 +98,9 @@ namespace RST.AspNetCore.Extensions
 
                 var accessToken = decryptor.Decrypt(encryptedAccessToken, encryptionOptions);
 
-                if(!await applicationAuthenticationRepository.ValidateAccessToken(identity, accessToken))
+                if (!await applicationAuthenticationRepository.ValidateAccessToken(identity, accessToken))
                 {
-                    throw new InvalidOperationException();
+                    throw new InvalidOperationException("Access token invalid");
                 }
 
                 var roles = await applicationAuthenticationRepository.GetRoles(identity);
