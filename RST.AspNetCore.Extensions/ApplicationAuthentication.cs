@@ -14,6 +14,7 @@ namespace RST.AspNetCore.Extensions
     public class ApplicationAuthentication : AuthenticationHandler<ApplicationAuthenticationSchemeOptions>
     {
         private readonly IApplicationAuthenticationRepository applicationAuthenticationRepository;
+        private readonly IEncryptionModuleOptions encryptionModuleOptions;
         private readonly IDecryptor decryptor;
         /// <summary>
         /// 
@@ -22,11 +23,14 @@ namespace RST.AspNetCore.Extensions
         /// <param name="logger"></param>
         /// <param name="encoder"></param>
         /// <param name="clock"></param>
+        /// <param name="encryptionModuleOptions"></param>
         /// <param name="decryptor"></param>
         /// <param name="applicationAuthenticationRepository"></param>
-        public ApplicationAuthentication(IOptionsMonitor<ApplicationAuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock,
-            IDecryptor decryptor, IApplicationAuthenticationRepository applicationAuthenticationRepository) : base(options, logger, encoder, clock)
+        public ApplicationAuthentication(IOptionsMonitor<ApplicationAuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock, IEncryptionModuleOptions encryptionModuleOptions,
+            IDecryptor decryptor, 
+            IApplicationAuthenticationRepository applicationAuthenticationRepository) : base(options, logger, encoder, clock)
         {
+            this.encryptionModuleOptions = encryptionModuleOptions;
             this.decryptor = decryptor;
             this.applicationAuthenticationRepository = applicationAuthenticationRepository;
         }
@@ -37,10 +41,11 @@ namespace RST.AspNetCore.Extensions
         /// <returns></returns>
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            Task<AuthenticateResult> HandleError(Exception exception)
+            static Task<AuthenticateResult> HandleError(Exception exception)
             {
                 return Task.FromResult(AuthenticateResult.Fail(exception));
             }
+
             try
             {
                 var authorisationToken = Request.Headers.Authorization.FirstOrDefault();
@@ -53,7 +58,7 @@ namespace RST.AspNetCore.Extensions
 
                 var encryptedGlob = authorisationToken[..^16];
 
-                var publicKey = decryptor.Decrypt(encryptedGlob, (Options.EncryptionOptions ?? throw new NullReferenceException("Unable to decrypt glob")).CreateInstance(globPublicKey));
+                var publicKey = decryptor.Decrypt(encryptedGlob, (Options.EncryptionOptions ?? encryptionModuleOptions[string.Empty] ?? throw new NullReferenceException("Unable to decrypt glob")).CreateInstance(globPublicKey));
 
                 var identity = await applicationAuthenticationRepository.GetIdentity(publicKey);
 

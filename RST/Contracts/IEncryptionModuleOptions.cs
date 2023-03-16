@@ -8,6 +8,12 @@ namespace RST.Contracts;
 public interface IEncryptionModuleOptions
 {
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
+    IEncryptionOptions? this[string key] { get; }
+    /// <summary>
     /// Gets a named instance factory of <see cref="IEncryptionOptions"/>
     /// </summary>
     IDictionary<string, Func<IServiceProvider, IEncryptionOptions>> EncryptionOptionsFactory { get; }

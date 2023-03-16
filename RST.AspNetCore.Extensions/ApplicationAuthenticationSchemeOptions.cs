@@ -35,6 +35,11 @@ public class ApplicationAuthenticationSchemeOptions : AuthenticationSchemeOption
     /// <summary>
     /// 
     /// </summary>
+    public bool UseProvidedEncryptionOptionsOnly { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
     public IEncryptionOptions? EncryptionOptions { get; set; }
 
     /// <summary>
@@ -47,7 +52,7 @@ public class ApplicationAuthenticationSchemeOptions : AuthenticationSchemeOption
             throw new ArgumentNullException(nameof(Scheme));
         }
 
-        if (EncryptionOptions == null)
+        if (UseProvidedEncryptionOptionsOnly && EncryptionOptions == null)
         {
             throw new ArgumentNullException(nameof(EncryptionOptions));
         }

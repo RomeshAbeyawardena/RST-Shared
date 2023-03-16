@@ -26,7 +26,7 @@ public static class ServiceCollectionExtensions
         params string[] sectionNames)
     {
         return services.AddSingleton<IEncryptionModuleOptions>(s => {
-            var options = new DefaultEncryptionModuleOptions(encryptionCaseConvention);
+            var options = new DefaultEncryptionModuleOptions(encryptionCaseConvention, s);
             var configuration = s.GetRequiredService<IConfiguration>();
             DictionaryBuilderExtensions.AddConfiguration(options.EncryptionOptions, s, rootPath,
                 sectionNames);
@@ -50,7 +50,7 @@ public static class ServiceCollectionExtensions
         return services.AddSingleton<IEncryptionModuleOptions, DefaultEncryptionModuleOptions>(
             (services) =>
         {
-            var options = new DefaultEncryptionModuleOptions(encryptionCaseConvention);
+            var options = new DefaultEncryptionModuleOptions(encryptionCaseConvention, services);
             configureEncryptionOptions?.Invoke(new DefaultDictionaryBuilder<string, IEncryptionOptions>(options.EncryptionOptions));
             configureServiceEncryptionOptions?.Invoke(new DefaultDictionaryBuilder<string, Func<IServiceProvider, IEncryptionOptions>>(options.EncryptionOptionsFactory));
             return options;

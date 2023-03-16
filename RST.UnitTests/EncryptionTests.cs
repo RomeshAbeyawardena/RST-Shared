@@ -25,7 +25,7 @@ namespace RST.UnitTests
                 Key = "NmZiMjhlMjNkZDdiNGU0NmJjODgwNTVjOTYxZDY1ZTM=",
                 InitialVector = "YjY2OTBlMmRjYjhhMDZmOQ=="
             };
-            encryptionModuleOptions = new DefaultEncryptionModuleOptions(Enumerations.EncryptionCaseConvention.Uppercase);
+            encryptionModuleOptions = new DefaultEncryptionModuleOptions(Enumerations.EncryptionCaseConvention.Uppercase, serviceProviderMock.Object);
             algorithmFactoryMock = new Mock<ISymmetricAlgorithmFactory>();
 
             algorithmFactoryMock
