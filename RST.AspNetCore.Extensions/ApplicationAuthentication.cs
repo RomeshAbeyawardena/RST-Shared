@@ -49,6 +49,7 @@ namespace RST.AspNetCore.Extensions
             try
             {
                 var authorisationToken = Request.Headers.Authorization.FirstOrDefault();
+
                 if (string.IsNullOrWhiteSpace(authorisationToken) || authorisationToken.Length < 132)
                 {
                     throw new NullReferenceException("Token invalid");
@@ -58,7 +59,9 @@ namespace RST.AspNetCore.Extensions
 
                 var encryptedGlob = authorisationToken[..^16];
 
-                var publicKey = decryptor.Decrypt(encryptedGlob, (Options.EncryptionOptions ?? encryptionModuleOptions[string.Empty] ?? throw new NullReferenceException("Unable to decrypt glob")).CreateInstance(globPublicKey));
+                var encryptionOptions = (Options.EncryptionOptions ?? encryptionModuleOptions[string.Empty] ?? throw new NullReferenceException("Unable to decrypt glob")).CreateInstance(globPublicKey);
+
+                var publicKey = decryptor.Decrypt(encryptedGlob, encryptionOptions);
 
                 var identity = await applicationAuthenticationRepository.GetIdentity(publicKey);
 
@@ -66,7 +69,16 @@ namespace RST.AspNetCore.Extensions
                 {
                     throw new NullReferenceException("Identity not found");
                 }
-                
+
+                var encryptedAccessToken = Request.Headers.ETag.FirstOrDefault();
+
+                if (string.IsNullOrWhiteSpace(encryptedAccessToken))
+                {
+                    throw new NullReferenceException("Access token invalid");
+                }
+
+                var accessToken = decryptor.Decrypt(encryptedAccessToken, encryptionOptions);
+
                 var roles = await applicationAuthenticationRepository.GetRoles(identity);
 
                 if (roles == null)
