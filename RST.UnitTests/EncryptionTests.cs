@@ -25,14 +25,16 @@ namespace RST.UnitTests
                 Key = "NmZiMjhlMjNkZDdiNGU0NmJjODgwNTVjOTYxZDY1ZTM=",
                 InitialVector = "YjY2OTBlMmRjYjhhMDZmOQ=="
             };
+
+
+            serviceProviderMock = new Mock<IServiceProvider>();
+
             encryptionModuleOptions = new DefaultEncryptionModuleOptions(Enumerations.EncryptionCaseConvention.Uppercase, serviceProviderMock.Object);
             algorithmFactoryMock = new Mock<ISymmetricAlgorithmFactory>();
 
             algorithmFactoryMock
                 .Setup(s => s.GetSymmetricAlgorithm(It.IsAny<Enumerations.SymmetricAlgorithm>()))
                 .Returns(Aes.Create());
-
-            serviceProviderMock = new Mock<IServiceProvider>();
 
             encryptor = new DefaultEncryptor(encryptionOptions,algorithmFactoryMock.Object,encryptionModuleOptions,
                 serviceProviderMock.Object);
