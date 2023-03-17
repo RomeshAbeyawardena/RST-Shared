@@ -50,7 +50,7 @@ namespace RST.AspNetCore.Extensions
         /// <returns></returns>
         public abstract Task<TIdentity> GetIdentity(TKey key);
         /// <summary>
-        /// <inheritdoc cref="IApplicationAuthenticationRepository{TKey, TIdentity, TTimestamp}.GetIdentity(string)"/>
+        /// <inheritdoc cref="IApplicationAuthenticationRepository.GetIdentity(string)"/>
         /// </summary>
         /// <param name="publicKey"></param>
         /// <returns></returns>

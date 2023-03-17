@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using RST.AspNetCore.Extensions.Contracts;
 
 namespace RST.AspNetCore.Extensions;
@@ -17,6 +19,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddApplicationAuthenticationRepository<TApplicationAuthenticationRepository>(IServiceCollection services)
         where TApplicationAuthenticationRepository : class, IApplicationAuthenticationRepository
     {
+        services.AddHttpContextAccessor()
+            .TryAddScoped(s => s.GetRequiredService<IHttpContextAccessor>().HttpContext!.Request.Headers);
         return services.AddTransient<IApplicationAuthenticationRepository, TApplicationAuthenticationRepository>();
     }
 }
