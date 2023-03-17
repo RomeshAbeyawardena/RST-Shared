@@ -5,6 +5,7 @@ using RST.AspNetCore.Extensions.Contracts;
 using RST.Contracts;
 using RST.Security.Cryptography.Defaults;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Text.Encodings.Web;
 
 namespace RST.AspNetCore.Extensions
@@ -18,6 +19,49 @@ namespace RST.AspNetCore.Extensions
         private readonly IEncryptionModuleOptions encryptionModuleOptions;
         private readonly IDecryptor decryptor;
         private readonly ISecuritySignatureProvider securitySignatureProvider;
+
+        private static Tuple<string, string> ExtractEncryptedGlob(string? authorisationToken)
+        {
+            if (string.IsNullOrWhiteSpace(authorisationToken) || authorisationToken.Length < 132)
+            {
+                throw new NullReferenceException("Authorision Token invalid");
+            }
+
+            var globPublicKey = authorisationToken.Substring(authorisationToken.Length - 16, 16);
+
+            var encryptedGlob = authorisationToken[..^16];
+
+            return Tuple.Create(globPublicKey, encryptedGlob);
+        }
+
+        private IEncryptionOptions GetEncryptionOptions(string globPublicKey)
+        {
+            return (Options.EncryptionOptions
+                    ?? (string.IsNullOrEmpty(Options.EncryptionKey) ? null : encryptionModuleOptions[Options.EncryptionKey])
+                    ?? throw new NullReferenceException("Unable to decrypt glob")).CreateInstance(globPublicKey);
+        }
+
+        private string VerifySignature(string? encryptedSignature, IEncryptionOptions encryptionOptions, string? authorisationToken, IApplicationIdentity identity)
+        {
+            if (string.IsNullOrWhiteSpace(encryptedSignature))
+            {
+                throw new NullReferenceException("Signature invalid");
+            }
+
+            if (string.IsNullOrWhiteSpace(authorisationToken))
+            {
+                throw new NullReferenceException("Authorisation token invalid invalid");
+            }
+
+            var signature = decryptor.Decrypt(encryptedSignature, encryptionOptions);
+
+            if (!securitySignatureProvider.VerifyData(authorisationToken, signature, DefaultSignatureConfiguration.DefaultConfiguration(identity.PublicKey)))
+            {
+                throw new InvalidOperationException("ETag signature invalid");
+            }
+
+            return signature;
+        }
 
         /// <summary>
         /// 
@@ -53,18 +97,9 @@ namespace RST.AspNetCore.Extensions
             {
                 var authorisationToken = Request.Headers.Authorization.FirstOrDefault();
 
-                if (string.IsNullOrWhiteSpace(authorisationToken) || authorisationToken.Length < 132)
-                {
-                    throw new NullReferenceException("Authorision Token invalid");
-                }
+                var (globPublicKey, encryptedGlob) = ExtractEncryptedGlob(authorisationToken);
 
-                var globPublicKey = authorisationToken.Substring(authorisationToken.Length - 16, 16);
-
-                var encryptedGlob = authorisationToken[..^16];
-
-                var encryptionOptions = (Options.EncryptionOptions
-                    ?? (string.IsNullOrEmpty(Options.EncryptionKey) ? null : encryptionModuleOptions[Options.EncryptionKey]) 
-                    ?? throw new NullReferenceException("Unable to decrypt glob")).CreateInstance(globPublicKey);
+                var encryptionOptions = GetEncryptionOptions(globPublicKey);
 
                 var publicKey = decryptor.Decrypt(encryptedGlob, encryptionOptions);
 
@@ -74,17 +109,7 @@ namespace RST.AspNetCore.Extensions
                 {
                     var encryptedSignature = Request.Headers.ETag.FirstOrDefault();
 
-                    if (string.IsNullOrWhiteSpace(encryptedSignature))
-                    {
-                        throw new NullReferenceException("Signature invalid");
-                    }
-
-                    var signature = decryptor.Decrypt(encryptedSignature, encryptionOptions);
-
-                    if (!securitySignatureProvider.VerifyData(authorisationToken, signature, DefaultSignatureConfiguration.DefaultConfiguration(identity.PublicKey)))
-                    {
-                        throw new InvalidOperationException("ETag signature invalid");
-                    }
+                    VerifySignature(encryptedSignature, encryptionOptions, authorisationToken, identity);
                 }
                 var encryptedAccessToken = Request.Headers.WWWAuthenticate.FirstOrDefault();
 
