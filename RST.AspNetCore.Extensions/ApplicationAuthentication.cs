@@ -63,6 +63,34 @@ namespace RST.AspNetCore.Extensions
             return signature;
         }
 
+        private async Task ValidateAccessToken(string? encryptedAccessToken, IEncryptionOptions encryptionOptions, IApplicationIdentity identity)
+        {
+            if (string.IsNullOrWhiteSpace(encryptedAccessToken))
+            {
+                throw new NullReferenceException("Access token invalid");
+            }
+
+            var accessToken = decryptor.Decrypt(encryptedAccessToken, encryptionOptions);
+
+            if (!await applicationAuthenticationRepository.ValidateAccessToken(identity, accessToken))
+            {
+                throw new InvalidOperationException("Access token invalid");
+            }
+        }
+
+        private async Task<IEnumerable<Claim>> GetRoles(IApplicationIdentity identity)
+        {
+            var roles = await applicationAuthenticationRepository.GetRoles(identity);
+
+            if (roles == null)
+            {
+                throw new NullReferenceException("Identity has no roles");
+            }
+
+            return roles.Select(s => new Claim(s.Key, s.Value));
+
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -96,7 +124,6 @@ namespace RST.AspNetCore.Extensions
             try
             {
                 var authorisationToken = Request.Headers.Authorization.FirstOrDefault();
-
                 var (globPublicKey, encryptedGlob) = ExtractEncryptedGlob(authorisationToken);
 
                 var encryptionOptions = GetEncryptionOptions(globPublicKey);
@@ -111,28 +138,11 @@ namespace RST.AspNetCore.Extensions
 
                     VerifySignature(encryptedSignature, encryptionOptions, authorisationToken, identity);
                 }
+
                 var encryptedAccessToken = Request.Headers.WWWAuthenticate.FirstOrDefault();
+                await ValidateAccessToken(encryptedAccessToken, encryptionOptions, identity);
 
-                if (string.IsNullOrWhiteSpace(encryptedAccessToken))
-                {
-                    throw new NullReferenceException("Access token invalid");
-                }
-
-                var accessToken = decryptor.Decrypt(encryptedAccessToken, encryptionOptions);
-
-                if (!await applicationAuthenticationRepository.ValidateAccessToken(identity, accessToken))
-                {
-                    throw new InvalidOperationException("Access token invalid");
-                }
-
-                var roles = await applicationAuthenticationRepository.GetRoles(identity);
-
-                if (roles == null)
-                {
-                    throw new NullReferenceException("Identity has no roles");
-                }
-
-                var claims = roles.Select(s => new Claim(s.Key, s.Value));
+                var claims = await GetRoles(identity);
 
                 return AuthenticateResult.Success(
                     new AuthenticationTicket(new ClaimsPrincipal(
