@@ -10,7 +10,7 @@ using System.Text.Encodings.Web;
 namespace RST.AspNetCore.Extensions
 {
     /// <summary>
-    /// 
+    /// Represents application authentication
     /// </summary>
     public class ApplicationAuthentication : AuthenticationHandler<ApplicationAuthenticationSchemeOptions>
     {
@@ -40,10 +40,8 @@ namespace RST.AspNetCore.Extensions
             this.applicationAuthenticationRepository = applicationAuthenticationRepository;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+        
+        /// <inheritdoc cref="AuthenticationHandler{ApplicationAuthenticationSchemeOptions}.AuthenticateAsync"/>
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
             static Task<AuthenticateResult> HandleError(Exception exception)
@@ -57,38 +55,37 @@ namespace RST.AspNetCore.Extensions
 
                 if (string.IsNullOrWhiteSpace(authorisationToken) || authorisationToken.Length < 132)
                 {
-                    throw new NullReferenceException("Token invalid");
+                    throw new NullReferenceException("Authorision Token invalid");
                 }
 
                 var globPublicKey = authorisationToken.Substring(authorisationToken.Length - 16, 16);
 
                 var encryptedGlob = authorisationToken[..^16];
 
-                var encryptionOptions = (Options.EncryptionOptions ?? encryptionModuleOptions[string.Empty] ?? throw new NullReferenceException("Unable to decrypt glob")).CreateInstance(globPublicKey);
+                var encryptionOptions = (Options.EncryptionOptions
+                    ?? (string.IsNullOrEmpty(Options.EncryptionKey) ? null : encryptionModuleOptions[Options.EncryptionKey]) 
+                    ?? throw new NullReferenceException("Unable to decrypt glob")).CreateInstance(globPublicKey);
 
                 var publicKey = decryptor.Decrypt(encryptedGlob, encryptionOptions);
 
-                var identity = await applicationAuthenticationRepository.GetIdentity(publicKey);
+                var identity = await applicationAuthenticationRepository.GetIdentity(publicKey) ?? throw new NullReferenceException("Identity not found");
 
-                if (identity == null)
+                if (Options.VerifySignature)
                 {
-                    throw new NullReferenceException("Identity not found");
+                    var encryptedSignature = Request.Headers.ETag.FirstOrDefault();
+
+                    if (string.IsNullOrWhiteSpace(encryptedSignature))
+                    {
+                        throw new NullReferenceException("Signature invalid");
+                    }
+
+                    var signature = decryptor.Decrypt(encryptedSignature, encryptionOptions);
+
+                    if (!securitySignatureProvider.VerifyData(authorisationToken, signature, DefaultSignatureConfiguration.DefaultConfiguration(identity.PublicKey)))
+                    {
+                        throw new InvalidOperationException("ETag signature invalid");
+                    }
                 }
-
-                var encryptedSignature = Request.Headers.ETag.FirstOrDefault();
-
-                if (string.IsNullOrWhiteSpace(encryptedSignature))
-                {
-                    throw new NullReferenceException("Signature invalid");
-                }
-
-                var signature = decryptor.Decrypt(encryptedSignature, encryptionOptions);
-
-                if(!securitySignatureProvider.VerifyData(authorisationToken, signature, DefaultSignatureConfiguration.DefaultConfiguration(identity.PublicKey)))
-                {
-                    throw new InvalidOperationException("ETag signature invalid");
-                }
-
                 var encryptedAccessToken = Request.Headers.WWWAuthenticate.FirstOrDefault();
 
                 if (string.IsNullOrWhiteSpace(encryptedAccessToken))
@@ -115,6 +112,11 @@ namespace RST.AspNetCore.Extensions
                 return AuthenticateResult.Success(
                     new AuthenticationTicket(new ClaimsPrincipal(
                         new ClaimsIdentity(identity, claims)), Options.Scheme));
+            }
+            catch(ArgumentOutOfRangeException ex)
+            {
+                Logger.LogError(ex, "Authorision token invalid");
+                return await HandleError(new InvalidDataException("Authorision token invalid"));
             }
             catch(InvalidOperationException ex)
             {
