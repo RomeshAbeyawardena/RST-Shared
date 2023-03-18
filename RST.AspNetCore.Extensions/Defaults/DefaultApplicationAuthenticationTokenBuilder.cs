@@ -45,11 +45,6 @@ public class DefaultApplicationAuthenticationTokenBuilder : IApplicationAuthenti
     {
         var applicationAuthenticationToken = new DefaultApplicationAuthenticationToken();
 
-        if(publicKey.Length != 16)
-        {
-            throw new InvalidDataException();
-        }
-
         var encryptionOptions = applicationAuthenticationProvider
             .GetEncryptionOptions(publicKey, options);
 
