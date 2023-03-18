@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
+using Microsoft.Net.Http.Headers;
 using Moq;
 using RST.AspNetCore.Extensions;
 using RST.AspNetCore.Extensions.Contracts;
@@ -25,7 +27,7 @@ public class ApplicationAuthenticationTests
     private Mock<IDecryptor> decryptorMock;
     private Mock<ISecuritySignatureProvider> securitySignatureProviderMock;
     private Mock<IApplicationAuthenticationRepository> applicationAuthenticationRepositoryMock;
-    private Mock<IHeaderDictionary> headerDictionaryMock;
+    private Dictionary<string, StringValues> headerDictionary;
     private Mock<IApplicationIdentity> identityMock;
     [SetUp]
     public void SetUp()
@@ -37,10 +39,10 @@ public class ApplicationAuthenticationTests
         decryptorMock = new Mock<IDecryptor>();
         securitySignatureProviderMock = new Mock<ISecuritySignatureProvider>();
         applicationAuthenticationRepositoryMock = new Mock<IApplicationAuthenticationRepository>();
-        headerDictionaryMock = new Mock<IHeaderDictionary>();
+        headerDictionary = new Dictionary<string, StringValues>();
         encryptorMock = new Mock<IEncryptor>();
         applicationAuthenticationProvider = new DefaultApplicationAuthenticationProvider(
-             loggerMock.Object,encryptionModuleMock.Object, headerDictionaryMock.Object,
+             loggerMock.Object,encryptionModuleMock.Object, new HeaderDictionary(headerDictionary),
             decryptorMock.Object, securitySignatureProviderMock.Object,
             applicationAuthenticationRepositoryMock.Object);
 
@@ -60,8 +62,13 @@ public class ApplicationAuthenticationTests
 
         identityMock.SetupProperty(i => i.PublicKey, "MIIBCgKCAQEAx+zH/l2a2iM27f+qwh7PaKYlONcTMUv8i9D1mghh4Wz7wa1KZgKibu+NveN65hw0haz/6bnYfPQlBfx+LVgo5Nsg7NLljOiYwMh3lAdUraTVz8cauHBSNJcYjw8KAQJaxT/QIS+VjGxQImX6LKFo/oIqtLYDPLJXvVgD41YupBZ8Xma+TAD5UkB/RdCUSIBm5rcDGLUQtUCO521hj50NXVzdnUY3mOIOozrJHZbucxGTZfnDWts9NPRyZf8X+rCc4lhl7y2UWAwY6NzQqxMKBo5+5D6k/hb1/oz3os3aVKGxp94IW/Z6MYAKGG122WI8mwa1OauqUO16zy9f51RN0QIDAQAB");
 
-        applicationAuthenticationTokenBuilder.BuildToken(identityMock.Object, publickey, options);
+        var token = applicationAuthenticationTokenBuilder.BuildToken(identityMock.Object, publickey, options);
 
-        await applicationAuthenticationProvider.HandleAuthenticateAsync(options);
+        headerDictionary.Add(HeaderNames.Authorization, new StringValues(token.AuthorisationToken));
+        headerDictionary.Add(HeaderNames.ETag, new StringValues(token.ETag));
+
+        var result = await applicationAuthenticationProvider.HandleAuthenticateAsync(options);
+
+        Assert.That(result, Is.Not.Null);
     }
 }
