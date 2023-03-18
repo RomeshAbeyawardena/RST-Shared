@@ -11,15 +11,11 @@ namespace RST.AspNetCore.Extensions.Contracts
         /// 
         /// </summary>
         /// <param name="applicationIdentity"></param>
-        /// <param name="encryptionOptions"></param>
-        /// <returns></returns>
-        string BuildToken(IApplicationIdentity applicationIdentity, IEncryptionOptions? encryptionOptions = null);
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="publicKey"></param>
-        /// <param name="encryptionOptions"></param>
+        /// <param name="options"></param>
         /// <returns></returns>
-        string BuildToken(string publicKey, IEncryptionOptions? encryptionOptions = null);
+        IApplicationAuthenticationToken BuildToken(IApplicationIdentity applicationIdentity,
+            string publicKey,
+            ApplicationAuthenticationSchemeOptions options);
     }
 }

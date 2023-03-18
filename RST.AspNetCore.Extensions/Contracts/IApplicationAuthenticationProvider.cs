@@ -20,8 +20,9 @@ public interface IApplicationAuthenticationProvider
     /// 
     /// </summary>
     /// <param name="globPublicKey"></param>
+    /// <param name="options"></param>
     /// <returns></returns>
-    IEncryptionOptions GetEncryptionOptions(string globPublicKey);
+    IEncryptionOptions GetEncryptionOptions(string globPublicKey, ApplicationAuthenticationSchemeOptions options);
 
     /// <summary>
     /// 
@@ -53,5 +54,5 @@ public interface IApplicationAuthenticationProvider
     /// 
     /// </summary>
     /// <returns></returns>
-    Task<AuthenticateResult> HandleAuthenticateAsync();
+    Task<AuthenticateResult> HandleAuthenticateAsync(ApplicationAuthenticationSchemeOptions options);
 }

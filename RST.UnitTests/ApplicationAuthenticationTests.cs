@@ -34,7 +34,7 @@ public class ApplicationAuthenticationTests
         securitySignatureProviderMock = new Mock<ISecuritySignatureProvider>();
         applicationAuthenticationRepositoryMock = new Mock<IApplicationAuthenticationRepository>();
         headerDictionaryMock = new Mock<IHeaderDictionary>();
-        applicationAuthenticationProvider = new DefaultApplicationAuthenticationProvider(options,
+        applicationAuthenticationProvider = new DefaultApplicationAuthenticationProvider(
              loggerMock.Object,encryptionModuleMock.Object, headerDictionaryMock.Object,
             decryptorMock.Object, securitySignatureProviderMock.Object,
             applicationAuthenticationRepositoryMock.Object);
@@ -44,6 +44,6 @@ public class ApplicationAuthenticationTests
     [Test]
     public async Task ValidateAccessToken()
     {
-        await applicationAuthenticationProvider.HandleAuthenticateAsync();
+        await applicationAuthenticationProvider.HandleAuthenticateAsync(options);
     }
 }

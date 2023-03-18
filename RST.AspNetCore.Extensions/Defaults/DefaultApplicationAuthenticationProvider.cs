@@ -13,7 +13,6 @@ namespace RST.AspNetCore.Extensions.Defaults;
 /// <inheritdoc cref="IApplicationAuthenticationProvider"/>
 public class DefaultApplicationAuthenticationProvider : IApplicationAuthenticationProvider
 {
-    private readonly ApplicationAuthenticationSchemeOptions options;
     private readonly ILogger<DefaultApplicationAuthenticationProvider> logger;
     private readonly IEncryptionModuleOptions encryptionModuleOptions;
     private readonly IHeaderDictionary headers;
@@ -24,20 +23,18 @@ public class DefaultApplicationAuthenticationProvider : IApplicationAuthenticati
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="options"></param>
     /// <param name="encryptionModuleOptions"></param>
     /// <param name="logger"></param>
     /// <param name="headers"></param>
     /// <param name="decryptor"></param>
     /// <param name="securitySignatureProvider"></param>
     /// <param name="applicationAuthenticationRepository"></param>
-    public DefaultApplicationAuthenticationProvider(ApplicationAuthenticationSchemeOptions options, 
+    public DefaultApplicationAuthenticationProvider( 
             ILogger<DefaultApplicationAuthenticationProvider> logger,
             IEncryptionModuleOptions encryptionModuleOptions, IHeaderDictionary headers,
             IDecryptor decryptor, ISecuritySignatureProvider securitySignatureProvider,
             IApplicationAuthenticationRepository applicationAuthenticationRepository)
     {
-        this.options = options;
         this.logger = logger;
         this.encryptionModuleOptions = encryptionModuleOptions;
         this.headers = headers;
@@ -61,8 +58,8 @@ public class DefaultApplicationAuthenticationProvider : IApplicationAuthenticati
         return Tuple.Create(globPublicKey, encryptedGlob);
     }
 
-    /// <inheritdoc cref="IApplicationAuthenticationProvider.GetEncryptionOptions(string)"/>
-    public IEncryptionOptions GetEncryptionOptions(string globPublicKey)
+    /// <inheritdoc cref="IApplicationAuthenticationProvider.GetEncryptionOptions(string, ApplicationAuthenticationSchemeOptions)"/>
+    public IEncryptionOptions GetEncryptionOptions(string globPublicKey, ApplicationAuthenticationSchemeOptions options)
     {
         return (options.EncryptionOptions
                     ?? (string.IsNullOrEmpty(options.EncryptionKey) ? null : encryptionModuleOptions[options.EncryptionKey])
@@ -80,8 +77,8 @@ public class DefaultApplicationAuthenticationProvider : IApplicationAuthenticati
 
         return roles.Select(s => new Claim(s.Key, s.Value));
     }
-
-    public async Task<AuthenticateResult> HandleAuthenticateAsync()
+    /// <inheritdoc cref="IApplicationAuthenticationProvider.HandleAuthenticateAsync(ApplicationAuthenticationSchemeOptions)"/>
+    public async Task<AuthenticateResult> HandleAuthenticateAsync(ApplicationAuthenticationSchemeOptions options)
     {
         static Task<AuthenticateResult> HandleError(Exception exception)
         {
@@ -93,7 +90,7 @@ public class DefaultApplicationAuthenticationProvider : IApplicationAuthenticati
             var authorisationToken = headers.Authorization.FirstOrDefault();
             var (globPublicKey, encryptedGlob) = ExtractEncryptedGlob(authorisationToken);
 
-            var encryptionOptions = GetEncryptionOptions(globPublicKey);
+            var encryptionOptions = GetEncryptionOptions(globPublicKey, options);
 
             var publicKey = decryptor.Decrypt(encryptedGlob, encryptionOptions);
 

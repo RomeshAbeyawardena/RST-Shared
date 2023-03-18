@@ -36,7 +36,7 @@ namespace RST.AspNetCore.Extensions
         /// <inheritdoc cref="AuthenticationHandler{ApplicationAuthenticationSchemeOptions}.AuthenticateAsync"/>
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            return await applicationAuthenticationProvider.HandleAuthenticateAsync();
+            return await applicationAuthenticationProvider.HandleAuthenticateAsync(Options);
         }
     }
 }
