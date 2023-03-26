@@ -7,8 +7,12 @@
     <NoWarn>1591</NoWarn>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+
   <ItemGroup>
-    <None Include="docs\README.md" Pack="true" PackagePath="\"/>
+    <Compile Remove="docs\**" />
+    <EmbeddedResource Remove="docs\**" />
+    <EntityDeploy Remove="docs\**" />
+    <None Remove="docs\**" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />

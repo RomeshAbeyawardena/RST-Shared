@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -6,12 +6,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="docs\README.md" Pack="true" PackagePath="\"/>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\RST\RST.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+    <None Include="docs\readme.md" Pack="true" PackagePath=""/>
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="7.2.23" />
