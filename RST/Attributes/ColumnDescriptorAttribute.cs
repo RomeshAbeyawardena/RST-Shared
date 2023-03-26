@@ -40,13 +40,18 @@ public class ColumnDescriptorAttribute : ColumnAttribute
 		return type ?? throw new NullReferenceException();
     }
 
-	/// <summary>
-	/// Creates an instance of <see cref="ColumnDescriptorAttribute"/>
-	/// </summary>
-	/// <param name="dbType">Describes the DB Type</param>
-	/// <param name="length">Describes the length</param>
-	/// <param name="subLength">Describes the sub length</param>
-	public ColumnDescriptorAttribute(SqlDbType dbType, int length = int.MinValue, int subLength  = int.MinValue)
+    /// <summary>
+    /// Creates an instance of <see cref="ColumnDescriptorAttribute"/>
+    /// </summary>
+    /// <param name="name"><inheritdoc cref="ColumnAttribute.ColumnAttribute(string)"/></param>
+    /// <param name="dbType">Describes the DB Type</param>
+    /// <param name="length">Describes the length</param>
+    /// <param name="subLength">Describes the sub length</param>
+    public ColumnDescriptorAttribute(string name,
+        SqlDbType dbType, 
+        int length = int.MinValue, 
+        int subLength  = int.MinValue)
+		: base(name)
 	{
 		DbType = dbType;
 		Length = length;
@@ -54,10 +59,25 @@ public class ColumnDescriptorAttribute : ColumnAttribute
 		this.TypeName = DescribeType();
 	}
 
-	/// <summary>
-	/// Gets the Db Type
-	/// </summary>
-	public SqlDbType DbType { get; }
+    /// <summary>
+    /// Creates an instance of <see cref="ColumnDescriptorAttribute"/>
+    /// </summary>
+    /// <param name="dbType">Describes the DB Type</param>
+    /// <param name="length">Describes the length</param>
+    /// <param name="subLength">Describes the sub length</param>
+    public ColumnDescriptorAttribute(SqlDbType dbType,
+        int length = int.MinValue, int subLength = int.MinValue)
+    {
+        DbType = dbType;
+        Length = length;
+        SubLength = subLength;
+        this.TypeName = DescribeType();
+    }
+
+    /// <summary>
+    /// Gets the Db Type
+    /// </summary>
+    public SqlDbType DbType { get; }
 
 	/// <summary>
 	/// Gets the length used by the Db type

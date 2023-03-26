@@ -3,5 +3,5 @@
 
     class MyInheritedBaseType : MyBaseType
     {
-        public string? B { get; set; }
+        protected string? B { get; set; }
     }
