@@ -62,6 +62,8 @@ public class ApplicationAuthenticationTests
 
         identityMock.SetupProperty(i => i.PublicKey, "MIIBCgKCAQEAx+zH/l2a2iM27f+qwh7PaKYlONcTMUv8i9D1mghh4Wz7wa1KZgKibu+NveN65hw0haz/6bnYfPQlBfx+LVgo5Nsg7NLljOiYwMh3lAdUraTVz8cauHBSNJcYjw8KAQJaxT/QIS+VjGxQImX6LKFo/oIqtLYDPLJXvVgD41YupBZ8Xma+TAD5UkB/RdCUSIBm5rcDGLUQtUCO521hj50NXVzdnUY3mOIOozrJHZbucxGTZfnDWts9NPRyZf8X+rCc4lhl7y2UWAwY6NzQqxMKBo5+5D6k/hb1/oz3os3aVKGxp94IW/Z6MYAKGG122WI8mwa1OauqUO16zy9f51RN0QIDAQAB");
 
+        encryptorMock.Setup()
+
         var token = applicationAuthenticationTokenBuilder.BuildToken(identityMock.Object, publickey, options);
 
         headerDictionary.Add(HeaderNames.Authorization, new StringValues(token.AuthorisationToken));
