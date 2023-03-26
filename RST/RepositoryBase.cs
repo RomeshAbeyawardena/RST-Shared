@@ -12,7 +12,7 @@ namespace RST;
 public abstract class RepositoryBase<T> : IRepository<T>
 {
     private IQueryable<T>? queryable;
-    private readonly ExpressionStarter<T> queryBuilder;
+    private ExpressionStarter<T>? queryBuilder;
 
     /// <summary>
     /// Sets the underlining <see cref="IQueryable"/>
@@ -25,8 +25,7 @@ public abstract class RepositoryBase<T> : IRepository<T>
     /// <param name="queryable"></param>
     public RepositoryBase(IQueryable<T>? queryable  = null)
     {
-        this.queryBuilder = PredicateBuilder.New<T>();
-        queryBuilder.DefaultExpression = a => true;
+        ResetQueryBuilder();
         this.queryable = queryable;
     }
 
@@ -50,7 +49,7 @@ public abstract class RepositoryBase<T> : IRepository<T>
     public IQueryProvider Provider => queryable?.Provider ?? throw new NullReferenceException();
     
     /// <inheritdoc cref="IRepository{T}.QueryBuilder"/>
-    public ExpressionStarter<T> QueryBuilder => queryBuilder; 
+    public ExpressionStarter<T> QueryBuilder => queryBuilder!; 
     
     /// <inheritdoc cref="IRepository{T}.CommitChangesAsync(CancellationToken)"/>
     public abstract Task<int> CommitChangesAsync(CancellationToken cancellationToken);
@@ -92,4 +91,14 @@ public abstract class RepositoryBase<T> : IRepository<T>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public abstract Task<IPagedResult<T>> GetPagedResult(Action<ExpressionStarter<T>> queryBuilder, IPagedQuery<int> query, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// <inheritdoc cref="ResetQueryBuilder"/>
+    /// </summary>
+    /// <exception cref="NotImplementedException"></exception>
+    public void ResetQueryBuilder()
+    {
+        this.queryBuilder = PredicateBuilder.New<T>();
+        queryBuilder.DefaultExpression = a => true;
+    }
 }

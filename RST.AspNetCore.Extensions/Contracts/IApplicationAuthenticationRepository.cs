@@ -10,7 +10,7 @@ namespace RST.AspNetCore.Extensions.Contracts
     public interface IApplicationAuthenticationRepository
     {
         /// <summary>
-        /// Gets an identity by its unique <typeparamref name="TKey"/> identifier
+        /// Gets an identity by its unique identifier
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>

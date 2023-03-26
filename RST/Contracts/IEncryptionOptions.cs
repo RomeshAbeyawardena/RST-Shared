@@ -7,6 +7,12 @@ namespace RST.Contracts;
 /// </summary>
 public interface IEncryptionOptions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="initialVector"></param>
+    /// <param name="key"></param>
+    /// <returns></returns>
     IEncryptionOptions CreateInstance(string initialVector, string? key = null);
     /// <summary>
     /// Gets or sets the symmetric algorithm

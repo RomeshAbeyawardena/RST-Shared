@@ -27,6 +27,12 @@ public interface IRepository<T> : IQueryable<T>
     /// Gets the query builder
     /// </summary>
     ExpressionStarter<T> QueryBuilder { get; }
+
+    /// <summary>
+    /// Resets the query builder instance
+    /// </summary>
+    void ResetQueryBuilder();
+
     /// <summary>
     /// Commits changes to underlining provider
     /// </summary>
