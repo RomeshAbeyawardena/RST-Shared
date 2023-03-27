@@ -5,6 +5,7 @@ using RST.Contracts;
 using RST.DependencyInjection.Extensions;
 using RST.DependencyInjection.Extensions.Attributes;
 using RST.Extensions;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
@@ -24,10 +25,8 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse> : RepositoryHan
     /// 
     /// </summary>
     /// <param name="serviceProvider"></param>
-    /// <param name="clockProvider"></param>
-    /// <param name="repository"></param>
-    protected RepositoryHandlerBase(IServiceProvider serviceProvider, IClockProvider clockProvider, IRepository<TResponse> repository) 
-        : base(serviceProvider, clockProvider, repository)
+    protected RepositoryHandlerBase(IServiceProvider serviceProvider) 
+        : base(serviceProvider)
     {
     }
 }
@@ -42,7 +41,15 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
     where TRequest : IRequest<TResponse>
     where TModel : class
 {
-    private readonly IClockProvider clockProvider;
+    /// <summary>
+    /// 
+    /// </summary>
+    protected IClockProvider? ClockProvider { get; set; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    protected IRepository<TModel>? Repository { get; set; }
 
     /// <summary>
     /// Configures no tracking against the repository based upon the <paramref name="request"/> parameter
@@ -52,7 +59,7 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
     {
         if (request.NoTracking.HasValue)
         {
-            Repository.NoTracking = request.NoTracking.Value;
+            Repository!.NoTracking = request.NoTracking.Value;
         }
     }
 
@@ -139,19 +146,19 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
             {
                 if(entity is ICreated created)
                 {
-                    created.Created = clockProvider.UtcNow;
+                    created.Created = ClockProvider!.UtcNow;
                 }
 
-                Repository.Add(entity);
+                Repository!.Add(entity);
             }
             else
             {
                 if(entity is IModified modified)
                 {
-                    modified.Modified = clockProvider.UtcNow;
+                    modified.Modified = ClockProvider!.UtcNow;
                 }
 
-                var foundEntity = await Repository.FindAsync(cancellationToken, identity.Id);
+                var foundEntity = await Repository!.FindAsync(cancellationToken, identity.Id);
 
                 if (foundEntity != null)
                 {
@@ -163,7 +170,7 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
             }
         }
         else
-            Repository.Add(entity);
+            Repository!.Add(entity);
 
         if (command.CommitChanges)
         {
@@ -189,7 +196,7 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
             query = FilterByDateRange(query, dateRangeQuery);
         }
 
-        return await OrderByQuery(this.Repository.Where(query), orderByQuery).ToArrayAsync(cancellationToken);
+        return await OrderByQuery(this.Repository!.Where(query), orderByQuery).ToArrayAsync(cancellationToken);
     }
 
     /// <summary>
@@ -208,7 +215,7 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
             query = FilterByDateRange(query, dateRangeQuery);
         }
 
-        return Repository.GetPagedResult(query, request, cancellationToken);
+        return Repository!.GetPagedResult(query, request, cancellationToken);
     }
     /// <summary>
     /// 
@@ -222,17 +229,9 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
     /// 
     /// </summary>
     /// <param name="serviceProvider"></param>
-    /// <param name="clockProvider"></param>
-    /// <param name="repository"></param>
-    public RepositoryHandlerBase(IServiceProvider serviceProvider, IClockProvider clockProvider, IRepository<TModel> repository)
+    public RepositoryHandlerBase(IServiceProvider serviceProvider)
         : base(serviceProvider)
     {
-        this.clockProvider = clockProvider;
-        Repository = repository;
+        ConfigureInjection();
     }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public IRepository<TModel> Repository { get; }
 }

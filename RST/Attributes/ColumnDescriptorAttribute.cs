@@ -8,13 +8,13 @@ namespace RST.Attributes;
 /// </summary>
 public class ColumnDescriptorAttribute : ColumnAttribute
 {
-	private IEnumerable<SqlDbType> DoubleParameterFieldTypes = new[]
+	private readonly IEnumerable<SqlDbType> DoubleParameterFieldTypes = new[]
 	{
 		SqlDbType.Decimal,
         SqlDbType.Float,
     };
 
-    private IEnumerable<SqlDbType> SingleParameterFieldTypes = new[]
+    private readonly IEnumerable<SqlDbType> SingleParameterFieldTypes = new[]
     {
         SqlDbType.VarBinary,
         SqlDbType.VarChar,

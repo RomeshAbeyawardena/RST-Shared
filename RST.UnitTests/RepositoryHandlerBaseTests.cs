@@ -16,8 +16,8 @@ namespace RST.UnitTests
 
         private class MyTestRepositoryHandler : RepositoryHandlerBase<MyRequest, IEnumerable<Customer>, Customer>
         {
-            public MyTestRepositoryHandler(IServiceProvider serviceProvider, IClockProvider clockProvider, IRepository<Customer> repository) 
-                : base(serviceProvider, clockProvider, repository)
+            public MyTestRepositoryHandler(IServiceProvider serviceProvider) 
+                : base(serviceProvider)
             {
             }
 
@@ -39,7 +39,7 @@ namespace RST.UnitTests
             serviceProviderMock = new Mock<IServiceProvider>();
             clockProviderMock = new Mock<IClockProvider>();
             repositoryMock = new Mock<IRepository<Customer>>();
-            sut = new MyTestRepositoryHandler(serviceProviderMock.Object, clockProviderMock.Object, repositoryMock.Object);
+            sut = new MyTestRepositoryHandler(serviceProviderMock.Object);
         }
 
         [Test]
