@@ -58,7 +58,7 @@ public class PropertyTypeProviderCache : IPropertyTypeProviderCache
     /// <inheritdoc cref="IReadOnlyDictionary{TKey, TValue}.TryGetValue(TKey, out TValue)"/>
     public bool TryGetValue(Type key, [MaybeNullWhen(false)] out IEnumerable<PropertyInfo> value)
     {
-        return TryGetValue(key, out value);
+        return propertiesDictionary.TryGetValue(key, out value);
     }
 
     IEnumerator IEnumerable.GetEnumerator()
