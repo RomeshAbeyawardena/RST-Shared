@@ -67,7 +67,7 @@ public static class ObjectExtensions
     }
 
     /// <summary>
-    /// Commits <paramref name="changes"/> to value to <paramref name="target"/> parameter
+    /// Commits <paramref name="changes"/> to the source value to <paramref name="target"/> parameter
     /// </summary>
     /// <param name="target">The target to apply changes to</param>
     /// <param name="changes">A list of changes detected</param>

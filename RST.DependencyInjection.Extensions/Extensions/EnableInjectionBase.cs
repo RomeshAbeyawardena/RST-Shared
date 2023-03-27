@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using RST.Contracts;
 using RST.Defaults;
 using RST.DependencyInjection.Extensions.Attributes;
 using RST.Extensions;
@@ -18,7 +19,7 @@ public abstract class EnableInjectionBase<TInjectAttribute>
     /// </summary>
     protected void ConfigureInjection()
     {
-        var typeProviderCache = serviceProvider.GetService<PropertyTypeProviderCache>()
+        var typeProviderCache = serviceProvider.GetService<IPropertyTypeProviderCache>()
             ?? throw new NullReferenceException();
 
         var instanceType = GetType();
