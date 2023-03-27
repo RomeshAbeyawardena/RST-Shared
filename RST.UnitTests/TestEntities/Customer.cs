@@ -1,8 +1,10 @@
-﻿namespace RST.UnitTests.TestEntities;
+﻿using RST.Contracts;
+
+namespace RST.UnitTests.TestEntities;
 /// <summary>
 /// 
 /// </summary>
-public record Customer
+public record Customer : IIdentity
 {
     /// <summary>
     /// 
@@ -20,5 +22,7 @@ public record Customer
     /// 
     /// </summary>
     public string? Lastname { get; set; }
+
+    public DateTimeOffset? PopulatedDate { get;set; }
 
 }

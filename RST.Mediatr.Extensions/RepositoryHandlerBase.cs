@@ -2,6 +2,8 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RST.Contracts;
+using RST.DependencyInjection.Extensions;
+using RST.DependencyInjection.Extensions.Attributes;
 using RST.Extensions;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
@@ -21,9 +23,11 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse> : RepositoryHan
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="serviceProvider"></param>
     /// <param name="clockProvider"></param>
     /// <param name="repository"></param>
-    protected RepositoryHandlerBase(IClockProvider clockProvider, IRepository<TResponse> repository) : base(clockProvider, repository)
+    protected RepositoryHandlerBase(IServiceProvider serviceProvider, IClockProvider clockProvider, IRepository<TResponse> repository) 
+        : base(serviceProvider, clockProvider, repository)
     {
     }
 }
@@ -34,7 +38,7 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse> : RepositoryHan
 /// <typeparam name="TRequest"></typeparam>
 /// <typeparam name="TResponse"></typeparam>
 /// <typeparam name="TModel"></typeparam>
-public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : IRequestHandler<TRequest, TResponse>
+public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : EnableInjectionBase<InjectAttribute>, IRequestHandler<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
     where TModel : class
 {
@@ -111,7 +115,7 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : IRequ
     }
     
     /// <summary>
-    /// Processes a save command and applies the approriate add/update behaviour against the underlining provider
+    /// Processes a save command and applies the appropriate add/update behaviour against the underlining provider
     /// </summary>
     /// <typeparam name="TDbCommand"></typeparam>
     /// <param name="command"></param>
@@ -119,7 +123,7 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : IRequ
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     /// <exception cref="NullReferenceException"></exception>
-    protected async Task<TModel> ProcessSave<TDbCommand>(TDbCommand command, Func<TDbCommand, TModel?> convertToModel, CancellationToken cancellationToken)
+    protected internal async Task<TModel> ProcessSave<TDbCommand>(TDbCommand command, Func<TDbCommand, TModel?> convertToModel, CancellationToken cancellationToken)
         where TDbCommand : IDbCommand
     {
         var entity = convertToModel(command);
@@ -151,8 +155,10 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : IRequ
 
                 if (foundEntity != null)
                 {
-                    foundEntity.HasChanges(entity, out var changes);
-                    foundEntity.CommitChanges(changes);
+                    if (foundEntity.HasChanges(entity, out var changes))
+                    {
+                        foundEntity.CommitChanges(changes);
+                    }
                 }
             }
         }
@@ -215,9 +221,11 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : IRequ
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="serviceProvider"></param>
     /// <param name="clockProvider"></param>
     /// <param name="repository"></param>
-    public RepositoryHandlerBase(IClockProvider clockProvider, IRepository<TModel> repository)
+    public RepositoryHandlerBase(IServiceProvider serviceProvider, IClockProvider clockProvider, IRepository<TModel> repository)
+        : base(serviceProvider)
     {
         this.clockProvider = clockProvider;
         Repository = repository;
