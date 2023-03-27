@@ -16,9 +16,10 @@ public abstract class PagedRepositoryHandlerBase<TRequest, TModel>
     /// <summary>
     /// Initialises an inherited instance of <see cref="PagedRepositoryHandlerBase{TRequest, TModel}"/>
     /// </summary>
+    /// <param name="serviceProvider"></param>
     /// <param name="clockProvider">Instance of clock provider</param>
     /// <param name="repository">Instance of SQL repository</param>
-    public PagedRepositoryHandlerBase(IClockProvider clockProvider, IRepository<TModel> repository) : base(clockProvider, repository)
+    public PagedRepositoryHandlerBase(IServiceProvider serviceProvider, IClockProvider clockProvider, IRepository<TModel> repository) : base(serviceProvider, clockProvider, repository)
     {
     }
 }
