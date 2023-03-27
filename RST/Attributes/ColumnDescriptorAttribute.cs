@@ -34,7 +34,7 @@ public class ColumnDescriptorAttribute : ColumnAttribute
 
         if (SingleParameterFieldTypes.Contains(DbType))
         {
-            return $"{type}({Length})";
+            return $"{type}({(Length == int.MaxValue ? "MAX" : Length)})";
         }
 
 		return type ?? throw new NullReferenceException();
