@@ -1,4 +1,6 @@
-﻿using RST.DependencyInjection.Extensions.Attributes;
+﻿using Microsoft.Extensions.DependencyInjection;
+using RST.Defaults;
+using RST.DependencyInjection.Extensions.Attributes;
 using RST.Extensions;
 
 namespace RST.DependencyInjection.Extensions;
@@ -16,10 +18,20 @@ public abstract class EnableInjectionBase<TInjectAttribute>
     /// </summary>
     protected void ConfigureInjection()
     {
-        var instanceType = GetType();
-        var properties = instanceType.GetAllProperties().Where(p => p.CanWrite && p.HasAttribute(typeof(TInjectAttribute), out var attribute));
+        var typeProviderCache = serviceProvider.GetService<PropertyTypeProviderCache>()
+            ?? throw new NullReferenceException();
 
-        foreach (var property in properties)
+        var instanceType = GetType();
+        
+        if (!typeProviderCache.TryGetValue(instanceType, out var properties))
+        {
+            properties = instanceType.GetAllProperties();
+            typeProviderCache.AddOrUpdate(instanceType, properties);
+        }
+
+        var injectableProperties = properties.Where(p => p.CanWrite && p.HasAttribute(typeof(TInjectAttribute), out var attribute));
+
+        foreach (var property in injectableProperties)
         {
             var service = serviceProvider.GetService(property.PropertyType);
 
