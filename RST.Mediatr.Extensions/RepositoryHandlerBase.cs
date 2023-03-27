@@ -44,12 +44,12 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
     /// <summary>
     /// 
     /// </summary>
-    protected IClockProvider? ClockProvider { get; set; }
-    
+    [Inject] protected IClockProvider? ClockProvider { get; set; }
+
     /// <summary>
     /// 
     /// </summary>
-    protected IRepository<TModel>? Repository { get; set; }
+    [Inject] protected IRepository<TModel>? Repository { get; set; }
 
     /// <summary>
     /// Configures no tracking against the repository based upon the <paramref name="request"/> parameter
