@@ -18,7 +18,7 @@ if ( [System.IO.Directory]::Exists($oldPath) -eq $true )
 
 git pull
 
-dotnet build
+dotnet build --output $oldPath --nologo
 
 if(-not $LastExitCode -eq 0 ) 
 {
@@ -31,7 +31,9 @@ $versionInfo = get-version $propsFile
 
 $version = $versionInfo.version
 
-dotnet pack -o "$outputPath/$version"
+dotnet build 
+
+dotnet pack --no-build -o "$outputPath/$version"
 
 if(-not $LastExitCode -eq 0 ) 
 {

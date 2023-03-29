@@ -4,10 +4,10 @@
     <Company>DNI</Company>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <FileVersion>0.0.2.29</FileVersion>
+    <FileVersion>0.0.2.30</FileVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Version>0.0.2.29</Version>
+    <Version>0.0.2.30</Version>
     <VersionSuffix>DEV</VersionSuffix>
   </PropertyGroup>
 </Project>
