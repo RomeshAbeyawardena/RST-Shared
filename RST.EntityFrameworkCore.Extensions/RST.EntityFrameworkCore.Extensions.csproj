@@ -6,10 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RST\RST.csproj" />
+    <None Include="Docs\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Docs\readme.md" Pack="true" PackagePath="" />
+    <ProjectReference Include="..\RST\RST.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.4" />
