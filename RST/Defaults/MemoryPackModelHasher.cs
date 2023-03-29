@@ -1,4 +1,4 @@
-﻿using MemoryPack;
+﻿using MessagePack;
 using RST.Attributes;
 using RST.Contracts;
 
@@ -26,7 +26,7 @@ public class MemoryPackModelHasher : ModelHasherBase<MemoryPackModelHasherOption
     public override string CalculateHash<T>(T model, MemoryPackModelHasherOptions options)
     {
         using var hashAlgorithm = hashAlgorithmProvider.GetHashAlgorithm(options.HashAlgorithmName); 
-        var serialisedModel = MemoryPackSerializer.Serialize(model);
+        var serialisedModel = MessagePackSerializer.Serialize(model);
         var secureHash = hashAlgorithm.ComputeHash(serialisedModel);
         return Convert.ToBase64String(secureHash);
     }

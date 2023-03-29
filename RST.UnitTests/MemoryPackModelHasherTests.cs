@@ -46,6 +46,6 @@ public class MemoryPackModelHasherTests
             HashAlgorithmName = HashAlgorithmName.SHA512
         });
 
-        Assert.That(hash, Is.EqualTo("zvuR/egU61jUP1m6M8LAswk/ohEAJ6OlaIU/hoJcC61QdX5Vcko7dQDUo6Wnw3yAKRvz81A9vtlBKXqJnd6XBw=="));
+        Assert.That(hash, Is.EqualTo("4YDvZBMtA3FmnZ/gWpDxzVmPHbJvDak/b41VySj7DzciNoT3gG5WKRmbaqkWQdUmh0mO26tgC1VJtJ29i5xGJw=="));
     }
 }

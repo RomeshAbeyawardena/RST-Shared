@@ -6,7 +6,7 @@ namespace RST.Attributes;
 /// Represents a hash column
 /// </summary>
 [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-public class HashColumnAttribute : Attribute
+public sealed class HashColumnAttribute : MessagePack.IgnoreMemberAttribute
 {
 	/// <summary>
 	/// 
