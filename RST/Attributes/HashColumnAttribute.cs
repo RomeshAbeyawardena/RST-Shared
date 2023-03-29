@@ -14,7 +14,7 @@ public class HashColumnAttribute : Attribute
 	/// <param name="name"></param>
 	public HashColumnAttribute(string name)
 	{
-		Name = HashAlgorithmName.FromOid(name);
+		Name = new HashAlgorithmName(name);
 	}
 
 	/// <summary>

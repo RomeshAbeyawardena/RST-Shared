@@ -1,4 +1,5 @@
 ﻿using Moq;
+using RST.Attributes;
 using RST.Contracts;
 using RST.Defaults;
 using RST.UnitTests.TestEntities;
@@ -16,6 +17,13 @@ public class MemoryPackModelHasherTests
     {
         hashAlgorithmProviderMock = new Mock<IHashAlgorithmProvider>();
         memoryPackModelHasher = new MemoryPackModelHasher(hashAlgorithmProviderMock.Object);
+    }
+
+    [Test]
+    public void HashColumnAttribute()
+    {
+        var a = new HashColumnAttribute(HashAlgorithms.SHA512);
+        Assert.That(a.Name, Is.EqualTo(HashAlgorithmName.SHA512));
     }
 
     [Test]
