@@ -18,7 +18,7 @@ if ( [System.IO.Directory]::Exists($oldPath) -eq $true )
 
 git pull
 
-dotnet build -o $oldPath
+dotnet build
 
 if(-not $LastExitCode -eq 0 ) 
 {
