@@ -8,7 +8,7 @@ param (
 . ".\shared-functions.ps1"
 
 $currentPath = Get-Location
-$propsFile = "$currentPath\Directory.build.props"
+$propsFile = "$currentPath/Directory.build.props"
 $oldPath = "$outputPath/old"
 
 if ( [System.IO.Directory]::Exists($oldPath) -eq $true )
