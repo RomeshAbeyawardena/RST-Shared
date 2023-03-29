@@ -53,11 +53,11 @@ public abstract class ModelHasherBase<TModelHasherOptions> : IModelHasher<TModel
         throw new InvalidOperationException();
     }
 
-    bool IModelHasher.CompareHash<T>(T model, object options, string hash)
+    bool IModelHasher.CompareHash<T>(T model, object? options, string? hash)
     {
         if (options is TModelHasherOptions opts)
         {
-            return CompareHash<T>(model, opts, hash);
+            return CompareHash<T>(model, opts, hash ?? string.Empty);
         }
 
         throw new InvalidOperationException();

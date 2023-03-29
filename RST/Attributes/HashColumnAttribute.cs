@@ -12,14 +12,19 @@ public sealed class HashColumnAttribute : MessagePack.IgnoreMemberAttribute
 	/// 
 	/// </summary>
 	/// <param name="name"></param>
-	public HashColumnAttribute(string name)
+	/// <param name="hasherImplementation"></param>
+	public HashColumnAttribute(string name, string? hasherImplementation = null)
 	{
 		Name = new HashAlgorithmName(name);
-	}
+        HasherImplementation = hasherImplementation;
+    }
 
 	/// <summary>
 	/// Gets the hash algorithm name
 	/// </summary>
 	public HashAlgorithmName Name { get; set; }
-
+	/// <summary>
+	/// 
+	/// </summary>
+    public string? HasherImplementation { get; }
 }

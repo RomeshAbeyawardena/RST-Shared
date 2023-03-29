@@ -19,6 +19,18 @@ public class DefaultModelHasherFactory : IModelHasherFactory
     {
         this.modelHashers = modelHashers;
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="NullReferenceException"></exception>
+    public IModelHasher GetDefault()
+    {
+        return GetModelHasher(nameof(MemoryPackModelHasher)) 
+            ?? throw new NullReferenceException("Default implementation not available");
+    }
+
     /// <summary>
     /// 
     /// </summary>

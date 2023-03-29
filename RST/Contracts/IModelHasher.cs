@@ -41,7 +41,7 @@ public interface IModelHasher
     /// <param name="options"></param>
     /// <param name="hash"></param>
     /// <returns></returns>
-    bool CompareHash<T>(T model, object options, string hash);
+    bool CompareHash<T>(T model, object? options, string? hash);
 }
 
 /// <summary>

@@ -11,4 +11,9 @@ public interface IModelHasherFactory
     /// <param name="modelHasher"></param>
     /// <returns></returns>
     IModelHasher? GetModelHasher(string modelHasher);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    IModelHasher GetDefault();
 }

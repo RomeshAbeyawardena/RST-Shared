@@ -22,10 +22,12 @@ public static class RepositoryHandlerBaseExtensions
     /// <param name="cache"></param>
     /// <param name="modelHasherFactory"></param>
     /// <param name="model"></param>
+    /// <param name="modifiedModel"></param>
     /// <returns></returns>
     public static bool ValidateHash<TRequest, TResponse, TModel>(
         this RepositoryHandlerBase<TRequest, TResponse, TModel> repositoryHandler,
-        IPropertyTypeProviderCache cache, IModelHasherFactory modelHasherFactory, TModel model)
+        IPropertyTypeProviderCache cache, IModelHasherFactory modelHasherFactory, TModel model, 
+            TModel modifiedModel)
         where TRequest : IRequest<TResponse>
         where TModel : class
     {
@@ -36,7 +38,7 @@ public static class RepositoryHandlerBaseExtensions
             cache.AddOrUpdate(modelType, properties = modelType.GetAllProperties());
         }
 
-        var propertyAttributes = new Dictionary<PropertyInfo, Attribute?>();
+        var propertyAttributes = new Dictionary<PropertyInfo, HashColumnAttribute?>();
         foreach( var property in properties)
         {
             if(!property.HasAttribute<HashColumnAttribute>(out var attribute))
@@ -45,8 +47,16 @@ public static class RepositoryHandlerBaseExtensions
             }
         }
         
-        //modelHasherFactory.GetModelHasher()
+        foreach(var (prop, attribute) in propertyAttributes)
+        {
+            var implementation = attribute != null && !string.IsNullOrWhiteSpace(attribute.HasherImplementation)
+                ? modelHasherFactory.GetModelHasher(attribute.HasherImplementation) 
+                    ?? modelHasherFactory.GetDefault()
+                : modelHasherFactory.GetDefault();
 
+            implementation.CompareHash(modifiedModel, null, prop.GetValue(model)?.ToString());
+        }
+        
         return false;
     }
 }
