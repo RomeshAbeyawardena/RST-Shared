@@ -27,7 +27,7 @@ public class MemoryPackModelHasher : ModelHasherBase<MemoryPackModelHasherOption
     {
         using var hashAlgorithm = hashAlgorithmProvider.GetHashAlgorithm(options.HashAlgorithmName); 
         var serialisedModel = MemoryPackSerializer.Serialize(model);
-        hashAlgorithm.ComputeHash(serialisedModel);
-        return Convert.ToBase64String(serialisedModel);
+        var secureHash = hashAlgorithm.ComputeHash(serialisedModel);
+        return Convert.ToBase64String(secureHash);
     }
 }

@@ -1,10 +1,12 @@
-﻿using RST.Contracts;
+﻿using MemoryPack;
+using RST.Contracts;
 
 namespace RST.UnitTests.TestEntities;
 /// <summary>
 /// 
 /// </summary>
-public record Customer : IIdentity
+[MemoryPackable]
+public partial record Customer : IIdentity
 {
     /// <summary>
     /// 
