@@ -46,7 +46,7 @@ public static class RepositoryHandlerBaseExtensions
                 propertyAttributes.TryAdd(property, attribute);
             }
         }
-        
+        var truthTable = new List<bool>();
         foreach(var (prop, attribute) in propertyAttributes)
         {
             var implementation = attribute != null && !string.IsNullOrWhiteSpace(attribute.HasherImplementation)
@@ -54,9 +54,10 @@ public static class RepositoryHandlerBaseExtensions
                     ?? modelHasherFactory.GetDefault()
                 : modelHasherFactory.GetDefault();
 
-            implementation.CompareHash(modifiedModel, null, prop.GetValue(model)?.ToString());
+            truthTable.Add(
+                implementation.CompareHash(modifiedModel, null, prop.GetValue(model)?.ToString()));
         }
         
-        return false;
+        return truthTable.All(a => a);
     }
 }
