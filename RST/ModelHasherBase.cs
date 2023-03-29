@@ -15,15 +15,25 @@ public abstract class ModelHasherBase<TModelHasherOptions> : IModelHasher<TModel
     /// <inheritdoc cref="IModelHasher.Name"/>
     public string Name { get; }
     
+    /// <inheritdoc cref="IModelHasher.OrderIndex"/>
+    public int OrderIndex { get; }
+
+    /// <inheritdoc cref="IModelHasher.IsDefault"/>
+    public bool IsDefault { get; }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="name"></param>
+    /// <param name="isDefault"></param>
+    /// <param name="orderIndex"></param>
     /// <param name="defaultOptions"></param>
-    public ModelHasherBase(string name, TModelHasherOptions? defaultOptions = default)
+    public ModelHasherBase(string name, bool isDefault = false, 
+        int orderIndex = int.MaxValue, TModelHasherOptions? defaultOptions = default)
     {
         Name = name;
+        IsDefault = isDefault;
+        OrderIndex = orderIndex;
         DefaultOptions = defaultOptions;
     }
 

@@ -27,7 +27,7 @@ public class DefaultModelHasherFactory : IModelHasherFactory
     /// <exception cref="NullReferenceException"></exception>
     public IModelHasher GetDefault()
     {
-        return GetModelHasher(nameof(MemoryPackModelHasher)) 
+        return modelHashers.Where(m => m.IsDefault).OrderBy(m => m.OrderIndex).FirstOrDefault()
             ?? throw new NullReferenceException("Default implementation not available");
     }
 

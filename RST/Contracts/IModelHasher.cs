@@ -8,6 +8,14 @@ namespace RST.Contracts;
 public interface IModelHasher
 {
     /// <summary>
+    /// Gets the order index
+    /// </summary>
+    int OrderIndex { get; }
+    /// <summary>
+    /// Gets a value to determine whether this is the default model hasher
+    /// </summary>
+    bool IsDefault { get; }
+    /// <summary>
     /// Gets the default options
     /// </summary>
     object? DefaultOptions { get; }

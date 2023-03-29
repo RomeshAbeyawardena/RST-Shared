@@ -17,7 +17,7 @@ public class MemoryPackModelHasher : ModelHasherBase<MemoryPackModelHasherOption
     /// </summary>
     /// <param name="hashAlgorithmProvider"></param>
     public MemoryPackModelHasher(IHashAlgorithmProvider hashAlgorithmProvider)
-        : base(nameof(MemoryPackModelHasher))
+        : base(nameof(MemoryPackModelHasher), true)
     {
         this.hashAlgorithmProvider = hashAlgorithmProvider;
     }
