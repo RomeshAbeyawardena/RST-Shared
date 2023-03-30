@@ -42,9 +42,9 @@ public static class RepositoryHandlerBaseExtensions
                 ? modelHasherFactory.GetModelHasher(attribute.HasherImplementation) 
                     ?? modelHasherFactory.GetDefault()
                 : modelHasherFactory.GetDefault();
-
+            var value = prop.GetValue(modifiedModel)?.ToString();
             truthTable.Add(
-                implementation.CompareHash(modifiedModel, null, prop.GetValue(model)?.ToString()));
+                implementation.CompareHash(model, null, value));
         }
         
         return !truthTable.Any() || truthTable.All(a => a);

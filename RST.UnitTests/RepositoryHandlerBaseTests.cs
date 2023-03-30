@@ -3,6 +3,7 @@ using RST.Mediatr.Extensions;
 using MediatR;
 using RST.Contracts;
 using Moq;
+using RST.Defaults;
 
 namespace RST.UnitTests
 {
@@ -27,6 +28,8 @@ namespace RST.UnitTests
                 throw new NotImplementedException();
             }
         }
+
+        private Mock<IModelHasher> modelHasherMock;
         private Mock<IPropertyTypeProviderCache>? propertyTypeProviderCacheMock;
         private Mock<IModelHasherFactory> modelHashFactoryMock;
         private Mock<IClockProvider>? clockProviderMock;
@@ -37,6 +40,7 @@ namespace RST.UnitTests
         [SetUp]
         public void SetUp()
         {
+            modelHasherMock = new Mock<IModelHasher>();
             serviceProviderMock = new Mock<IServiceProvider>();
             clockProviderMock = new Mock<IClockProvider>();
             propertyTypeProviderCacheMock = new Mock<IPropertyTypeProviderCache>();
@@ -48,9 +52,12 @@ namespace RST.UnitTests
                 .Returns(repositoryMock.Object);
 
             modelHashFactoryMock = new Mock<IModelHasherFactory>();
-
+            
             serviceProviderMock.Setup(s => s.GetService(typeof(IModelHasherFactory)))
                 .Returns(modelHashFactoryMock.Object);
+
+            modelHashFactoryMock.Setup(s => s.GetDefault())
+                .Returns(modelHasherMock.Object);
 
             sut = new MyTestRepositoryHandler(serviceProviderMock.Object);
         }
@@ -59,13 +66,19 @@ namespace RST.UnitTests
         public async Task Test()
         {
             var id = Guid.NewGuid();
+            var dbCustomer = new Customer
+            {
+                Id = id,
+                Firstname = "Test",
+                Lastname = "Test",
+                Middlename = "Test",
+            };
+
             repositoryMock!.Setup(s => s.FindAsync(It.IsAny<CancellationToken>(), id))
-                .Returns(ValueTask.FromResult<Customer?>(new Customer { 
-                    Id = id,
-                    Firstname = "Test",
-                    Lastname = "Test",
-                    Middlename = "Test",
-                }));
+                .Returns(ValueTask.FromResult<Customer?>(dbCustomer));
+
+            modelHasherMock.Setup(s => s.CompareHash(dbCustomer, null, "THIS_IS_THE_HASH"))
+                .Returns(true);
 
             await sut!.ProcessSave(new MyRequest(), c => { return new Customer { 
                     Id = id, 
@@ -73,6 +86,7 @@ namespace RST.UnitTests
                     Lastname = "Test1",
                     Middlename = "Test2",
                     PopulatedDate = DateTime.Now,
+                    Hash = "THIS_IS_THE_HASH"
             }; }, CancellationToken.None);
         }
     }
