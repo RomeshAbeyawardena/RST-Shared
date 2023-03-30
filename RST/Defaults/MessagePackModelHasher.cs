@@ -28,7 +28,7 @@ public class MessagePackModelHasher : ModelHasherBase<MessagePackModelHasherOpti
         options = options ?? DefaultOptions ?? MessagePackModelHasherOptions.DefaultOptions;
         using var hashAlgorithm = hashAlgorithmProvider.GetHashAlgorithm(options.HashAlgorithmName);
         var serialisedModel = MessagePackSerializer.Serialize(model);
-        var secureHash = hashAlgorithm.ComputeHash(serialisedModel);
+        var secureHash = hashAlgorithm!.ComputeHash(serialisedModel);
         return Convert.ToBase64String(secureHash);
     }
 }

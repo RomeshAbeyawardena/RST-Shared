@@ -60,6 +60,28 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
     [Inject] protected IPropertyTypeProviderCache? PropertyTypeProviderCache { get; set; }
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="isHashable"></param>
+    /// <param name="entity"></param>
+    protected void SetHashing(bool isHashable, TModel entity)
+    {
+        if (isHashable)
+        {
+            foreach (var (property, implementation) in
+                 entity.GetModelHashers(PropertyTypeProviderCache!, ModelHasherFactory!))
+            {
+                if (implementation == null)
+                {
+                    continue;
+                }
+
+                property.SetValue(entity, implementation.CalculateHash(entity, null));
+            }
+        }
+    }
+
+    /// <summary>
     /// Configures no tracking against the repository based upon the <paramref name="request"/> parameter
     /// </summary>
     /// <param name="request">Request used to configure the repository</param>
@@ -157,6 +179,8 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
                     created.Created = ClockProvider!.UtcNow;
                 }
 
+                SetHashing(entity is IHashable, entity);
+
                 Repository!.Add(entity);
             }
             else
@@ -179,19 +203,7 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
                             .Add("Hash", "Invalid hash"));
                     }
 
-                    if (isHashable)
-                    {
-                       foreach(var (property, implementation) in
-                            entity.GetModelHashers(PropertyTypeProviderCache!, ModelHasherFactory!))
-                        {
-                            if(implementation == null)
-                            {
-                                continue;
-                            }
-
-                            property.SetValue(entity, implementation.CalculateHash(entity, null));
-                        }
-                    }
+                    SetHashing(isHashable, entity);
 
                     if (foundEntity.HasChanges(entity, out var changes))
                     {

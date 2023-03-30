@@ -53,7 +53,7 @@ public abstract class ModelHasherBase<TModelHasherOptions> : IModelHasher<TModel
         return hash.Equals(otherHash);
     }
 
-    string IModelHasher.CalculateHash<T>(T model, object options)
+    string IModelHasher.CalculateHash<T>(T model, object? options)
     {
         if (options is TModelHasherOptions opts)
         {
