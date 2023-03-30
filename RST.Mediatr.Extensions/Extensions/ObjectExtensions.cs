@@ -3,12 +3,12 @@ using RST.Contracts;
 using RST.Extensions;
 using System.Reflection;
 
-namespace RST.Mediatr.Extensions.Extensions;
+namespace RST.Mediatr.Extensions;
 
 /// <summary>
 /// 
 /// </summary>
-public static class PropertyInfoExtensions
+public static class ObjectExtensions
 {
     /// <summary>
     /// 

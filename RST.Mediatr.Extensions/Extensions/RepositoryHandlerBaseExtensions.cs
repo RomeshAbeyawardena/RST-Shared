@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using RST.Contracts;
-using RST.Mediatr.Extensions.Extensions;
 
 namespace RST.Mediatr.Extensions;
 

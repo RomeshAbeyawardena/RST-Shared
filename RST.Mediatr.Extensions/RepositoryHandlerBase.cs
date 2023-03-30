@@ -6,6 +6,7 @@ using RST.DependencyInjection.Extensions;
 using RST.DependencyInjection.Extensions.Attributes;
 using RST.Extensions;
 using RST.Mediatr.Extensions.Exceptions;
+using RST.Mediatr.Extensions;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 
@@ -170,7 +171,7 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
                 if (foundEntity != null)
                 {
                     bool isHashable = false;
-                    if ((isHashable = foundEntity is IHashable hashableEntity)
+                    if ((isHashable = foundEntity is IHashable)
                         && !this.ValidateHash(PropertyTypeProviderCache!, ModelHasherFactory!,
                         foundEntity, entity))
                     {
@@ -178,10 +179,25 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
                             .Add("Hash", "Invalid hash"));
                     }
 
+                    if (isHashable)
+                    {
+                       foreach(var (property, implementation) in
+                            entity.GetModelHashers(PropertyTypeProviderCache!, ModelHasherFactory!))
+                        {
+                            if(implementation == null)
+                            {
+                                continue;
+                            }
+
+                            property.SetValue(entity, implementation.CalculateHash(entity, null));
+                        }
+                    }
+
                     if (foundEntity.HasChanges(entity, out var changes))
                     {
                         foundEntity.CommitChanges(changes);
                     }
+
                 }
             }
         }

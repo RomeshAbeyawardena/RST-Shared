@@ -37,7 +37,7 @@ public interface IModelHasher
     /// <param name="model">Supplied model</param>
     /// <param name="options"></param>
     /// <returns></returns>
-    string CalculateHash<T>(T model, object options);
+    string CalculateHash<T>(T model, object? options);
 
     /// <summary>
     /// 
