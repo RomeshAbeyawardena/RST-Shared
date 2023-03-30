@@ -58,6 +58,6 @@ public static class RepositoryHandlerBaseExtensions
                 implementation.CompareHash(modifiedModel, null, prop.GetValue(model)?.ToString()));
         }
         
-        return truthTable.All(a => a);
+        return !truthTable.Any() || truthTable.All(a => a);
     }
 }

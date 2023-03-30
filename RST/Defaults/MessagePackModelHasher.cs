@@ -8,7 +8,7 @@ namespace RST.Defaults;
 /// 
 /// </summary>
 [Register]
-public class MemoryPackModelHasher : ModelHasherBase<MemoryPackModelHasherOptions>
+public class MessagePackModelHasher : ModelHasherBase<MessagePackModelHasherOptions>
 {
     private readonly IHashAlgorithmProvider hashAlgorithmProvider;
 
@@ -16,14 +16,14 @@ public class MemoryPackModelHasher : ModelHasherBase<MemoryPackModelHasherOption
     /// 
     /// </summary>
     /// <param name="hashAlgorithmProvider"></param>
-    public MemoryPackModelHasher(IHashAlgorithmProvider hashAlgorithmProvider)
-        : base(nameof(MemoryPackModelHasher), true)
+    public MessagePackModelHasher(IHashAlgorithmProvider hashAlgorithmProvider)
+        : base(nameof(MessagePackModelHasher), true)
     {
         this.hashAlgorithmProvider = hashAlgorithmProvider;
     }
 
     /// <inheritdoc cref="IModelHasher{TModelHasherOptions}.CalculateHash{T}(T, TModelHasherOptions)"/>
-    public override string CalculateHash<T>(T model, MemoryPackModelHasherOptions options)
+    public override string CalculateHash<T>(T model, MessagePackModelHasherOptions options)
     {
         using var hashAlgorithm = hashAlgorithmProvider.GetHashAlgorithm(options.HashAlgorithmName); 
         var serialisedModel = MessagePackSerializer.Serialize(model);

@@ -11,12 +11,12 @@ namespace RST.UnitTests;
 public class MemoryPackModelHasherTests
 {
     private Mock<IHashAlgorithmProvider> hashAlgorithmProviderMock;
-    private MemoryPackModelHasher? memoryPackModelHasher;
+    private MessagePackModelHasher? memoryPackModelHasher;
     [SetUp]
     public void SetUp()
     {
         hashAlgorithmProviderMock = new Mock<IHashAlgorithmProvider>();
-        memoryPackModelHasher = new MemoryPackModelHasher(hashAlgorithmProviderMock.Object);
+        memoryPackModelHasher = new MessagePackModelHasher(hashAlgorithmProviderMock.Object);
     }
 
     [Test]
@@ -41,7 +41,7 @@ public class MemoryPackModelHasherTests
             Lastname = "Doe",
             Id = idGuid,
             PopulatedDate = date
-        }, new MemoryPackModelHasherOptions
+        }, new MessagePackModelHasherOptions
         {
             HashAlgorithmName = HashAlgorithmName.SHA512
         });

@@ -5,6 +5,7 @@ using RST.Contracts;
 using RST.DependencyInjection.Extensions;
 using RST.DependencyInjection.Extensions.Attributes;
 using RST.Extensions;
+using RST.Mediatr.Extensions.Exceptions;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
@@ -50,6 +51,14 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
     /// 
     /// </summary>
     [Inject] protected IRepository<TModel>? Repository { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    [Inject] protected IModelHasherFactory? ModelHasherFactory { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    [Inject] protected IPropertyTypeProviderCache? PropertyTypeProviderCache { get; set; }
 
     /// <summary>
     /// Configures no tracking against the repository based upon the <paramref name="request"/> parameter
@@ -162,6 +171,13 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
 
                 if (foundEntity != null)
                 {
+
+                    if(!this.ValidateHash(PropertyTypeProviderCache!, ModelHasherFactory!,
+                        foundEntity, entity))
+                    {
+                        throw new ValidationFailureException(dict => dict.Add("Hash", "Hashes don't match"));
+                    }
+
                     if (foundEntity.HasChanges(entity, out var changes))
                     {
                         foundEntity.CommitChanges(changes);

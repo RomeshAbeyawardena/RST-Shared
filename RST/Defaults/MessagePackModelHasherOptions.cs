@@ -5,7 +5,7 @@ namespace RST.Defaults;
 /// <summary>
 /// 
 /// </summary>
-public record MemoryPackModelHasherOptions
+public record MessagePackModelHasherOptions
 {
     /// <summary>
     /// 
