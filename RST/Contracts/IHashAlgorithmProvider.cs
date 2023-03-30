@@ -11,5 +11,5 @@ public interface IHashAlgorithmProvider
     /// Get an instance of hash algorithm by the parameter of <paramref name="hashAlgorithmName"/>
     /// </summary>
     /// <returns></returns>
-    HashAlgorithm GetHashAlgorithm(HashAlgorithmName hashAlgorithmName);
+    HashAlgorithm? GetHashAlgorithm(HashAlgorithmName hashAlgorithmName);
 }
