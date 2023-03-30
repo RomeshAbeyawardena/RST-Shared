@@ -29,5 +29,6 @@ public partial record Customer : IIdentity, IHashable
     /// <summary>
     /// 
     /// </summary>
+    [IgnoreMember]
     public string? Hash { get; set; }
 }

@@ -23,11 +23,12 @@ public static class RepositoryHandlerBaseExtensions
     /// <param name="modelHasherFactory"></param>
     /// <param name="model"></param>
     /// <param name="modifiedModel"></param>
+    /// <param name="options"></param>
     /// <returns></returns>
     public static bool ValidateHash<TRequest, TResponse, TModel>(
         this RepositoryHandlerBase<TRequest, TResponse, TModel> repositoryHandler,
-        IPropertyTypeProviderCache cache, IModelHasherFactory modelHasherFactory, TModel model, 
-            TModel modifiedModel)
+        IPropertyTypeProviderCache cache, IModelHasherFactory modelHasherFactory, 
+        TModel model, TModel modifiedModel, object? options = null)
         where TRequest : IRequest<TResponse>
         where TModel : class
     {
@@ -44,7 +45,7 @@ public static class RepositoryHandlerBaseExtensions
                 : modelHasherFactory.GetDefault();
             var value = prop.GetValue(modifiedModel)?.ToString();
             truthTable.Add(
-                implementation.CompareHash(model, null, value));
+                implementation.CompareHash(model, options, value));
         }
         
         return !truthTable.Any() || truthTable.All(a => a);

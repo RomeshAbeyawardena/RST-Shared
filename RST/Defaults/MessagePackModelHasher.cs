@@ -25,6 +25,7 @@ public class MessagePackModelHasher : ModelHasherBase<MessagePackModelHasherOpti
     /// <inheritdoc cref="IModelHasher{TModelHasherOptions}.CalculateHash{T}(T, TModelHasherOptions)"/>
     public override string CalculateHash<T>(T model, MessagePackModelHasherOptions options)
     {
+        options = options ?? DefaultOptions ?? MessagePackModelHasherOptions.DefaultOptions;
         using var hashAlgorithm = hashAlgorithmProvider.GetHashAlgorithm(options.HashAlgorithmName); 
         var serialisedModel = MessagePackSerializer.Serialize(model);
         var secureHash = hashAlgorithm.ComputeHash(serialisedModel);

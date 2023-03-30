@@ -40,7 +40,8 @@ public class MemoryPackModelHasherTests
             Middlename = "Henry",
             Lastname = "Doe",
             Id = idGuid,
-            PopulatedDate = date
+            PopulatedDate = date,
+            Hash = "HELLO2"
         }, new MessagePackModelHasherOptions
         {
             HashAlgorithmName = HashAlgorithmName.SHA512
