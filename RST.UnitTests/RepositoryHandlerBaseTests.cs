@@ -62,7 +62,7 @@ namespace RST.UnitTests
         }
 
         [Test]
-        public async Task Test()
+        public async Task ProcessSave()
         {
             var id = Guid.NewGuid();
             var dbCustomer = new Customer
@@ -73,24 +73,30 @@ namespace RST.UnitTests
                 Middlename = "Test",
             };
 
+            var editedCustomer = new Customer
+            {
+                Id = id,
+                Firstname = "Tes12t",
+                Lastname = "Test1",
+                Middlename = "Test2",
+                PopulatedDate = DateTime.Now,
+                Hash = "THIS_IS_THE_HASH"
+            };
+
             repositoryMock!.Setup(s => s.FindAsync(It.IsAny<CancellationToken>(), id))
                 .Returns(ValueTask.FromResult<Customer?>(dbCustomer));
 
             modelHasherMock.Setup(s => s.CompareHash(dbCustomer, null, "THIS_IS_THE_HASH"))
                 .Returns(true);
 
+            modelHasherMock.Setup(s => s.CalculateHash(editedCustomer, null)).Returns("NewHash");
+
             await sut!.ProcessSave(new MyRequest(), c =>
             {
-                return new Customer
-                {
-                    Id = id,
-                    Firstname = "Tes12t",
-                    Lastname = "Test1",
-                    Middlename = "Test2",
-                    PopulatedDate = DateTime.Now,
-                    Hash = "THIS_IS_THE_HASH"
-                };
+                return editedCustomer;
             }, CancellationToken.None);
+
+            Assert.That(editedCustomer.Hash, Is.EqualTo("NewHash"));
         }
     }
 }
