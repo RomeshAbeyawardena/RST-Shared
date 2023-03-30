@@ -11,5 +11,5 @@ public interface IHashable
     /// Gets or sets the hash
     /// </summary>
     [HashColumn(nameof(MessagePackModelHasher))]
-    string Hash { get; set; }
+    string? Hash { get; set; }
 }

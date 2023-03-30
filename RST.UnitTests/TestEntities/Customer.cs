@@ -6,7 +6,7 @@ namespace RST.UnitTests.TestEntities;
 /// 
 /// </summary>
 [MessagePackObject(true)]
-public partial record Customer : IIdentity
+public partial record Customer : IIdentity, IHashable
 {
     /// <summary>
     /// 
@@ -26,5 +26,8 @@ public partial record Customer : IIdentity
     public string? Lastname { get; set; }
 
     public DateTimeOffset? PopulatedDate { get;set; }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    public string? Hash { get; set; }
 }

@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using RST.Contracts;
+using System.Reflection;
 
 namespace RST.Extensions;
 
@@ -54,5 +55,44 @@ public static class PropertyInfoExtensions
         }
 
         return properties.Where(filterExpression ?? (a => true));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TAttribute"></typeparam>
+    /// <param name="type"></param>
+    /// <param name="cache"></param>
+    /// <returns></returns>
+    public static IReadOnlyDictionary<PropertyInfo, TAttribute> GetUnderliningAttributes<TAttribute>(
+        this Type type,
+        IPropertyTypeProviderCache? cache = null)
+        where TAttribute : Attribute
+    {
+        var dictionary = new Dictionary<PropertyInfo, TAttribute>();
+        IEnumerable<PropertyInfo>? properties;
+        if(cache != null)
+        {
+            if(!cache.TryGetValue(type, out properties))
+            {
+                cache.AddOrUpdate(type, properties = type.GetAllProperties());
+            }
+        }
+        else
+        {
+            properties = type.GetAllProperties();
+        }
+
+        var allProperties = properties.Union(type.GetInterfaces().SelectMany(t => t.GetAllProperties()));
+
+        foreach (var property in allProperties)
+        {
+            if(property.HasAttribute<TAttribute>(out var attribute) && attribute != null)
+            {
+                dictionary.Add(property, attribute);
+            }
+        }
+
+        return dictionary;
     }
 }

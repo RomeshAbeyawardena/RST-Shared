@@ -32,20 +32,9 @@ public static class RepositoryHandlerBaseExtensions
         where TModel : class
     {
         var modelType = typeof(TModel);
-        IEnumerable<PropertyInfo>? properties; 
-        if(!cache.TryGetValue(modelType, out properties))
-        {
-            cache.AddOrUpdate(modelType, properties = modelType.GetAllProperties());
-        }
 
-        var propertyAttributes = new Dictionary<PropertyInfo, HashColumnAttribute?>();
-        foreach( var property in properties)
-        {
-            if(!property.HasAttribute<HashColumnAttribute>(out var attribute))
-            {
-                propertyAttributes.TryAdd(property, attribute);
-            }
-        }
+        var propertyAttributes = modelType.GetUnderliningAttributes<HashColumnAttribute>(cache);
+
         var truthTable = new List<bool>();
         foreach(var (prop, attribute) in propertyAttributes)
         {

@@ -28,6 +28,7 @@ namespace RST.UnitTests
             }
         }
         private Mock<IPropertyTypeProviderCache>? propertyTypeProviderCacheMock;
+        private Mock<IModelHasherFactory> modelHashFactoryMock;
         private Mock<IClockProvider>? clockProviderMock;
         private Mock<IRepository<Customer>>? repositoryMock;
         private Mock<IServiceProvider>? serviceProviderMock;
@@ -45,6 +46,11 @@ namespace RST.UnitTests
 
             serviceProviderMock.Setup(s => s.GetService(typeof(IRepository<Customer>)))
                 .Returns(repositoryMock.Object);
+
+            modelHashFactoryMock = new Mock<IModelHasherFactory>();
+
+            serviceProviderMock.Setup(s => s.GetService(typeof(IModelHasherFactory)))
+                .Returns(modelHashFactoryMock.Object);
 
             sut = new MyTestRepositoryHandler(serviceProviderMock.Object);
         }
