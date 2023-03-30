@@ -38,12 +38,12 @@ public abstract class ModelHasherBase<TModelHasherOptions> : IModelHasher<TModel
     }
 
     /// <inheritdoc cref="IModelHasher{TModelHasherOptions}.CalculateHash{T}(T, TModelHasherOptions)"/>
-    public abstract string CalculateHash<T>(T model, TModelHasherOptions options);
+    public abstract string CalculateHash<T>(T model, TModelHasherOptions? options);
 
     ///<inheritdoc cref="IModelHasher{TModelHasherOptions}.CompareHash{T}(T, TModelHasherOptions, string)"/>
-    public virtual bool CompareHash<T>(T model, TModelHasherOptions options, string hash)
+    public virtual bool CompareHash<T>(T model, TModelHasherOptions? options, string hash)
     {
-        var otherHash = CalculateHash<T>(model, options);
+        var otherHash = CalculateHash(model, options);
         return CompareHash(hash, otherHash);
     }
 
@@ -55,9 +55,14 @@ public abstract class ModelHasherBase<TModelHasherOptions> : IModelHasher<TModel
 
     string IModelHasher.CalculateHash<T>(T model, object? options)
     {
+        if(options == null)
+        {
+            return CalculateHash<T>(model, default);
+        }
+
         if (options is TModelHasherOptions opts)
         {
-            return CalculateHash<T>(model, opts);
+            return CalculateHash(model, opts);
         }
 
         throw new InvalidOperationException();
@@ -65,9 +70,15 @@ public abstract class ModelHasherBase<TModelHasherOptions> : IModelHasher<TModel
 
     bool IModelHasher.CompareHash<T>(T model, object? options, string? hash)
     {
+        if (options == null)
+        {
+            return CompareHash(model, default, hash ?? string.Empty); ;
+        }
+
+
         if (options is TModelHasherOptions opts)
         {
-            return CompareHash<T>(model, opts, hash ?? string.Empty);
+            return CompareHash(model, opts, hash ?? string.Empty);
         }
 
         throw new InvalidOperationException();
