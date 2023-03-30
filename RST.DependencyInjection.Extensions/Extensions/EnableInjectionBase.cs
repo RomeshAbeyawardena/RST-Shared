@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RST.Contracts;
 using RST.Defaults;
-using RST.DependencyInjection.Extensions.Attributes;
 using RST.Extensions;
 
 namespace RST.DependencyInjection.Extensions;
@@ -10,7 +9,7 @@ namespace RST.DependencyInjection.Extensions;
 /// Enables injection for the inherited class 
 /// </summary>
 public abstract class EnableInjectionBase<TInjectAttribute>
-    where TInjectAttribute: Attribute
+    where TInjectAttribute : Attribute
 {
     private readonly IServiceProvider serviceProvider;
 
@@ -23,7 +22,7 @@ public abstract class EnableInjectionBase<TInjectAttribute>
             ?? throw new NullReferenceException($"{nameof(PropertyTypeProviderCache)} not found");
 
         var instanceType = GetType();
-        
+
         if (!typeProviderCache.TryGetValue(instanceType, out var properties))
         {
             properties = instanceType.GetAllProperties();
@@ -48,7 +47,7 @@ public abstract class EnableInjectionBase<TInjectAttribute>
     /// </summary>
     /// <param name="serviceProvider"></param>
     public EnableInjectionBase(IServiceProvider serviceProvider)
-	{
+    {
         this.serviceProvider = serviceProvider;
     }
 }

@@ -8,9 +8,9 @@ namespace RST.Attributes;
 /// </summary>
 public class ColumnDescriptorAttribute : ColumnAttribute
 {
-	private readonly IEnumerable<SqlDbType> DoubleParameterFieldTypes = new[]
-	{
-		SqlDbType.Decimal,
+    private readonly IEnumerable<SqlDbType> DoubleParameterFieldTypes = new[]
+    {
+        SqlDbType.Decimal,
         SqlDbType.Float,
     };
 
@@ -24,20 +24,20 @@ public class ColumnDescriptorAttribute : ColumnAttribute
     };
 
     private string DescribeType()
-	{
-		var type = Enum.GetName(DbType)?.ToUpper();
+    {
+        var type = Enum.GetName(DbType)?.ToUpper();
 
-		if (DoubleParameterFieldTypes.Contains(DbType))
-		{
-			return $"{type}({Length},{SubLength})";
-		}
+        if (DoubleParameterFieldTypes.Contains(DbType))
+        {
+            return $"{type}({Length},{SubLength})";
+        }
 
         if (SingleParameterFieldTypes.Contains(DbType))
         {
             return $"{type}({(Length == int.MaxValue ? "MAX" : Length)})";
         }
 
-		return type ?? throw new NullReferenceException();
+        return type ?? throw new NullReferenceException();
     }
 
     /// <summary>
@@ -48,16 +48,16 @@ public class ColumnDescriptorAttribute : ColumnAttribute
     /// <param name="length">Describes the length</param>
     /// <param name="subLength">Describes the sub length</param>
     public ColumnDescriptorAttribute(string name,
-        SqlDbType dbType, 
-        int length = int.MinValue, 
-        int subLength  = int.MinValue)
-		: base(name)
-	{
-		DbType = dbType;
-		Length = length;
-		SubLength = subLength;
-		this.TypeName = DescribeType();
-	}
+        SqlDbType dbType,
+        int length = int.MinValue,
+        int subLength = int.MinValue)
+        : base(name)
+    {
+        DbType = dbType;
+        Length = length;
+        SubLength = subLength;
+        this.TypeName = DescribeType();
+    }
 
     /// <summary>
     /// Creates an instance of <see cref="ColumnDescriptorAttribute"/>
@@ -79,12 +79,12 @@ public class ColumnDescriptorAttribute : ColumnAttribute
     /// </summary>
     public SqlDbType DbType { get; }
 
-	/// <summary>
-	/// Gets the length used by the Db type
-	/// </summary>
-	public int? Length { get; }
-	/// <summary>
-	/// Gets the sub length of the Db type
-	/// </summary>
-	public int? SubLength { get; }
+    /// <summary>
+    /// Gets the length used by the Db type
+    /// </summary>
+    public int? Length { get; }
+    /// <summary>
+    /// Gets the sub length of the Db type
+    /// </summary>
+    public int? SubLength { get; }
 }

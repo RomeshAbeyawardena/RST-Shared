@@ -1,8 +1,6 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using RST.AspNetCore.Extensions.Contracts;
 using RST.Contracts;
 using RST.Security.Cryptography.Defaults;
@@ -29,7 +27,7 @@ public class DefaultApplicationAuthenticationProvider : IApplicationAuthenticati
     /// <param name="decryptor"></param>
     /// <param name="securitySignatureProvider"></param>
     /// <param name="applicationAuthenticationRepository"></param>
-    public DefaultApplicationAuthenticationProvider( 
+    public DefaultApplicationAuthenticationProvider(
             ILogger<DefaultApplicationAuthenticationProvider> logger,
             IEncryptionModuleOptions encryptionModuleOptions, IHeaderDictionary headers,
             IDecryptor decryptor, ISecuritySignatureProvider securitySignatureProvider,

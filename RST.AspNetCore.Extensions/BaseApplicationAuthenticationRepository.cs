@@ -81,15 +81,15 @@ namespace RST.AspNetCore.Extensions
         public virtual async Task<bool> ValidateIdentitySignature(TIdentity identity, string signature, ISignatureConfiguration? configuration = null)
         {
             var applicationIdentity = Convert(identity);
-            
-            if(applicationIdentity == null || !applicationIdentity.IsEnabled)
+
+            if (applicationIdentity == null || !applicationIdentity.IsEnabled)
             {
                 return false;
             }
 
             configuration ??= DefaultSignatureConfiguration.DefaultConfiguration(applicationIdentity.PublicKey);
 
-            if(!await OnValidateIdentitySignature(identity, signature, configuration))
+            if (!await OnValidateIdentitySignature(identity, signature, configuration))
             {
                 return false;
             }

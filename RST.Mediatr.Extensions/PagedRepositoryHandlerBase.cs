@@ -10,8 +10,8 @@ namespace RST.Mediatr.Extensions;
 /// <typeparam name="TModel"></typeparam>
 public abstract class PagedRepositoryHandlerBase<TRequest, TModel>
     : RepositoryHandlerBase<TRequest, IPagedResult<TModel>, TModel>
-    where TRequest: IRequest<IPagedResult<TModel>>
-    where TModel: class
+    where TRequest : IRequest<IPagedResult<TModel>>
+    where TModel : class
 {
     /// <summary>
     /// Initialises an inherited instance of <see cref="PagedRepositoryHandlerBase{TRequest, TModel}"/>

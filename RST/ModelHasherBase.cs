@@ -14,7 +14,7 @@ public abstract class ModelHasherBase<TModelHasherOptions> : IModelHasher<TModel
 
     /// <inheritdoc cref="IModelHasher.Name"/>
     public string Name { get; }
-    
+
     /// <inheritdoc cref="IModelHasher.OrderIndex"/>
     public int OrderIndex { get; }
 
@@ -28,7 +28,7 @@ public abstract class ModelHasherBase<TModelHasherOptions> : IModelHasher<TModel
     /// <param name="isDefault"></param>
     /// <param name="orderIndex"></param>
     /// <param name="defaultOptions"></param>
-    public ModelHasherBase(string name, bool isDefault = false, 
+    public ModelHasherBase(string name, bool isDefault = false,
         int orderIndex = int.MaxValue, TModelHasherOptions? defaultOptions = default)
     {
         Name = name;
@@ -55,7 +55,7 @@ public abstract class ModelHasherBase<TModelHasherOptions> : IModelHasher<TModel
 
     string IModelHasher.CalculateHash<T>(T model, object options)
     {
-        if(options is TModelHasherOptions opts)
+        if (options is TModelHasherOptions opts)
         {
             return CalculateHash<T>(model, opts);
         }

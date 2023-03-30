@@ -1,6 +1,4 @@
-﻿using RST.Enumerations;
-
-namespace RST.Contracts;
+﻿namespace RST.Contracts;
 
 /// <summary>
 /// Represents a paged query

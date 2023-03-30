@@ -25,21 +25,21 @@ public static class ObjectExtensions
 
         var targetProperties = targetType.GetProperties();
         var sourceProperties = targetProperties;
-        if(targetType != sourceType)
+        if (targetType != sourceType)
         {
             sourceProperties = sourceType.GetProperties();
         }
 
-        foreach(var property in sourceProperties)
+        foreach (var property in sourceProperties)
         {
-            if(!property.CanRead && property.CanWrite)
+            if (!property.CanRead && property.CanWrite)
             {
                 continue;
             }
 
             var targetProperty = sourceProperties.FirstOrDefault(p => p.Name == property.Name && p.PropertyType == property.PropertyType);
 
-            if(targetProperty == null)
+            if (targetProperty == null)
             {
                 continue;
             }
@@ -47,13 +47,14 @@ public static class ObjectExtensions
             var sourceValue = property.GetValue(source);
             var targetValue = property.GetValue(target);
 
-            var isSourceNotNullAndSourceNotEqualToTarget = sourceValue != null 
+            var isSourceNotNullAndSourceNotEqualToTarget = sourceValue != null
                 ? !sourceValue.Equals(targetValue)
                 : targetValue != null && !targetValue.Equals(sourceValue);
 
             if (isSourceNotNullAndSourceNotEqualToTarget)
             {
-                changeList.Add(new DefaultObjectChange { 
+                changeList.Add(new DefaultObjectChange
+                {
                     HasChanged = true,
                     NewValue = sourceValue,
                     OldValue = targetValue,
@@ -73,7 +74,7 @@ public static class ObjectExtensions
     /// <param name="changes">A list of changes detected</param>
     public static void CommitChanges(this object target, IEnumerable<IObjectChange> changes)
     {
-        foreach(var change in changes)
+        foreach (var change in changes)
         {
             if (!change.HasChanged)
             {

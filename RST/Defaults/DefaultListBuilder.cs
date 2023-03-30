@@ -27,7 +27,7 @@ public class DefaultListBuilder<T> : IListBuilder<T>
     /// Initialises a list builder
     /// </summary>
     /// <param name="list"></param>
-    public DefaultListBuilder(List<T>? list = null) 
+    public DefaultListBuilder(List<T>? list = null)
     {
         this.list = list ?? new List<T>();
     }

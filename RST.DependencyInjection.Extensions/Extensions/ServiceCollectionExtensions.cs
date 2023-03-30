@@ -1,10 +1,10 @@
-﻿using RST.Attributes;
-using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Internal;
+using RST.Attributes;
 using RST.Contracts;
 using RST.Defaults;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using System.Reflection;
 using System.Security.Cryptography;
 
 namespace RST.DependencyInjection.Extensions;
@@ -44,7 +44,7 @@ public static class ServiceCollectionExtensions
     {
         var serviceDefinitionOptions = new ServiceDefinitionOptions();
         configureOptions?.Invoke(serviceDefinitionOptions);
-        
+
         if (serviceDefinitionOptions.HasAssemblies)
         {
             assemblies = assemblies.Union(serviceDefinitionOptions.Assemblies).ToArray();

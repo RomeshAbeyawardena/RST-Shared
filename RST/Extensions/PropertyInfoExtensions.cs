@@ -71,9 +71,9 @@ public static class PropertyInfoExtensions
     {
         var dictionary = new Dictionary<PropertyInfo, TAttribute>();
         IEnumerable<PropertyInfo>? properties;
-        if(cache != null)
+        if (cache != null)
         {
-            if(!cache.TryGetValue(type, out properties))
+            if (!cache.TryGetValue(type, out properties))
             {
                 cache.AddOrUpdate(type, properties = type.GetAllProperties());
             }
@@ -87,7 +87,7 @@ public static class PropertyInfoExtensions
 
         foreach (var property in allProperties)
         {
-            if(property.HasAttribute<TAttribute>(out var attribute) && attribute != null)
+            if (property.HasAttribute<TAttribute>(out var attribute) && attribute != null)
             {
                 dictionary.Add(property, attribute);
             }

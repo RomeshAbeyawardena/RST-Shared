@@ -3,7 +3,6 @@ using MediatR;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using RST.DependencyInjection.Extensions;
-using RST.Extensions;
 
 namespace RST.AspNetCore.Extensions;
 

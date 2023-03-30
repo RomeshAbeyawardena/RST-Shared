@@ -1,7 +1,6 @@
 ﻿using Moq;
-using NUnit.Framework;
-using RST.Defaults;
 using RST.Contracts;
+using RST.Defaults;
 using RST.Security.Cryptography.Extensions.Defaults;
 using System.Security.Cryptography;
 
@@ -36,7 +35,7 @@ namespace RST.UnitTests
                 .Setup(s => s.GetSymmetricAlgorithm(It.IsAny<Enumerations.SymmetricAlgorithm>()))
                 .Returns(Aes.Create());
 
-            encryptor = new DefaultEncryptor(encryptionOptions,algorithmFactoryMock.Object,encryptionModuleOptions,
+            encryptor = new DefaultEncryptor(encryptionOptions, algorithmFactoryMock.Object, encryptionModuleOptions,
                 serviceProviderMock.Object);
             decryptor = new DefaultDecryptor(encryptionOptions, algorithmFactoryMock.Object,
                 encryptionModuleOptions,
@@ -46,11 +45,11 @@ namespace RST.UnitTests
         [Test]
         public void Encrypt()
         {
-           var o = "Hello world";
-           var s = encryptor.Encrypt(o, encryptionOptions);
-           
-           var e = decryptor.Decrypt(s, encryptionOptions);
-           Assert.That(e, Is.EqualTo(o.ToUpperInvariant()));
+            var o = "Hello world";
+            var s = encryptor.Encrypt(o, encryptionOptions);
+
+            var e = decryptor.Decrypt(s, encryptionOptions);
+            Assert.That(e, Is.EqualTo(o.ToUpperInvariant()));
         }
 
         [Test]
@@ -76,7 +75,7 @@ namespace RST.UnitTests
         {
             encryptionModuleOptions.EncryptionOptions.Add("test", encryptionOptions);
             var o = "Hello world";
-            
+
             Assert.Throws<NullReferenceException>(() => encryptor.Encrypt("test2", o));
         }
     }

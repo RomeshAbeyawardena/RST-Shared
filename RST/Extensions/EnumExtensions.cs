@@ -27,5 +27,5 @@ public static class EnumExtensions
         }
 
         return defaultEnumValue ?? default;
-    } 
+    }
 }

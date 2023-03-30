@@ -16,17 +16,20 @@ public record ServiceDefinitionOptions : IServiceDefinitionOptions
     private IEnumerable<Assembly>? assemblies;
 
     /// <inheritdoc cref="IServiceDefinitionOptions.ConfigureCoreServices"/>
-    public bool ConfigureCoreServices { 
-        get => configureCoreServices; 
-        set { 
-            hasChanged = configureCoreServices != value; 
-            configureCoreServices = value; 
-        } 
+    public bool ConfigureCoreServices
+    {
+        get => configureCoreServices;
+        set
+        {
+            hasChanged = configureCoreServices != value;
+            configureCoreServices = value;
+        }
     }
 
     /// <inheritdoc cref="IServiceDefinitionOptions.ConfigureCryptographyExtensions"/>
-    public bool ConfigureCryptographyExtensions { 
-        get => configureCryptographyExtensions; 
+    public bool ConfigureCryptographyExtensions
+    {
+        get => configureCryptographyExtensions;
         set
         {
             hasChanged = configureCryptographyExtensions != value;
@@ -36,7 +39,7 @@ public record ServiceDefinitionOptions : IServiceDefinitionOptions
 
     internal bool HasAssemblies => Assemblies.Any();
 
-    internal IEnumerable<Assembly> Assemblies => assemblies == null || hasChanged 
+    internal IEnumerable<Assembly> Assemblies => assemblies == null || hasChanged
         ? GetAssemblies()
         : assemblies;
 

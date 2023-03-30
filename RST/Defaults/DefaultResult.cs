@@ -23,7 +23,7 @@ namespace RST.Defaults
             {
                 IsSuccessful = isSuccessful,
                 StatusCode = statusCode,
-                Message= statusMessage,
+                Message = statusMessage,
                 Value = value
             };
         }
@@ -63,7 +63,7 @@ namespace RST.Defaults
         /// <param name="isSuccessful">Determines whether the result was successful</param>
         /// <returns></returns>
         public static IPagedResult<TResult> GetPaged<TResult>(
-            IEnumerable<TResult> result, 
+            IEnumerable<TResult> result,
             int pageNumber,
             int totalNumberOfPages,
             int totalItems,
@@ -77,8 +77,8 @@ namespace RST.Defaults
                 StatusCode = statusCode,
                 Message = statusMessage,
                 PageNumber = pageNumber,
-                TotalItems= totalItems,
-                NumberOfPages= totalNumberOfPages,
+                TotalItems = totalItems,
+                NumberOfPages = totalNumberOfPages,
                 Results = result
             };
         }
@@ -95,7 +95,7 @@ namespace RST.Defaults
 
         ///<inheritdoc/>
         public int? StatusCode { get; set; }
-        
+
         object? IResult.Value => Value;
 
         /// <summary>

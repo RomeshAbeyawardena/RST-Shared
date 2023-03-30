@@ -62,8 +62,8 @@ public class DefaultSecuritySignatureProvider : ISecuritySignatureProvider
     {
         var publicKeyBytes = Convert.FromBase64String(signatureConfiguration.PublicKey ?? throw new ArgumentException());
         Rsa!.ImportRSAPublicKey(publicKeyBytes, out var bytes);
-        
-        var result = Rsa.VerifyData((signatureConfiguration.Encoding ?? Encoding.Default).GetBytes(data), 
+
+        var result = Rsa.VerifyData((signatureConfiguration.Encoding ?? Encoding.Default).GetBytes(data),
             Convert.FromBase64String(signature), signatureConfiguration.HashAlgorithmName, signatureConfiguration.Padding ?? RSASignaturePadding.Pkcs1);
         FlushProvider();
 
@@ -82,7 +82,7 @@ public class DefaultSecuritySignatureProvider : ISecuritySignatureProvider
 
         var signature = Rsa!.SignData(Encoding.UTF8.GetBytes(data), signatureConfiguration.HashAlgorithmName, signatureConfiguration.Padding ?? RSASignaturePadding.Pkcs1);
         FlushProvider();
-        
+
         return Convert.ToBase64String(signature);
     }
 
@@ -103,13 +103,13 @@ public class DefaultSecuritySignatureProvider : ISecuritySignatureProvider
     /// <exception cref="NotImplementedException"></exception>
     public ISignatureConfiguration CreateConfiguration(ISignatureConfiguration signatureConfiguration)
     {
-        
+
         var publicKeyBytes = Rsa!.ExportRSAPublicKey();
-        
+
         var privateKeyBytes = Rsa.ExportEncryptedPkcs8PrivateKey(signatureConfiguration.PrivateKeyPassword, new PbeParameters(signatureConfiguration.EncryptionAlgorithm, signatureConfiguration.HashAlgorithmName, signatureConfiguration.IterationCount));
-        
+
         var configuration = DefaultSignatureConfiguration.DefaultConfiguration(Convert.ToBase64String(publicKeyBytes), Convert.ToBase64String(privateKeyBytes));
-        
+
         return configuration;
     }
 
@@ -126,7 +126,7 @@ public class DefaultSecuritySignatureProvider : ISecuritySignatureProvider
         var encodedData = Convert.FromBase64String(encryptedValue);
 
         string result;
-        if(usePublicKey)
+        if (usePublicKey)
         {
             result = GetEncodingOrDefault(signatureConfiguration).GetString(Rsa!.DecryptValue(encodedData));
         }

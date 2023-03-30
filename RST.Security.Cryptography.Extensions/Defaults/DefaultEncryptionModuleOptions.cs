@@ -28,7 +28,9 @@ public record DefaultEncryptionModuleOptions : IEncryptionModuleOptions
     /// </summary>
     /// <param name="key"></param>
     /// <returns></returns>
-    public IEncryptionOptions? this[string key] { get =>
+    public IEncryptionOptions? this[string key]
+    {
+        get =>
             EncryptionOptions.TryGetValue(key, out var options)
             ? options : EncryptionOptionsFactory.TryGetValue(key, out var factory)
                 ? factory?.Invoke(serviceProvider) : null;

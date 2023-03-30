@@ -58,7 +58,7 @@ public class ApplicationAuthenticationSchemeOptions : AuthenticationSchemeOption
     /// <exception cref="ArgumentNullException"></exception>
     public override void Validate()
     {
-        if(string.IsNullOrWhiteSpace(Scheme))
+        if (string.IsNullOrWhiteSpace(Scheme))
         {
             throw new ArgumentNullException(nameof(Scheme));
         }

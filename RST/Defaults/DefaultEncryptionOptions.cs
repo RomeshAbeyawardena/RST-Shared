@@ -27,7 +27,8 @@ public record DefaultEncryptionOptions : IEncryptionOptions
     /// <returns></returns>
     public IEncryptionOptions CreateInstance(string initialVector, string? key = null)
     {
-        return new DefaultEncryptionOptions() {
+        return new DefaultEncryptionOptions()
+        {
             Algorithm = Algorithm,
             Key = string.IsNullOrEmpty(key) ? Key : key,
             InitialVector = initialVector,

@@ -5,7 +5,7 @@
 /// </summary>
 /// <typeparam name="TKey"></typeparam>
 public interface IIdentity<TKey>
-    where TKey : struct 
+    where TKey : struct
 {
     /// <summary>
     /// Gets the identifier
@@ -16,5 +16,5 @@ public interface IIdentity<TKey>
 /// <inheritdoc cref="IIdentity{TKey}"/>
 public interface IIdentity : IIdentity<Guid>
 {
-    
+
 }

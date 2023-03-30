@@ -1,10 +1,10 @@
-﻿using RST.Persistence.Contracts;
+﻿using LinqKit;
 using Microsoft.EntityFrameworkCore;
 using RST.Contracts;
 using RST.Defaults;
-using System.Linq.Expressions;
-using LinqKit;
+using RST.Persistence.Contracts;
 using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 
 namespace RST.EntityFrameworkCore;
 
@@ -100,7 +100,7 @@ public abstract class EntityFrameworkRepositoryBase<TDbContext, T> : RepositoryB
         }
         else
         {
-            
+
             var maximumPages = query.TotalItemsPerPage.HasValue
                 ? Convert.ToInt32(Math.Ceiling((decimal)query.TotalItemsPerPage / total))
                 : 1;

@@ -18,7 +18,7 @@ public record DefaultSignatureConfiguration : ISignatureConfiguration
     /// <param name="configuration"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"></exception>
-    public static ISignatureConfiguration DefaultConfiguration(string? publicKey, string? privateKey = null, string? privateKeyPassword = null, 
+    public static ISignatureConfiguration DefaultConfiguration(string? publicKey, string? privateKey = null, string? privateKeyPassword = null,
         ISignatureConfiguration? configuration = null)
     {
         return new DefaultSignatureConfiguration

@@ -49,7 +49,7 @@ public class PropertyTypeProviderCache : IPropertyTypeProviderCache
     /// <param name="properties"></param>
     public void AddOrUpdate(Type type, IEnumerable<PropertyInfo> properties)
     {
-        if(!propertiesDictionary.TryAdd(type, properties))
+        if (!propertiesDictionary.TryAdd(type, properties))
         {
             propertiesDictionary[type] = properties;
         }

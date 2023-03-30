@@ -4,7 +4,7 @@
 /// Represent a query comparing against a date range
 /// </summary>
 public interface IDateRangeQuery<T> : IDbQuery
-    where T: struct
+    where T : struct
 {
     /// <summary>
     /// Gets or sets the start date to filter

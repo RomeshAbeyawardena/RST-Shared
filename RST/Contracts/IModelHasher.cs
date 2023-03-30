@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography;
-
-namespace RST.Contracts;
+﻿namespace RST.Contracts;
 
 /// <summary>
 /// 
@@ -70,7 +68,7 @@ public interface IModelHasher<TModelHasherOptions> : IModelHasher
     /// <param name="options"></param>
     /// <returns></returns>
     string CalculateHash<T>(T model, TModelHasherOptions options);
-    
+
     /// <summary>
     /// 
     /// </summary>

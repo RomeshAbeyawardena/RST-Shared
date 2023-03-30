@@ -19,7 +19,7 @@ public class DefaultEncryptor : CryptographicProviderBase, IEncryptor
     /// <param name="symmetricAlgorithmFactory"></param>
     /// <param name="encryptionModuleOptions"></param>
     /// <param name="serviceProvider"></param>
-    public DefaultEncryptor(IEncryptionOptions encryptionOptions, 
+    public DefaultEncryptor(IEncryptionOptions encryptionOptions,
         ISymmetricAlgorithmFactory symmetricAlgorithmFactory,
         IEncryptionModuleOptions encryptionModuleOptions,
         IServiceProvider serviceProvider) : base(encryptionOptions, symmetricAlgorithmFactory)

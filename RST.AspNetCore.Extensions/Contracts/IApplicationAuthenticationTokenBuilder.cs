@@ -1,6 +1,4 @@
-﻿using RST.Contracts;
-
-namespace RST.AspNetCore.Extensions.Contracts
+﻿namespace RST.AspNetCore.Extensions.Contracts
 {
     /// <summary>
     /// 

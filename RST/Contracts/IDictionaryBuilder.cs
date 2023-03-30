@@ -25,5 +25,5 @@ public interface IDictionaryBuilder<TKey, TValue> : IReadOnlyDictionary<TKey, TV
     /// <summary>
     /// Sets the underlining referenced dictionary
     /// </summary>
-    IDictionary<TKey, TValue> Dictionary {set; }
+    IDictionary<TKey, TValue> Dictionary { set; }
 }

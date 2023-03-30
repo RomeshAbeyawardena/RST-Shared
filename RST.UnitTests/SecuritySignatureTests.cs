@@ -16,9 +16,9 @@ public class SecuritySignatureTests
     {
         serviceProvider = new ServiceCollection()
             .AddTransient((s) => RSA.Create()).BuildServiceProvider();
-        
+
         securitySignature = new DefaultSecuritySignatureProvider(serviceProvider);
-        configurationMock= new Mock<ISignatureConfiguration>();
+        configurationMock = new Mock<ISignatureConfiguration>();
     }
 
     [Test]
@@ -33,7 +33,7 @@ public class SecuritySignatureTests
         configurationMock.SetupProperty(s => s.HashAlgorithmName, HashAlgorithmName.SHA512);
         configurationMock.SetupProperty(s => s.IterationCount, 8);
         var signature = securitySignature!.SignData(data, configurationMock.Object);
-        
+
         Assert.That(securitySignature.VerifyData(data, signature, configurationMock.Object), Is.True);
     }
 }

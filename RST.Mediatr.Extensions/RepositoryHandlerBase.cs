@@ -6,10 +6,8 @@ using RST.DependencyInjection.Extensions;
 using RST.DependencyInjection.Extensions.Attributes;
 using RST.Extensions;
 using RST.Mediatr.Extensions.Exceptions;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
 
 namespace RST.Mediatr.Extensions;
 
@@ -26,7 +24,7 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse> : RepositoryHan
     /// 
     /// </summary>
     /// <param name="serviceProvider"></param>
-    protected RepositoryHandlerBase(IServiceProvider serviceProvider) 
+    protected RepositoryHandlerBase(IServiceProvider serviceProvider)
         : base(serviceProvider)
     {
     }
@@ -129,7 +127,7 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
             _ => string.Empty,
         };
     }
-    
+
     /// <summary>
     /// Processes a save command and applies the appropriate add/update behaviour against the underlining provider
     /// </summary>
@@ -143,17 +141,17 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
         where TDbCommand : IDbCommand
     {
         var entity = convertToModel(command);
-        
-        if(entity == null)
+
+        if (entity == null)
         {
             throw new NullReferenceException();
         }
 
-        if(entity is IIdentity identity)
+        if (entity is IIdentity identity)
         {
-            if(identity.Id == Guid.Empty)
+            if (identity.Id == Guid.Empty)
             {
-                if(entity is ICreated created)
+                if (entity is ICreated created)
                 {
                     created.Created = ClockProvider!.UtcNow;
                 }
@@ -162,7 +160,7 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
             }
             else
             {
-                if(entity is IModified modified)
+                if (entity is IModified modified)
                 {
                     modified.Modified = ClockProvider!.UtcNow;
                 }
@@ -171,8 +169,8 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
 
                 if (foundEntity != null)
                 {
-
-                    if(foundEntity is IHashable 
+                    bool isHashable = false;
+                    if ((isHashable = foundEntity is IHashable hashableEntity)
                         && !this.ValidateHash(PropertyTypeProviderCache!, ModelHasherFactory!,
                         foundEntity, entity))
                     {

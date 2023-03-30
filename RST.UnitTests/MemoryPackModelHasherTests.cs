@@ -33,9 +33,10 @@ public class MemoryPackModelHasherTests
         hashAlgorithmProviderMock.Setup(h => h.GetHashAlgorithm(HashAlgorithmName.SHA512))
             .Returns(sha512);
         var idGuid = Guid.Parse("F36ECB19-D4BD-4F9F-925F-D937F2365110");
-        
-        var date = new DateTimeOffset(2023,03,09,12,14,30, TimeSpan.FromHours(1));
-        var hash = memoryPackModelHasher!.CalculateHash(new Customer { 
+
+        var date = new DateTimeOffset(2023, 03, 09, 12, 14, 30, TimeSpan.FromHours(1));
+        var hash = memoryPackModelHasher!.CalculateHash(new Customer
+        {
             Firstname = "John",
             Middlename = "Henry",
             Lastname = "Doe",

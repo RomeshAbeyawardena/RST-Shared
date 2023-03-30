@@ -7,7 +7,7 @@ namespace RST.Defaults;
 
 /// <inheritdoc cref="IDictionaryBuilder{TKey, TValue}"/>
 public class DefaultDictionaryBuilder<TKey, TValue> : IDictionaryBuilder<TKey, TValue>
-    where TKey: notnull
+    where TKey : notnull
 {
     private IDictionary<TKey, TValue> dictionary;
 

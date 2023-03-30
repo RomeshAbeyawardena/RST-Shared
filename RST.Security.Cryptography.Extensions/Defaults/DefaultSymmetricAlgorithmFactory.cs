@@ -15,9 +15,9 @@ public class DefaultSymmetricAlgorithmFactory : ISymmetricAlgorithmFactory
     /// </summary>
     public DefaultSymmetricAlgorithmFactory()
     {
-        symmetricAlgorithms = new Dictionary<Enumerations.SymmetricAlgorithm, Func<SymmetricAlgorithm>>() { 
-            { Enumerations.SymmetricAlgorithm.Aes, Aes.Create }, 
-            { Enumerations.SymmetricAlgorithm.TripleDES, TripleDES.Create } 
+        symmetricAlgorithms = new Dictionary<Enumerations.SymmetricAlgorithm, Func<SymmetricAlgorithm>>() {
+            { Enumerations.SymmetricAlgorithm.Aes, Aes.Create },
+            { Enumerations.SymmetricAlgorithm.TripleDES, TripleDES.Create }
         };
     }
 
@@ -25,7 +25,7 @@ public class DefaultSymmetricAlgorithmFactory : ISymmetricAlgorithmFactory
     /// <exception cref="NullReferenceException">When algorithm is not found</exception>
     public SymmetricAlgorithm GetSymmetricAlgorithm(Enumerations.SymmetricAlgorithm symmetricAlgorithm)
     {
-        if(symmetricAlgorithms.TryGetValue(symmetricAlgorithm, out var getAlgorithm))
+        if (symmetricAlgorithms.TryGetValue(symmetricAlgorithm, out var getAlgorithm))
         {
             return getAlgorithm();
         }

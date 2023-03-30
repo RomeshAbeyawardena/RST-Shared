@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 using Moq;
@@ -11,7 +9,6 @@ using RST.AspNetCore.Extensions.Defaults;
 using RST.Contracts;
 using RST.Defaults;
 using System.Text;
-using System.Text.Encodings.Web;
 
 namespace RST.UnitTests;
 
@@ -42,7 +39,7 @@ public class ApplicationAuthenticationTests
         headerDictionary = new Dictionary<string, StringValues>();
         encryptorMock = new Mock<IEncryptor>();
         applicationAuthenticationProvider = new DefaultApplicationAuthenticationProvider(
-             loggerMock.Object,encryptionModuleMock.Object, new HeaderDictionary(headerDictionary),
+             loggerMock.Object, encryptionModuleMock.Object, new HeaderDictionary(headerDictionary),
             decryptorMock.Object, securitySignatureProviderMock.Object,
             applicationAuthenticationRepositoryMock.Object);
 

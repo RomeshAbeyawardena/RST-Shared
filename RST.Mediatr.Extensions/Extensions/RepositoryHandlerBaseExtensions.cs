@@ -1,9 +1,6 @@
 ﻿using MediatR;
-using MessagePack;
-using RST.Attributes;
 using RST.Contracts;
-using RST.Extensions;
-using System.Reflection;
+using RST.Mediatr.Extensions.Extensions;
 
 namespace RST.Mediatr.Extensions;
 
@@ -27,27 +24,29 @@ public static class RepositoryHandlerBaseExtensions
     /// <returns></returns>
     public static bool ValidateHash<TRequest, TResponse, TModel>(
         this RepositoryHandlerBase<TRequest, TResponse, TModel> repositoryHandler,
-        IPropertyTypeProviderCache cache, IModelHasherFactory modelHasherFactory, 
+        IPropertyTypeProviderCache cache, IModelHasherFactory modelHasherFactory,
         TModel model, TModel modifiedModel, object? options = null)
         where TRequest : IRequest<TResponse>
         where TModel : class
     {
         var modelType = typeof(TModel);
 
-        var propertyAttributes = modelType.GetUnderliningAttributes<HashColumnAttribute>(cache);
+        var propertyModelHasherImplementations = modelType.GetModelHashers(cache, modelHasherFactory);
 
         var truthTable = new List<bool>();
-        foreach(var (prop, attribute) in propertyAttributes)
+        foreach (var (prop, implementation) in propertyModelHasherImplementations)
         {
-            var implementation = attribute != null && !string.IsNullOrWhiteSpace(attribute.HasherImplementation)
-                ? modelHasherFactory.GetModelHasher(attribute.HasherImplementation) 
-                    ?? modelHasherFactory.GetDefault()
-                : modelHasherFactory.GetDefault();
+            if (implementation == null)
+            {
+                continue;
+            }
+
             var value = prop.GetValue(modifiedModel)?.ToString();
+
             truthTable.Add(
                 implementation.CompareHash(model, options, value));
         }
-        
+
         return !truthTable.Any() || truthTable.All(a => a);
     }
 }

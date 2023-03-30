@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace RST.Contracts;
+﻿namespace RST.Contracts;
 /// <summary>
 /// 
 /// </summary>

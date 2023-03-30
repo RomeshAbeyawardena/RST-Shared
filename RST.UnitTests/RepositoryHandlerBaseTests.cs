@@ -1,9 +1,8 @@
-﻿using RST.UnitTests.TestEntities;
-using RST.Mediatr.Extensions;
-using MediatR;
-using RST.Contracts;
+﻿using MediatR;
 using Moq;
-using RST.Defaults;
+using RST.Contracts;
+using RST.Mediatr.Extensions;
+using RST.UnitTests.TestEntities;
 
 namespace RST.UnitTests
 {
@@ -17,7 +16,7 @@ namespace RST.UnitTests
 
         private class MyTestRepositoryHandler : RepositoryHandlerBase<MyRequest, IEnumerable<Customer>, Customer>
         {
-            public MyTestRepositoryHandler(IServiceProvider serviceProvider) 
+            public MyTestRepositoryHandler(IServiceProvider serviceProvider)
                 : base(serviceProvider)
             {
             }
@@ -52,7 +51,7 @@ namespace RST.UnitTests
                 .Returns(repositoryMock.Object);
 
             modelHashFactoryMock = new Mock<IModelHasherFactory>();
-            
+
             serviceProviderMock.Setup(s => s.GetService(typeof(IModelHasherFactory)))
                 .Returns(modelHashFactoryMock.Object);
 
@@ -80,14 +79,18 @@ namespace RST.UnitTests
             modelHasherMock.Setup(s => s.CompareHash(dbCustomer, null, "THIS_IS_THE_HASH"))
                 .Returns(true);
 
-            await sut!.ProcessSave(new MyRequest(), c => { return new Customer { 
-                    Id = id, 
+            await sut!.ProcessSave(new MyRequest(), c =>
+            {
+                return new Customer
+                {
+                    Id = id,
                     Firstname = "Tes12t",
                     Lastname = "Test1",
                     Middlename = "Test2",
                     PopulatedDate = DateTime.Now,
                     Hash = "THIS_IS_THE_HASH"
-            }; }, CancellationToken.None);
+                };
+            }, CancellationToken.None);
         }
     }
 }

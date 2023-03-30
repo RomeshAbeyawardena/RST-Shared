@@ -1,12 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Options;
 using Moq;
-using RST.Contracts;
 using RST.Defaults;
 using RST.Extensions.Configuration;
-using RST.Security.Cryptography.Extensions.Defaults;
 using System.Text;
 
 namespace RST.UnitTests;
@@ -24,7 +21,7 @@ public class ConfigurationExtensionTests
         configurationManager = new ConfigurationManager();
         fileInfoMock = new Mock<IFileInfo>();
         fileInfoMock.Setup(a => a.Exists).Returns(true);
-        
+
         var ms = new MemoryStream();
         var sw = new StreamWriter(ms);
         sw.Write(@"{
@@ -61,8 +58,9 @@ public class ConfigurationExtensionTests
         fileProviderMock.Setup(a => a.GetFileInfo("appsetting.json")).Returns(fileInfoMock.Object);
 
         var test = Encoding.UTF8.GetString(ms.ToArray());
-        
-        configuration = configurationManager.Add<JsonConfigurationSource>(c => {
+
+        configuration = configurationManager.Add<JsonConfigurationSource>(c =>
+        {
             c.FileProvider = fileProviderMock.Object;
             c.Path = "appsetting.json";
             c.Optional = false;
@@ -72,7 +70,7 @@ public class ConfigurationExtensionTests
         sw.Dispose();
         ms.Dispose();
     }
-    
+
     [Test]
     public void GetFromPath()
     {

@@ -1,5 +1,4 @@
 ﻿using RST.Contracts;
-using System.Collections;
 
 namespace RST.Defaults;
 
@@ -39,6 +38,6 @@ public record DefaultPagedResult<T, TResult> : DefaultResult<IEnumerable<TResult
 
     ///<inheritdoc />
     public IEnumerable<TResult> Results { get; set; }
-    
+
     IEnumerable<TResult>? IResult<IEnumerable<TResult>>.Value => Results;
 }

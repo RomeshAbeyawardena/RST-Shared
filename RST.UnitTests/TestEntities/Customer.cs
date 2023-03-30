@@ -25,7 +25,7 @@ public partial record Customer : IIdentity, IHashable
     /// </summary>
     public string? Lastname { get; set; }
 
-    public DateTimeOffset? PopulatedDate { get;set; }
+    public DateTimeOffset? PopulatedDate { get; set; }
     /// <summary>
     /// 
     /// </summary>

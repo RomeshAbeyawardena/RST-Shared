@@ -21,12 +21,12 @@ public static class DictionaryBuilderExtensions
             string rootPath, params string[] sectionNames)
     {
         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-        
-        if(!sectionNames.Any())
+
+        if (!sectionNames.Any())
         {
             var sections = configuration.GetSections(rootPath);
-            
-            foreach(var section in sections)
+
+            foreach (var section in sections)
             {
                 var opts = section.Get<IEncryptionOptions>();
                 if (opts != null)

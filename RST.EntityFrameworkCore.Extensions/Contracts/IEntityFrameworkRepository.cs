@@ -1,7 +1,5 @@
-﻿using RST.Contracts;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
-using LinqKit;
+﻿using Microsoft.EntityFrameworkCore;
+using RST.Contracts;
 
 namespace RST.Persistence.Contracts;
 
@@ -19,5 +17,5 @@ public interface IEntityFrameworkRepository<TDbContext, T> : IRepository<T>
     /// </summary>
     TDbContext Context { get; }
 
-    
-} 
+
+}

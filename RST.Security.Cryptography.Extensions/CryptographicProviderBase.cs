@@ -1,6 +1,5 @@
 ﻿using RST.Contracts;
 using RST.Enumerations;
-using System;
 using System.Security.Cryptography;
 
 namespace RST.Security.Cryptography.Extensions;

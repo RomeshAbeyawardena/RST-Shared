@@ -10,7 +10,7 @@ public class DictionaryBuilderTests
     [SetUp]
     public void SetUp()
     {
-        underliningDictionary= new Dictionary<string, int>();
+        underliningDictionary = new Dictionary<string, int>();
         dictionaryBuilder = new DefaultDictionaryBuilder<string, int>(underliningDictionary);
     }
 

@@ -30,5 +30,5 @@ public interface IApplicationIdentity<TKey, TTimeStamp> : IIdentity<TKey>, ICrea
     where TKey : struct
     where TTimeStamp : struct
 {
-    
+
 }

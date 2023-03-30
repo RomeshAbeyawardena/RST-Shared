@@ -3,8 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using RST.Contracts;
 using RST.Defaults;
 using RST.Enumerations;
-using RST.Security.Cryptography.Extensions.Defaults;
 using RST.Extensions.Configuration;
+using RST.Security.Cryptography.Extensions.Defaults;
 
 namespace RST.Security.Cryptography.Extensions;
 /// <summary>
@@ -25,14 +25,15 @@ public static class ServiceCollectionExtensions
         EncryptionCaseConvention encryptionCaseConvention = EncryptionCaseConvention.Default,
         params string[] sectionNames)
     {
-        return services.AddSingleton<IEncryptionModuleOptions>(s => {
+        return services.AddSingleton<IEncryptionModuleOptions>(s =>
+        {
             var options = new DefaultEncryptionModuleOptions(encryptionCaseConvention, s);
             var configuration = s.GetRequiredService<IConfiguration>();
             DictionaryBuilderExtensions.AddConfiguration(options.EncryptionOptions, s, rootPath,
                 sectionNames);
 
             return options;
-          });
+        });
     }
     /// <summary>
     /// Adds the encryption module options to the provided <paramref name="services"/> parameter

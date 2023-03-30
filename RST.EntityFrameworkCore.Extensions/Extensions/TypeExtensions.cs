@@ -15,7 +15,7 @@ public static class TypeExtensions
         foreach (var property in dbSetType.GetProperties())
         {
             var propertyType = property.PropertyType;
-            
+
             if (!propertyType.IsGenericType)
             {
                 continue;
@@ -27,5 +27,5 @@ public static class TypeExtensions
         }
 
         return modelTypes;
-    } 
+    }
 }

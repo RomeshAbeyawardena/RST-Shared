@@ -1,7 +1,6 @@
 ﻿using RST.AspNetCore.Extensions.Contracts;
 using RST.Contracts;
 using RST.Security.Cryptography.Defaults;
-using System.Security.Principal;
 
 namespace RST.AspNetCore.Extensions.Defaults;
 
@@ -39,8 +38,8 @@ public class DefaultApplicationAuthenticationTokenBuilder : IApplicationAuthenti
     /// <param name="options"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public IApplicationAuthenticationToken BuildToken(IApplicationIdentity applicationIdentity, 
-        string publicKey, 
+    public IApplicationAuthenticationToken BuildToken(IApplicationIdentity applicationIdentity,
+        string publicKey,
         ApplicationAuthenticationSchemeOptions options)
     {
         var applicationAuthenticationToken = new DefaultApplicationAuthenticationToken();

@@ -30,7 +30,8 @@ public static class StringExtensions
             return encryptor.Encrypt(input, encryptionOptions);
         }
 
-        if (encryptionKey != null) {
+        if (encryptionKey != null)
+        {
             return encryptor.Encrypt(input, encryptionKey);
         }
 
@@ -49,7 +50,7 @@ public static class StringExtensions
     public static string Decrypt(this string input, IDecryptor decryptor, IEncryptionOptions? encryptionOptions = null,
         string? encryptionKey = null)
     {
-        if(decryptor == null)
+        if (decryptor == null)
         {
             throw new ArgumentNullException(nameof(decryptor));
         }

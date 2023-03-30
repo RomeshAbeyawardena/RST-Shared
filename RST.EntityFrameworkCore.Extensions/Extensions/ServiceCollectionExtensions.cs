@@ -1,7 +1,7 @@
-﻿using RST.Contracts;
-using RST.Persistence.Contracts;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using RST.Contracts;
+using RST.Persistence.Contracts;
 
 namespace RST.EntityFrameworkCore.Extensions;
 /// <summary>
@@ -56,7 +56,7 @@ public static class ServiceCollectionExtensions
         var serviceType = typeof(IRepository<>);
         var specificServiceType = typeof(IEntityFrameworkRepository<,>);
         var dbContextType = typeof(TDbContext);
-        foreach(var modelType in modelTypes)
+        foreach (var modelType in modelTypes)
         {
             var specificImplementationType = implementationType.MakeGenericType(modelType);
 

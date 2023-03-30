@@ -23,7 +23,7 @@ public abstract class RepositoryBase<T> : IRepository<T>
     /// 
     /// </summary>
     /// <param name="queryable"></param>
-    public RepositoryBase(IQueryable<T>? queryable  = null)
+    public RepositoryBase(IQueryable<T>? queryable = null)
     {
         ResetQueryBuilder();
         this.queryable = queryable;
@@ -47,10 +47,10 @@ public abstract class RepositoryBase<T> : IRepository<T>
 
     /// <inheritdoc cref="IQueryable.Provider" />
     public IQueryProvider Provider => queryable?.Provider ?? throw new NullReferenceException();
-    
+
     /// <inheritdoc cref="IRepository{T}.QueryBuilder"/>
-    public ExpressionStarter<T> QueryBuilder => queryBuilder!; 
-    
+    public ExpressionStarter<T> QueryBuilder => queryBuilder!;
+
     /// <inheritdoc cref="IRepository{T}.CommitChangesAsync(CancellationToken)"/>
     public abstract Task<int> CommitChangesAsync(CancellationToken cancellationToken);
 
@@ -73,7 +73,7 @@ public abstract class RepositoryBase<T> : IRepository<T>
     /// <param name="keys"></param>
     /// <returns></returns>
     public abstract ValueTask<T?> FindAsync(CancellationToken cancellationToken, params object[] keys);
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -82,7 +82,7 @@ public abstract class RepositoryBase<T> : IRepository<T>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public abstract Task<IPagedResult<T>> GetPagedResult(Expression<Func<T, bool>> expression, IPagedQuery<int> query, CancellationToken cancellationToken);
-    
+
     /// <summary>
     /// 
     /// </summary>

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.DataProtection.KeyManagement;
-using RST.Contracts;
-using System.Security.Principal;
+﻿using RST.Contracts;
 
 namespace RST.AspNetCore.Extensions.Contracts
 {
@@ -36,7 +34,7 @@ namespace RST.AspNetCore.Extensions.Contracts
         /// <param name="identity"></param>
         /// <returns></returns>
         Task<IDictionary<string, string>> GetRoles(IApplicationIdentity identity);
-        
+
         /// <summary>
         /// Validates access token
         /// </summary>

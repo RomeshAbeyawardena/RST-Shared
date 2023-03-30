@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper.Configuration;
 using RST.Contracts;
 using RST.Defaults;
 
@@ -7,7 +6,7 @@ namespace RST.Automapper.Extensions;
 /// <summary>
 /// 
 /// </summary>
-public static class MappingExpression 
+public static class MappingExpression
 {
     /// <summary>
     /// 
@@ -21,15 +20,16 @@ public static class MappingExpression
     {
         IEnumerable<TDestination>? destination;
         return profile.CreateMap<IPagedResult<TSource>, IPagedResult<TDestination>>()
-            .ConstructUsing((c, r) => new DefaultPagedResult<TDestination> { 
+            .ConstructUsing((c, r) => new DefaultPagedResult<TDestination>
+            {
                 IsSuccessful = c.IsSuccessful,
-                TotalItems= c.TotalItems,
-                Message= c.Message,
-                NumberOfPages= c.NumberOfPages,
-                PageNumber= c.PageNumber,
+                TotalItems = c.TotalItems,
+                Message = c.Message,
+                NumberOfPages = c.NumberOfPages,
+                PageNumber = c.PageNumber,
                 Results = (destination = r.Mapper.Map<IEnumerable<TDestination>>(c.Results)),
-                StatusCode=c.StatusCode,
-                Value= destination
+                StatusCode = c.StatusCode,
+                Value = destination
             });
     }
 }
