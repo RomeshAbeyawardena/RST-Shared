@@ -27,7 +27,7 @@ namespace RST.UnitTests
                 throw new NotImplementedException();
             }
         }
-
+        private Mock<IPropertyTypeProviderCache>? propertyTypeProviderCacheMock;
         private Mock<IClockProvider>? clockProviderMock;
         private Mock<IRepository<Customer>>? repositoryMock;
         private Mock<IServiceProvider>? serviceProviderMock;
@@ -38,7 +38,14 @@ namespace RST.UnitTests
         {
             serviceProviderMock = new Mock<IServiceProvider>();
             clockProviderMock = new Mock<IClockProvider>();
+            propertyTypeProviderCacheMock = new Mock<IPropertyTypeProviderCache>();
             repositoryMock = new Mock<IRepository<Customer>>();
+            serviceProviderMock.Setup(s => s.GetService(typeof(IPropertyTypeProviderCache)))
+                .Returns(propertyTypeProviderCacheMock.Object);
+
+            serviceProviderMock.Setup(s => s.GetService(typeof(IRepository<Customer>)))
+                .Returns(repositoryMock.Object);
+
             sut = new MyTestRepositoryHandler(serviceProviderMock.Object);
         }
 

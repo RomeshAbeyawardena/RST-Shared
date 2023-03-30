@@ -172,10 +172,12 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
                 if (foundEntity != null)
                 {
 
-                    if(!this.ValidateHash(PropertyTypeProviderCache!, ModelHasherFactory!,
+                    if(foundEntity is IHashable 
+                        && !this.ValidateHash(PropertyTypeProviderCache!, ModelHasherFactory!,
                         foundEntity, entity))
                     {
-                        throw new ValidationFailureException(dict => dict.Add("Hash", "Hashes don't match"));
+                        throw new ValidationFailureException(dict => dict
+                            .Add("Hash", "Invalid hash"));
                     }
 
                     if (foundEntity.HasChanges(entity, out var changes))

@@ -20,7 +20,7 @@ public abstract class EnableInjectionBase<TInjectAttribute>
     protected void ConfigureInjection()
     {
         var typeProviderCache = serviceProvider.GetService<IPropertyTypeProviderCache>()
-            ?? throw new NullReferenceException();
+            ?? throw new NullReferenceException($"{nameof(PropertyTypeProviderCache)} not found");
 
         var instanceType = GetType();
         
