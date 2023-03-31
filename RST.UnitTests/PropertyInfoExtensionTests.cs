@@ -1,4 +1,5 @@
-﻿using RST.Extensions;
+﻿using RST.Defaults;
+using RST.Extensions;
 
 namespace RST.UnitTests;
 
@@ -12,6 +13,14 @@ public class PropertyInfoExtensionTests
 
         var properties = t.GetAllProperties();
         var count = properties.Count();
-        Assert.That(count, Is.EqualTo(3));
+        Assert.That(count, Is.EqualTo(4));
+
+
+        var myCache = new PropertyTypeProviderCache();
+        properties = t.GetAllProperties(myCache);
+        count = properties.Count();
+        Assert.That(count, Is.EqualTo(4));
+
+        Assert.That(myCache, Contains.Key(t));
     }
 }

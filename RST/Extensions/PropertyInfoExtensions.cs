@@ -52,7 +52,7 @@ public static class PropertyInfoExtensions
 
         if (cache == null || !cache.TryGetValue(type, out var props))
         {
-            properties = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            properties = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.GetField);
             cache?.AddOrUpdate(type, properties);
         }
         else
