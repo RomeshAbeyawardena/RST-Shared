@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using LinqKit;
+using MediatR;
 using Moq;
 using RST.Contracts;
 using RST.Mediatr.Extensions;
@@ -34,6 +35,7 @@ namespace RST.UnitTests
         private Mock<IClockProvider>? clockProviderMock;
         private Mock<IRepository<Customer>>? repositoryMock;
         private Mock<IServiceProvider>? serviceProviderMock;
+        private Mock<IObservable<ExpressionStarter<Customer>>> expressionObserverMock;
         private MyTestRepositoryHandler? sut;
 
         [SetUp]
@@ -54,6 +56,8 @@ namespace RST.UnitTests
 
             serviceProviderMock.Setup(s => s.GetService(typeof(IModelHasherFactory)))
                 .Returns(modelHashFactoryMock.Object);
+            expressionObserverMock = new Mock<IObservable<ExpressionStarter<Customer>>>();
+            repositoryMock.Setup(s => s.OnReset).Returns(expressionObserverMock.Object);
 
             modelHashFactoryMock.Setup(s => s.GetDefault())
                 .Returns(modelHasherMock.Object);

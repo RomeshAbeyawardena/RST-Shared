@@ -21,13 +21,10 @@ public abstract class EnableInjectionBase<TInjectAttribute>
         var typeProviderCache = serviceProvider.GetService<IPropertyTypeProviderCache>()
             ?? throw new NullReferenceException($"{nameof(PropertyTypeProviderCache)} not found");
 
+
         var instanceType = GetType();
 
-        if (!typeProviderCache.TryGetValue(instanceType, out var properties))
-        {
-            properties = instanceType.GetAllProperties();
-            typeProviderCache.AddOrUpdate(instanceType, properties);
-        }
+        var properties = instanceType.GetAllProperties(typeProviderCache);
 
         var injectableProperties = properties.Where(p => p.CanWrite && p.HasAttribute(typeof(TInjectAttribute), out var attribute));
 

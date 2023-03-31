@@ -43,11 +43,22 @@ public static class PropertyInfoExtensions
     /// Gets 
     /// </summary>
     /// <param name="type"></param>
+    /// <param name="cache"></param>
     /// <param name="filterExpression"></param>
     /// <returns></returns>
-    public static IEnumerable<PropertyInfo> GetAllProperties(this Type type, Func<PropertyInfo, bool>? filterExpression = null)
+    public static IEnumerable<PropertyInfo> GetAllProperties(this Type type, IPropertyTypeProviderCache? cache = null, Func<PropertyInfo, bool>? filterExpression = null)
     {
-        var properties = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        IEnumerable<PropertyInfo> properties;
+
+        if (cache == null || !cache.TryGetValue(type, out var props))
+        {
+            properties = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            cache?.AddOrUpdate(type, properties);
+        }
+        else
+        {
+            properties = props;
+        }
 
         if (filterExpression == null)
         {
@@ -71,19 +82,10 @@ public static class PropertyInfoExtensions
     {
         var dictionary = new Dictionary<PropertyInfo, TAttribute>();
         IEnumerable<PropertyInfo>? properties;
-        if (cache != null)
-        {
-            if (!cache.TryGetValue(type, out properties))
-            {
-                cache.AddOrUpdate(type, properties = type.GetAllProperties());
-            }
-        }
-        else
-        {
-            properties = type.GetAllProperties();
-        }
 
-        var allProperties = properties.Union(type.GetInterfaces().SelectMany(t => t.GetAllProperties()));
+        properties = type.GetAllProperties(cache);
+        
+        var allProperties = properties.Union(type.GetInterfaces().SelectMany(t => t.GetAllProperties(cache)));
 
         foreach (var property in allProperties)
         {

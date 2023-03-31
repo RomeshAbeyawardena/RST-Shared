@@ -46,20 +46,20 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
     /// <summary>
     /// 
     /// </summary>
-    [Inject] protected IClockProvider? ClockProvider { get; set; }
+    [Inject] protected internal IClockProvider? ClockProvider { get; set; }
 
     /// <summary>
     /// 
     /// </summary>
-    [Inject] protected IRepository<TModel>? Repository { get; set; }
+    [Inject] protected internal IRepository<TModel>? Repository { get; set; }
     /// <summary>
     /// 
     /// </summary>
-    [Inject] protected IModelHasherFactory? ModelHasherFactory { get; set; }
+    [Inject] protected internal IModelHasherFactory? ModelHasherFactory { get; set; }
     /// <summary>
     /// 
     /// </summary>
-    [Inject] protected IPropertyTypeProviderCache? PropertyTypeProviderCache { get; set; }
+    [Inject] protected internal IPropertyTypeProviderCache? PropertyTypeProviderCache { get; set; }
 
     /// <summary>
     /// Sets the default expression used by the repository
@@ -208,8 +208,7 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
                 {
                     bool isHashable = false;
                     if ((isHashable = foundEntity is IHashable)
-                        && !this.ValidateHash(PropertyTypeProviderCache!, ModelHasherFactory!,
-                        foundEntity, entity))
+                        && !this.ValidateHash(foundEntity, entity))
                     {
                         throw new ValidationFailureException(dict => dict
                             .Add("Hash", "Invalid hash"));
