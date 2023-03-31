@@ -4,6 +4,7 @@ using Microsoft.Extensions.Internal;
 using RST.Attributes;
 using RST.Contracts;
 using RST.Defaults;
+using System.Reactive.Subjects;
 using System.Reflection;
 using System.Security.Cryptography;
 
@@ -26,6 +27,7 @@ public static class ServiceCollectionExtensions
         return services
             .AddSingleton(c => RSA.Create())
             .AddSingleton<IClockProvider, DefaultClockProvider>()
+            .AddSingleton(typeof(ISubject<>), typeof(Subject<>))
             .AddTransient(typeof(IDictionaryBuilder<,>), typeof(DefaultInjectedDictionaryBuilder<,>))
             .AddTransient(typeof(IListBuilder<>), typeof(DefaultInjectedListBuilder<>));
     }
