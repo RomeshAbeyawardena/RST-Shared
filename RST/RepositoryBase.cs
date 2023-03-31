@@ -28,8 +28,8 @@ public abstract class RepositoryBase<T> : IRepository<T>
     /// <param name="queryable"></param>
     public RepositoryBase(ISubject<ExpressionStarter<T>> subject, IQueryable<T>? queryable = null)
     {
-        ResetQueryBuilder();
         this.subject = subject;
+        ResetQueryBuilder();
         this.queryable = queryable;
     }
 
@@ -109,7 +109,6 @@ public abstract class RepositoryBase<T> : IRepository<T>
     public void ResetQueryBuilder()
     {
         this.queryBuilder = PredicateBuilder.New<T>();
-        queryBuilder.DefaultExpression = a => true;
         subject.OnNext(queryBuilder);
     }
 }
