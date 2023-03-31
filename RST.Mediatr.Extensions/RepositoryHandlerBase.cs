@@ -41,6 +41,8 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
     where TRequest : IRequest<TResponse>
     where TModel : class
 {
+    private Expression<Func<TModel, bool>>? defaultExpression;
+
     /// <summary>
     /// 
     /// </summary>
@@ -59,6 +61,16 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
     /// </summary>
     [Inject] protected IPropertyTypeProviderCache? PropertyTypeProviderCache { get; set; }
 
+    /// <summary>
+    /// Sets the default expression used by the repository
+    /// </summary>
+    protected Expression<Func<TModel, bool>> DefaultExpression { 
+        set 
+        { 
+            Repository!.QueryBuilder.DefaultExpression = value; 
+            defaultExpression = value; 
+        } 
+    }
     /// <summary>
     /// 
     /// </summary>
@@ -277,5 +289,11 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
         : base(serviceProvider)
     {
         ConfigureInjection();
+        Repository!.OnReset.Subscribe(a => {
+            if (defaultExpression != null)
+            {
+                a.DefaultExpression = defaultExpression;
+            }
+        });
     }
 }

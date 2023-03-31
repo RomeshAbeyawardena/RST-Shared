@@ -10,6 +10,10 @@ namespace RST.Contracts;
 public interface IRepository<T> : IQueryable<T>
 {
     /// <summary>
+    /// 
+    /// </summary>
+    IObservable<ExpressionStarter<T>> OnReset { get; }
+    /// <summary>
     /// Gets a value determining whether the entity should not be tracked
     /// </summary>
     bool NoTracking { set; }

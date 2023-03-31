@@ -43,8 +43,9 @@ public abstract class EntityFrameworkRepositoryBase<TDbContext, T> : RepositoryB
     /// 
     /// </summary>
     /// <param name="context"></param>
-    public EntityFrameworkRepositoryBase(TDbContext context)
-        : base()
+    /// <param name="subject"></param>
+    public EntityFrameworkRepositoryBase(TDbContext context, System.Reactive.Subjects.ISubject<ExpressionStarter<T>> subject)
+        : base(subject)
     {
         dbSet = context.Set<T>();
         Queryable = dbSet.AsNoTracking();

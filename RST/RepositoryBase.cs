@@ -2,7 +2,8 @@
 using RST.Contracts;
 using System.Collections;
 using System.Linq.Expressions;
-
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 namespace RST;
 
 /// <summary>
@@ -13,6 +14,7 @@ public abstract class RepositoryBase<T> : IRepository<T>
 {
     private IQueryable<T>? queryable;
     private ExpressionStarter<T>? queryBuilder;
+    private readonly ISubject<ExpressionStarter<T>> subject;
 
     /// <summary>
     /// Sets the underlining <see cref="IQueryable"/>
@@ -22,10 +24,12 @@ public abstract class RepositoryBase<T> : IRepository<T>
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="subject"></param>
     /// <param name="queryable"></param>
-    public RepositoryBase(IQueryable<T>? queryable = null)
+    public RepositoryBase(ISubject<ExpressionStarter<T>> subject, IQueryable<T>? queryable = null)
     {
         ResetQueryBuilder();
+        this.subject = subject;
         this.queryable = queryable;
     }
 
@@ -39,6 +43,12 @@ public abstract class RepositoryBase<T> : IRepository<T>
     /// Gets or sets a value determining whether entity tracking should be disabled
     /// </summary>
     public abstract bool NoTracking { set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public IObservable<ExpressionStarter<T>> OnReset => subject;
+
     /// <inheritdoc cref="IQueryable.ElementType" />
     public Type ElementType => queryable?.ElementType ?? throw new NullReferenceException();
 
@@ -100,5 +110,6 @@ public abstract class RepositoryBase<T> : IRepository<T>
     {
         this.queryBuilder = PredicateBuilder.New<T>();
         queryBuilder.DefaultExpression = a => true;
+        subject.OnNext(queryBuilder);
     }
 }
