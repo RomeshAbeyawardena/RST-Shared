@@ -38,7 +38,7 @@ public static class RepositoryHandlerBaseExtensions
                 continue;
             }
 
-            var value = prop.Property.GetValue(modifiedModel)?.ToString();
+            var value = prop.GetValue(modifiedModel)?.ToString();
 
             truthTable.Add(
                 implementation.CompareHash(model, options, value));

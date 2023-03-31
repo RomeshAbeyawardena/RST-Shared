@@ -88,7 +88,7 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
                     continue;
                 }
 
-                property.Property.SetValue(entity, implementation.CalculateHash(entity, null));
+                property.SetValue(entity, implementation.CalculateHash(entity, null));
             }
         }
     }
