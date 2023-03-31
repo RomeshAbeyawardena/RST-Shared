@@ -1,4 +1,5 @@
 ﻿using RST.Contracts;
+using RST.Defaults;
 using System.Reflection;
 
 namespace RST.Extensions;
@@ -46,7 +47,7 @@ public static class PropertyInfoExtensions
     /// <param name="cache"></param>
     /// <param name="filterExpression"></param>
     /// <returns></returns>
-    public static IEnumerable<PropertyInfo> GetAllProperties(this Type type, IPropertyTypeProviderCache? cache = null, Func<PropertyInfo, bool>? filterExpression = null)
+    public static IEnumerable<IPropertyInfo> GetAllProperties(this Type type, IPropertyTypeProviderCache? cache = null, Func<PropertyInfo, bool>? filterExpression = null)
     {
         IEnumerable<PropertyInfo> properties;
 
@@ -62,10 +63,10 @@ public static class PropertyInfoExtensions
 
         if (filterExpression == null)
         {
-            return properties;
+            return properties.Select(p => new DefaultPropertyInfo(p.PropertyType, p));
         }
 
-        return properties.Where(filterExpression ?? (a => true));
+        return properties.Where(filterExpression ?? (a => true)).Select(p => new DefaultPropertyInfo(type, p));
     }
 
     /// <summary>
@@ -75,13 +76,13 @@ public static class PropertyInfoExtensions
     /// <param name="type"></param>
     /// <param name="cache"></param>
     /// <returns></returns>
-    public static IReadOnlyDictionary<PropertyInfo, TAttribute> GetUnderliningAttributes<TAttribute>(
+    public static IReadOnlyDictionary<IPropertyInfo, TAttribute> GetUnderliningAttributes<TAttribute>(
         this Type type,
         IPropertyTypeProviderCache? cache = null)
         where TAttribute : Attribute
     {
-        var dictionary = new Dictionary<PropertyInfo, TAttribute>();
-        IEnumerable<PropertyInfo>? properties;
+        var dictionary = new Dictionary<IPropertyInfo, TAttribute>();
+        IEnumerable<IPropertyInfo>? properties;
 
         properties = type.GetAllProperties(cache);
         
@@ -89,7 +90,7 @@ public static class PropertyInfoExtensions
 
         foreach (var property in allProperties)
         {
-            if (property.HasAttribute<TAttribute>(out var attribute) && attribute != null)
+            if (property.Property.HasAttribute<TAttribute>(out var attribute) && attribute != null)
             {
                 dictionary.Add(property, attribute);
             }

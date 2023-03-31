@@ -26,15 +26,15 @@ public abstract class EnableInjectionBase<TInjectAttribute>
 
         var properties = instanceType.GetAllProperties(typeProviderCache);
 
-        var injectableProperties = properties.Where(p => p.CanWrite && p.HasAttribute(typeof(TInjectAttribute), out var attribute));
+        var injectableProperties = properties.Where(p => p.Property.CanWrite && p.Property.HasAttribute(typeof(TInjectAttribute), out var attribute));
 
         foreach (var property in injectableProperties)
         {
-            var service = serviceProvider.GetService(property.PropertyType);
+            var service = serviceProvider.GetService(property.Type);
 
             if (service != null)
             {
-                property.SetValue(this, service);
+                property.Property.SetValue(this, service);
             }
         }
     }
