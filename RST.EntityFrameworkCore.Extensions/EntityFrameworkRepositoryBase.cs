@@ -64,7 +64,7 @@ public abstract class EntityFrameworkRepositoryBase<TDbContext, T> : RepositoryB
         dbSet.Update(entity);
     }
 
-    /// <inheritdoc cref="Contracts.IRepository{T}.CommitChangesAsync(CancellationToken)"/>
+    /// <inheritdoc cref="IRepository{T}.CommitChangesAsync(CancellationToken)"/>
     public override Task<int> CommitChangesAsync(CancellationToken cancellationToken)
     {
         return Context.SaveChangesAsync(cancellationToken);
