@@ -8,7 +8,7 @@ public interface IExceptionStatusCode
     /// <summary>
     /// 
     /// </summary>
-    Type ExceptionType { get; set; }
+    Type? ExceptionType { get; set; }
     /// <summary>
     /// 
     /// </summary>

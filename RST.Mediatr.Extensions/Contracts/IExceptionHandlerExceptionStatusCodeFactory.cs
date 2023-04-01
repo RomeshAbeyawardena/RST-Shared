@@ -10,11 +10,11 @@ public interface IExceptionHandlerExceptionStatusCodeFactory : IReadOnlyDictiona
     /// </summary>
     /// <param name="type"></param>
     /// <param name="statusCode"></param>
-    void TryAddExceptionStatusCode(Type type, IExceptionStatusCode statusCode);
+    bool TryAddExceptionStatusCode(Type type, IExceptionStatusCode statusCode);
     /// <summary>
     /// 
     /// </summary>
     /// <typeparam name="TException"></typeparam>
     /// <param name="statusCode"></param>
-    void TryAddExceptionStatusCode<TException>(IExceptionStatusCode statusCode);
+    bool TryAddExceptionStatusCode<TException>(IExceptionStatusCode statusCode);
 }

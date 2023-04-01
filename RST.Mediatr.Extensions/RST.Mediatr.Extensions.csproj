@@ -19,4 +19,7 @@
     <ProjectReference Include="..\RST.DependencyInjection.Extensions\RST.DependencyInjection.Extensions.csproj" />
     <ProjectReference Include="..\RST\RST.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Exceptions\" />
+  </ItemGroup>
 </Project>

@@ -62,9 +62,9 @@ public class DefaultExceptionHandlerExceptionStatusCodeFactory : IExceptionHandl
     /// </summary>
     /// <param name="type"></param>
     /// <param name="statusCode"></param>
-    public void TryAddExceptionStatusCode(Type type, IExceptionStatusCode statusCode)
+    public bool TryAddExceptionStatusCode(Type type, IExceptionStatusCode statusCode)
     {
-        exceptionStatusCodes.TryAdd(type, statusCode);
+        return exceptionStatusCodes.TryAdd(type, statusCode);
     }
 
     /// <summary>
@@ -72,9 +72,9 @@ public class DefaultExceptionHandlerExceptionStatusCodeFactory : IExceptionHandl
     /// </summary>
     /// <typeparam name="TException"></typeparam>
     /// <param name="statusCode"></param>
-    public void TryAddExceptionStatusCode<TException>(IExceptionStatusCode statusCode)
+    public bool TryAddExceptionStatusCode<TException>(IExceptionStatusCode statusCode)
     {
-        TryAddExceptionStatusCode(typeof(TException), statusCode);
+        return TryAddExceptionStatusCode(typeof(TException), statusCode);
     }
 
     /// <summary>

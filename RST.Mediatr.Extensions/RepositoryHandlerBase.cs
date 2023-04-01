@@ -5,8 +5,6 @@ using RST.Contracts;
 using RST.DependencyInjection.Extensions;
 using RST.DependencyInjection.Extensions.Attributes;
 using RST.Extensions;
-using RST.Mediatr.Extensions.Exceptions;
-using RST.Mediatr.Extensions;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.ComponentModel.DataAnnotations;
