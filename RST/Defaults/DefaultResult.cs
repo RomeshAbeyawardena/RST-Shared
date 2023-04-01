@@ -1,4 +1,5 @@
 ﻿using RST.Contracts;
+using System.Diagnostics.Contracts;
 
 namespace RST.Defaults
 {
@@ -90,6 +91,35 @@ namespace RST.Defaults
     /// <typeparam name="T"><see cref="Type"/> of result</typeparam>
     public record DefaultResult<T> : IResult<T>
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="result"></param>
+        public static implicit operator DefaultResult(DefaultResult<T> result)
+        {
+            return DefaultResult.FromResult(result);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="result"></param>
+        public static implicit operator DefaultResult<T>(DefaultResult result)
+        {
+            var r = new DefaultResult<T>()
+            {
+                IsSuccessful = result.IsSuccessful,
+                StatusCode = result.StatusCode,
+                StatusMessage = result.StatusMessage
+            };
+
+            T? value;
+            if(result.Value != null && (value = (T)result.Value) != null)
+            {
+                r.Value = value;
+            }
+
+            return r;
+        }
         ///<inheritdoc/>
         public string? StatusMessage { get; set; }
 
@@ -113,6 +143,23 @@ namespace RST.Defaults
     /// <inheritdoc cref="IRepository{T}"/>
     public record DefaultResult : IResult
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        public static DefaultResult FromResult<T>(IResult<T> result)
+        {
+            return new DefaultResult
+            {
+                IsSuccessful = result.IsSuccessful,
+                StatusMessage = result.StatusMessage,
+                StatusCode = result.StatusCode,
+                Value = result.Value
+            };
+        }
+
         ///<inheritdoc/>
         public string? StatusMessage { get; set; }
 
