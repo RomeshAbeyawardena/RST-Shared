@@ -1,11 +1,15 @@
 ﻿using RST.Contracts;
 using RST.Defaults;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace RST.Mediatr.Extensions.Exceptions;
 
-internal class ValidationFailureException : Exception
+/// <summary>
+/// Represents a validation failure exception
+/// </summary>
+public class ValidationFailureException : ValidationException
 {
     private static string GenerateMessage(Action<IDictionaryBuilder<string, string>> builder)
     {

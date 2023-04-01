@@ -24,7 +24,7 @@ public static class MappingExpression
             {
                 IsSuccessful = c.IsSuccessful,
                 TotalItems = c.TotalItems,
-                Message = c.Message,
+                StatusMessage = c.StatusMessage,
                 NumberOfPages = c.NumberOfPages,
                 PageNumber = c.PageNumber,
                 Results = (destination = r.Mapper.Map<IEnumerable<TDestination>>(c.Results)),

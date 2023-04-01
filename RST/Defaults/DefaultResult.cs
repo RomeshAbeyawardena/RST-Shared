@@ -23,7 +23,7 @@ namespace RST.Defaults
             {
                 IsSuccessful = isSuccessful,
                 StatusCode = statusCode,
-                Message = statusMessage,
+                StatusMessage = statusMessage,
                 Value = value
             };
         }
@@ -45,7 +45,7 @@ namespace RST.Defaults
             {
                 IsSuccessful = isSuccessful,
                 StatusCode = statusCode,
-                Message = statusMessage,
+                StatusMessage = statusMessage,
                 Value = value
             };
         }
@@ -75,7 +75,7 @@ namespace RST.Defaults
             {
                 IsSuccessful = isSuccessful,
                 StatusCode = statusCode,
-                Message = statusMessage,
+                StatusMessage = statusMessage,
                 PageNumber = pageNumber,
                 TotalItems = totalItems,
                 NumberOfPages = totalNumberOfPages,
@@ -91,7 +91,7 @@ namespace RST.Defaults
     public record DefaultResult<T> : IResult<T>
     {
         ///<inheritdoc/>
-        public string? Message { get; set; }
+        public string? StatusMessage { get; set; }
 
         ///<inheritdoc/>
         public int? StatusCode { get; set; }
@@ -114,7 +114,7 @@ namespace RST.Defaults
     public record DefaultResult : IResult
     {
         ///<inheritdoc/>
-        public string? Message { get; set; }
+        public string? StatusMessage { get; set; }
 
         ///<inheritdoc/>
         public int? StatusCode { get; set; }

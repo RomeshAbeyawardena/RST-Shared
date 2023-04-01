@@ -9,6 +9,7 @@ using RST.Mediatr.Extensions.Exceptions;
 using RST.Mediatr.Extensions;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
+using System.ComponentModel.DataAnnotations;
 
 namespace RST.Mediatr.Extensions;
 
@@ -210,8 +211,7 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
                     if ((isHashable = foundEntity is IHashable)
                         && !this.ValidateHash(foundEntity, entity))
                     {
-                        throw new ValidationFailureException(dict => dict
-                            .Add("Hash", "Invalid hash"));
+                        throw new ValidationException("Invalid hash");
                     }
 
                     SetHashing(isHashable, entity);

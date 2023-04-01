@@ -9,7 +9,7 @@ public interface IResult
     /// <summary>
     /// Gets error or status message
     /// </summary>
-    string? Message { get; }
+    string? StatusMessage { get; }
     /// <summary>
     /// Gets the status code
     /// </summary>
