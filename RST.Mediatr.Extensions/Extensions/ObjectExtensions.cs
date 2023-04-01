@@ -17,11 +17,11 @@ public static class ObjectExtensions
     /// <param name="cache"></param>
     /// <param name="modelHasherFactory"></param>
     /// <returns></returns>
-    public static IReadOnlyDictionary<IPropertyInfo, IModelHasher?> GetModelHashers(this
-        object model, IPropertyTypeProviderCache cache, IModelHasherFactory modelHasherFactory)
+    public static IReadOnlyDictionary<IPropertyInfo, IModelHasher?> GetModelHashers<T>(this
+        T model, IPropertyTypeProviderCache cache, IModelHasherFactory modelHasherFactory)
     {
         var dictionary = new Dictionary<IPropertyInfo, IModelHasher?>();
-        var propertyAttributes = model.GetType()
+        var propertyAttributes = typeof(T)
             .GetUnderliningAttributes<HashColumnAttribute>(cache);
 
         foreach (var (prop, attribute) in propertyAttributes)

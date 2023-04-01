@@ -205,8 +205,8 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
 
                 if (foundEntity != null)
                 {
-                    bool isHashable = false;
-                    if ((isHashable = foundEntity is IHashable)
+                    bool isHashable = foundEntity is IHashable;
+                    if (isHashable
                         && !this.ValidateHash(foundEntity, entity))
                     {
                         throw new ValidationException("Invalid hash");

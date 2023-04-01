@@ -1,7 +1,7 @@
 ﻿using RST.Mediatr.Extensions.Contracts;
 using RST.Mediatr.Extensions.Defaults;
 
-namespace RST.Mediatr.Extensions.Extensions;
+namespace RST.Mediatr.Extensions;
 
 /// <summary>
 /// 
@@ -15,7 +15,7 @@ public static class ExceptionHandlerExceptionStatusCodeFactoryExtensions
     /// <param name="factory"></param>
     /// <param name="configure"></param>
     /// <returns></returns>
-    public static bool TryAddExceptionStatusCode<T>(this IExceptionHandlerExceptionStatusCodeFactory factory,
+    public static IExceptionHandlerExceptionStatusCodeFactory TryAddExceptionStatusCode<T>(this IExceptionHandlerExceptionStatusCodeFactory factory,
         Action<IExceptionStatusCode> configure)
     {
         var defaultExceptionStatusCode = new DefaultExceptionStatusCode();

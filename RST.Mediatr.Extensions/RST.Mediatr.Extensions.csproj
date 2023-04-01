@@ -5,6 +5,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Exceptions\**" />
+    <EmbeddedResource Remove="Exceptions\**" />
+    <EntityDeploy Remove="Exceptions\**" />
+    <None Remove="Exceptions\**" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="Docs\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
@@ -18,8 +25,5 @@
   <ItemGroup>
     <ProjectReference Include="..\RST.DependencyInjection.Extensions\RST.DependencyInjection.Extensions.csproj" />
     <ProjectReference Include="..\RST\RST.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Exceptions\" />
   </ItemGroup>
 </Project>
