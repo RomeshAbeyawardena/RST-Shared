@@ -1,4 +1,5 @@
 ﻿using MessagePack;
+using RST.Attributes;
 using RST.Contracts;
 
 namespace RST.UnitTests.TestEntities;
@@ -31,4 +32,7 @@ public partial record Customer : IIdentity, IHashable
     /// </summary>
     [IgnoreMember]
     public string? Hash { get; set; }
+
+    [IgnoreChanges]
+    public int Index { get; set; }
 }

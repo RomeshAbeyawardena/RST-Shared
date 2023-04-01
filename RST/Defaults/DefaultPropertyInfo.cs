@@ -42,6 +42,11 @@ internal class DefaultPropertyInfo : PropertyInfo, IPropertyInfo
 
     public override Type? ReflectedType => Property.ReflectedType;
 
+    public bool Equals(PropertyInfo propertyInfo)
+    {
+        return Property.Equals(propertyInfo);
+    }
+
     public override MethodInfo[] GetAccessors(bool nonPublic)
     {
         return Property.GetAccessors(nonPublic);
@@ -85,5 +90,14 @@ internal class DefaultPropertyInfo : PropertyInfo, IPropertyInfo
     public override void SetValue(object? obj, object? value, BindingFlags invokeAttr, Binder? binder, object?[]? index, CultureInfo? culture)
     {
         Property.SetValue(obj, value, invokeAttr, binder, index, culture);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if(obj is PropertyInfo propInfo)
+        {
+            return Property.Name == propInfo.Name;
+        }
+        return base.Equals(obj);
     }
 }

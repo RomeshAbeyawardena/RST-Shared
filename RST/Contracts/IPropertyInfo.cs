@@ -88,4 +88,11 @@ public interface IPropertyInfo
     /// <param name="obj"></param>
     /// <param name="value"></param>
     void SetValue(object? obj, object? value);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="propertyInfo"></param>
+    /// <returns></returns>
+    bool Equals(PropertyInfo propertyInfo);
 }

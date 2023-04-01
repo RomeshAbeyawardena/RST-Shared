@@ -1,4 +1,5 @@
-﻿using RST.Contracts;
+﻿using RST.Attributes;
+using RST.Contracts;
 using RST.Defaults;
 
 namespace RST.Extensions;
@@ -14,30 +15,39 @@ public static class ObjectExtensions
     /// <param name="target">The target to apply changes to</param>
     /// <param name="source">The source to compare changes from</param>
     /// <param name="changes">A list of changes detected</param>
+    /// <param name="cache"></param>
     /// <returns></returns>
-    public static bool HasChanges(this object target, object source, out IEnumerable<IObjectChange> changes)
+    public static bool HasChanges(this object target, object source,
+        out IEnumerable<IObjectChange> changes, IPropertyTypeProviderCache? cache = null)
     {
         var changeList = new List<IObjectChange>();
         changes = changeList;
 
         var targetType = target.GetType();
         var sourceType = source.GetType();
+        
+        var properties = sourceType.GetUnderliningAttributes<IgnoreChangesAttribute>(cache);
 
-        var targetProperties = targetType.GetProperties();
+        var targetProperties = targetType.GetAllProperties(cache);
         var sourceProperties = targetProperties;
         if (targetType != sourceType)
         {
-            sourceProperties = sourceType.GetProperties();
+            sourceProperties = sourceType.GetAllProperties(cache);
         }
 
         foreach (var property in sourceProperties)
         {
+            if(properties.Any(p => p.Key.Equals(property)))
+            {
+                continue;
+            }
+
             if (!property.CanRead && property.CanWrite)
             {
                 continue;
             }
 
-            var targetProperty = sourceProperties.FirstOrDefault(p => p.Name == property.Name && p.PropertyType == property.PropertyType);
+            var targetProperty = sourceProperties.FirstOrDefault(p => p.Name == property.Name && p.Type == property.Type);
 
             if (targetProperty == null)
             {
@@ -58,8 +68,8 @@ public static class ObjectExtensions
                     HasChanged = true,
                     NewValue = sourceValue,
                     OldValue = targetValue,
-                    SourceProperty = property,
-                    TargetProperty = targetProperty
+                    SourceProperty = property.Property,
+                    TargetProperty = targetProperty.Property
                 });
             }
         }

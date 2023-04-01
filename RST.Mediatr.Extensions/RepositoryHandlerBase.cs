@@ -214,7 +214,7 @@ public abstract class RepositoryHandlerBase<TRequest, TResponse, TModel> : Enabl
 
                     SetHashing(isHashable, entity);
 
-                    if (foundEntity.HasChanges(entity, out var changes))
+                    if (foundEntity.HasChanges(entity, out var changes, PropertyTypeProviderCache))
                     {
                         foundEntity.CommitChanges(changes);
                     }

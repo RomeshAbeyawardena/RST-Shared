@@ -1,6 +1,7 @@
 ﻿using RST.Attributes;
 using RST.Contracts;
 using RST.Extensions;
+using System.Data.Entity.Core.Metadata.Edm;
 using System.Reflection;
 
 namespace RST.Mediatr.Extensions;
@@ -21,6 +22,7 @@ public static class ObjectExtensions
         T model, IPropertyTypeProviderCache cache, IModelHasherFactory modelHasherFactory)
     {
         var dictionary = new Dictionary<IPropertyInfo, IModelHasher?>();
+        
         var propertyAttributes = typeof(T)
             .GetUnderliningAttributes<HashColumnAttribute>(cache);
 

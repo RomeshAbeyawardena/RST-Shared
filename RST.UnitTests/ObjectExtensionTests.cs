@@ -27,7 +27,8 @@ public class ObjectExtensionTests
             Firstname = "John",
             Middlename = "Elliot",
             Lastname = "Doe",
-            Id = Guid.NewGuid()
+            Id = Guid.NewGuid(),
+            Index = 5
         };
 
         Assert.That(customer.HasChanges(new Customer
@@ -35,7 +36,8 @@ public class ObjectExtensionTests
             Firstname = "John",
             Middlename = "Elliot",
             Lastname = "Doe",
-            Id = Guid.NewGuid()
+            Id = Guid.NewGuid(),
+            Index = 6
         }, out var changes), Is.True);
 
         Assert.That(changes.Count(), Is.EqualTo(1));

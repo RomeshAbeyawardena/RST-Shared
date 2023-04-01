@@ -26,9 +26,7 @@ public static class RepositoryHandlerBaseExtensions
         where TRequest : IRequest<TResponse>
         where TModel : class
     {
-        var modelType = typeof(TModel);
-
-        var propertyModelHasherImplementations = modelType.GetModelHashers(repositoryHandler.PropertyTypeProviderCache!, repositoryHandler.ModelHasherFactory!);
+        var propertyModelHasherImplementations = model.GetModelHashers(repositoryHandler.PropertyTypeProviderCache!, repositoryHandler.ModelHasherFactory!);
 
         var truthTable = new List<bool>();
         foreach (var (prop, implementation) in propertyModelHasherImplementations)
@@ -38,10 +36,16 @@ public static class RepositoryHandlerBaseExtensions
                 continue;
             }
 
-            var value = prop.GetValue(modifiedModel)?.ToString();
+            var modifiedValue = prop.GetValue(modifiedModel)?.ToString();
+            var originalValue = prop.GetValue(model)?.ToString();
+            
+            if(originalValue == null || modifiedValue == null) {
+                truthTable.Add(false);
+                continue;
+            }
 
             truthTable.Add(
-                implementation.CompareHash(model, options, value));
+                implementation.CompareHash(modifiedValue, originalValue));
         }
 
         return !truthTable.Any() || truthTable.All(a => a);

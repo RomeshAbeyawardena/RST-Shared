@@ -75,6 +75,7 @@ namespace RST.UnitTests
                 Firstname = "Test",
                 Lastname = "Test",
                 Middlename = "Test",
+                Hash = "THIS_IS_THE_HASH"
             };
 
             var editedCustomer = new Customer
@@ -91,6 +92,9 @@ namespace RST.UnitTests
                 .Returns(ValueTask.FromResult<Customer?>(dbCustomer));
 
             modelHasherMock.Setup(s => s.CompareHash(dbCustomer, null, "THIS_IS_THE_HASH"))
+                .Returns(true);
+
+            modelHasherMock.Setup(s => s.CompareHash("THIS_IS_THE_HASH", "THIS_IS_THE_HASH"))
                 .Returns(true);
 
             modelHasherMock.Setup(s => s.CalculateHash(editedCustomer, null)).Returns("NewHash");
