@@ -36,6 +36,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{93F388AB-B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RST.Automapper.Extensions", "RST.Automapper.Extensions\RST.Automapper.Extensions.csproj", "{D9B58572-8AE8-4F80-A396-22652327EB78}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RST.FluentValidation.Extensions", "RST.FluentValidation.Extensions\RST.FluentValidation.Extensions.csproj", "{131F8003-0B82-4033-817C-1A5B5FA6E8EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,6 +80,10 @@ Global
 		{D9B58572-8AE8-4F80-A396-22652327EB78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9B58572-8AE8-4F80-A396-22652327EB78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9B58572-8AE8-4F80-A396-22652327EB78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{131F8003-0B82-4033-817C-1A5B5FA6E8EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{131F8003-0B82-4033-817C-1A5B5FA6E8EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{131F8003-0B82-4033-817C-1A5B5FA6E8EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{131F8003-0B82-4033-817C-1A5B5FA6E8EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
