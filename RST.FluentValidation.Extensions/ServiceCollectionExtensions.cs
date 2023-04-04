@@ -22,7 +22,7 @@ namespace RST.FluentValidation.Extensions
         {
             return services
                 .AddValidatorsFromAssemblies(assemblies)
-                .AddSingleton(typeof(IRequestPreProcessor<>), typeof(FluentValidationRequestHandler<>));
+                .AddScoped(typeof(IRequestPreProcessor<>), typeof(FluentValidationRequestHandler<>));
         }
     }
 }
